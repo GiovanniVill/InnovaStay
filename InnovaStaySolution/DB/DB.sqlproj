@@ -61,4 +61,11 @@
     <Folder Include="StoredProc" />
     <Folder Include="PostScript" />
   </ItemGroup>
+  <ItemGroup>
+    <Build Include="Table\Users.sql" />
+    <Build Include="StoredProc\spAuthenticateUser.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="PostScript\SeedUsers.sql" />
+  </ItemGroup>
 </Project>
