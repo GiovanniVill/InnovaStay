@@ -39,8 +39,8 @@
             btnEditRoom = new Button();
             btnViewRoom = new Button();
             btnDeactivateRoom = new Button();
-            cmbRoomType = new ComboBox();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            cmbRoomType = new ComboBox();
             SuspendLayout();
             // 
             // label1
@@ -154,10 +154,10 @@
             // cmbRoomType
             // 
             cmbRoomType.FormattingEnabled = true;
-            cmbRoomType.Location = new Point(5, 94);
+            cmbRoomType.Location = new Point(5, 99);
             cmbRoomType.Name = "cmbRoomType";
             cmbRoomType.Size = new Size(385, 23);
-            cmbRoomType.TabIndex = 14;
+            cmbRoomType.TabIndex = 13;
             // 
             // DesignRoomMaintenanceForm
             // 
@@ -195,7 +195,7 @@
         private Button btnEditRoom;
         private Button btnViewRoom;
         private Button btnDeactivateRoom;
-        private ComboBox cmbRoomType;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private ComboBox cmbRoomType;
     }
 }
