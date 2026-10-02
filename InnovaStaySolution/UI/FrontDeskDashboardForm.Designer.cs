@@ -40,6 +40,7 @@
             btnCreateRes = new Button();
             btnBP = new Button();
             label2 = new Label();
+            btnGuestManagement = new Button();
             SuspendLayout();
             // 
             // btnCI
@@ -172,12 +173,25 @@
             label2.TabIndex = 11;
             label2.Text = "Front Desk";
             // 
+            // btnGuestManagement
+            // 
+            btnGuestManagement.BackColor = Color.Khaki;
+            btnGuestManagement.Font = new Font("Sitka Heading", 15.7499981F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnGuestManagement.Location = new Point(394, 325);
+            btnGuestManagement.Name = "btnGuestManagement";
+            btnGuestManagement.Size = new Size(203, 51);
+            btnGuestManagement.TabIndex = 12;
+            btnGuestManagement.Text = "Guest Management";
+            btnGuestManagement.UseVisualStyleBackColor = false;
+            btnGuestManagement.Click += btnGuestManagement_Click;
+            // 
             // FrontDeskDashboardForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.MintCream;
             ClientSize = new Size(640, 434);
+            Controls.Add(btnGuestManagement);
             Controls.Add(label2);
             Controls.Add(btnBP);
             Controls.Add(btnCreateRes);
@@ -210,5 +224,6 @@
         private Button btnCreateRes;
         private Button btnBP;
         private Label label2;
+        private Button btnGuestManagement;
     }
 }

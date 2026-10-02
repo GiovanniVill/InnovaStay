@@ -19,5 +19,11 @@ namespace UI
         {
 
         }
+
+        private void btnGuestManagement_Click(object sender, EventArgs e)
+        {
+            GuestManagementForm guestForm = new GuestManagementForm();
+            guestForm.Show();
+        }
     }
 }
