@@ -30,7 +30,6 @@
         {
             label1 = new Label();
             txtRoomNumber = new TextBox();
-            txtRoomType = new TextBox();
             label2 = new Label();
             txtRoomRate = new TextBox();
             label3 = new Label();
@@ -40,6 +39,8 @@
             btnEditRoom = new Button();
             btnViewRoom = new Button();
             btnDeactivateRoom = new Button();
+            cmbRoomType = new ComboBox();
+            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             SuspendLayout();
             // 
             // label1
@@ -59,14 +60,6 @@
             txtRoomNumber.Name = "txtRoomNumber";
             txtRoomNumber.Size = new Size(385, 33);
             txtRoomNumber.TabIndex = 1;
-            // 
-            // txtRoomType
-            // 
-            txtRoomType.Location = new Point(5, 89);
-            txtRoomType.Multiline = true;
-            txtRoomType.Name = "txtRoomType";
-            txtRoomType.Size = new Size(385, 33);
-            txtRoomType.TabIndex = 3;
             // 
             // label2
             // 
@@ -158,11 +151,20 @@
             btnDeactivateRoom.Text = "Deactivate Room";
             btnDeactivateRoom.UseVisualStyleBackColor = false;
             // 
+            // cmbRoomType
+            // 
+            cmbRoomType.FormattingEnabled = true;
+            cmbRoomType.Location = new Point(5, 94);
+            cmbRoomType.Name = "cmbRoomType";
+            cmbRoomType.Size = new Size(385, 23);
+            cmbRoomType.TabIndex = 14;
+            // 
             // DesignRoomMaintenanceForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(398, 355);
+            Controls.Add(cmbRoomType);
             Controls.Add(btnDeactivateRoom);
             Controls.Add(btnViewRoom);
             Controls.Add(btnEditRoom);
@@ -171,7 +173,6 @@
             Controls.Add(label4);
             Controls.Add(txtRoomRate);
             Controls.Add(label3);
-            Controls.Add(txtRoomType);
             Controls.Add(label2);
             Controls.Add(txtRoomNumber);
             Controls.Add(label1);
@@ -185,7 +186,6 @@
 
         private Label label1;
         private TextBox txtRoomNumber;
-        private TextBox txtRoomType;
         private Label label2;
         private TextBox txtRoomRate;
         private Label label3;
@@ -195,5 +195,7 @@
         private Button btnEditRoom;
         private Button btnViewRoom;
         private Button btnDeactivateRoom;
+        private ComboBox cmbRoomType;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
