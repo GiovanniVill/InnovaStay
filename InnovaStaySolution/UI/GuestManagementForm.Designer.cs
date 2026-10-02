@@ -43,6 +43,8 @@
             btnAddGuest = new Button();
             btnEditGuest = new Button();
             btnViewGuest = new Button();
+            dgvGuest = new DataGridView();
+            ((System.ComponentModel.ISupportInitialize)dgvGuest).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -82,7 +84,6 @@
             label3.Size = new Size(115, 30);
             label3.TabIndex = 3;
             label3.Text = "Full Name:";
-            label3.Click += label3_Click;
             // 
             // txtFullName
             // 
@@ -157,6 +158,7 @@
             btnSearchGuest.TabIndex = 13;
             btnSearchGuest.Text = "Search Guest";
             btnSearchGuest.UseVisualStyleBackColor = false;
+            btnSearchGuest.Click += btnSearchGuest_Click;
             // 
             // btnAddGuest
             // 
@@ -168,6 +170,7 @@
             btnAddGuest.TabIndex = 14;
             btnAddGuest.Text = "Add Guest";
             btnAddGuest.UseVisualStyleBackColor = false;
+            btnAddGuest.Click += btnAddGuest_Click;
             // 
             // btnEditGuest
             // 
@@ -179,6 +182,7 @@
             btnEditGuest.TabIndex = 15;
             btnEditGuest.Text = "Edit Guest";
             btnEditGuest.UseVisualStyleBackColor = false;
+            btnEditGuest.Click += btnEditGuest_Click;
             // 
             // btnViewGuest
             // 
@@ -190,13 +194,28 @@
             btnViewGuest.TabIndex = 16;
             btnViewGuest.Text = "View Guest";
             btnViewGuest.UseVisualStyleBackColor = false;
+            btnViewGuest.Click += btnViewGuest_Click;
+            // 
+            // dgvGuest
+            // 
+            dgvGuest.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvGuest.BackgroundColor = Color.White;
+            dgvGuest.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvGuest.Location = new Point(619, 86);
+            dgvGuest.MultiSelect = false;
+            dgvGuest.Name = "dgvGuest";
+            dgvGuest.ReadOnly = true;
+            dgvGuest.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvGuest.Size = new Size(467, 223);
+            dgvGuest.TabIndex = 17;
             // 
             // GuestManagementForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.MintCream;
-            ClientSize = new Size(661, 336);
+            ClientSize = new Size(1098, 342);
+            Controls.Add(dgvGuest);
             Controls.Add(btnViewGuest);
             Controls.Add(btnEditGuest);
             Controls.Add(btnAddGuest);
@@ -215,6 +234,8 @@
             Margin = new Padding(3, 2, 3, 2);
             Name = "GuestManagementForm";
             Text = "GuestManagementForm";
+            Load += GuestManagementForm_Load;
+            ((System.ComponentModel.ISupportInitialize)dgvGuest).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -236,5 +257,6 @@
         private Button btnAddGuest;
         private Button btnEditGuest;
         private Button btnViewGuest;
+        private DataGridView dgvGuest;
     }
 }
