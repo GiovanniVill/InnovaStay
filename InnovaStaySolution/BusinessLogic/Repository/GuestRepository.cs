@@ -8,7 +8,7 @@ namespace BusinessLogic.Repository
 {
     public class GuestRepository
     {
-        private readonly string _connectionString = "Server=localhost;Database=InnovaStayDB;Trusted_Connection=True;TrustServerCertificate=True;";
+        private readonly string _connectionString = @"Server=(localdb)\MSSQLLocalDB;Database=InnovaStayDB;Trusted_Connection=True;TrustServerCertificate=True;";
 
         public bool AddGuest(GuestModel guest, out string errorMessage)
         {
@@ -19,16 +19,23 @@ namespace BusinessLogic.Repository
                 using (var cmd = new SqlCommand("sp_Guest_CRUD", conn))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@Action", "CREATE");
-                    cmd.Parameters.AddWithValue("@FirstName", guest.FirstName ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@LastName", guest.LastName ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Email", guest.Email ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@PhoneNumber", guest.PhoneNumber ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Address", guest.Address ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Action", "INSERT");
+                    cmd.Parameters.AddWithValue("@first_name", guest.FirstName ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@last_name", guest.LastName ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@email", guest.Email ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@phone_number", guest.PhoneNumber ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@address", guest.Address ?? (object)DBNull.Value);
 
                     conn.Open();
-                    int rows = cmd.ExecuteNonQuery();
-                    return rows > 0;
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && decimal.TryParse(result.ToString(), out decimal newId) && newId > 0)
+                    {
+                        guest.GuestId = Convert.ToInt32(newId);
+                        return true;
+                    }
+
+                    errorMessage = "Failed to retrieve new guest ID.";
+                    return false;
                 }
             }
             catch (Exception ex)
@@ -46,7 +53,7 @@ namespace BusinessLogic.Repository
             using (var cmd = new SqlCommand("sp_Guest_CRUD", conn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@Action", "READ_ALL");
+                cmd.Parameters.AddWithValue("@Action", "SELECT_ALL");
 
                 conn.Open();
                 using (var reader = cmd.ExecuteReader())
@@ -55,14 +62,14 @@ namespace BusinessLogic.Repository
                     {
                         list.Add(new GuestModel
                         {
-                            GuestId = Convert.ToInt32(reader["GuestId"]),
-                            FirstName = reader["FirstName"].ToString(),
-                            LastName = reader["LastName"].ToString(),
-                            Email = reader["Email"] != DBNull.Value ? reader["Email"].ToString() : string.Empty,
-                            PhoneNumber = reader["PhoneNumber"] != DBNull.Value ? reader["PhoneNumber"].ToString() : string.Empty,
-                            Address = reader["Address"] != DBNull.Value ? reader["Address"].ToString() : string.Empty,
-                            CreatedAt = Convert.ToDateTime(reader["CreatedAt"]),
-                            UpdatedAt = Convert.ToDateTime(reader["UpdatedAt"])
+                            GuestId = Convert.ToInt32(reader["guest_id"]),
+                            FirstName = reader["first_name"].ToString(),
+                            LastName = reader["last_name"].ToString(),
+                            Email = reader["email"] != DBNull.Value ? reader["email"].ToString() : string.Empty,
+                            PhoneNumber = reader["phone_number"] != DBNull.Value ? reader["phone_number"].ToString() : string.Empty,
+                            Address = reader["address"] != DBNull.Value ? reader["address"].ToString() : string.Empty,
+                            CreatedAt = reader["created_at"] != DBNull.Value ? Convert.ToDateTime(reader["created_at"]) : DateTime.MinValue,
+                            UpdatedAt = reader["updated_at"] != DBNull.Value ? Convert.ToDateTime(reader["updated_at"]) : DateTime.MinValue
                         });
                     }
                 }
@@ -81,16 +88,16 @@ namespace BusinessLogic.Repository
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Action", "UPDATE");
-                    cmd.Parameters.AddWithValue("@GuestId", guest.GuestId);
-                    cmd.Parameters.AddWithValue("@FirstName", guest.FirstName ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@LastName", guest.LastName ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Email", guest.Email ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@PhoneNumber", guest.PhoneNumber ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Address", guest.Address ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@guest_id", guest.GuestId);
+                    cmd.Parameters.AddWithValue("@first_name", guest.FirstName ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@last_name", guest.LastName ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@email", guest.Email ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@phone_number", guest.PhoneNumber ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@address", guest.Address ?? (object)DBNull.Value);
 
                     conn.Open();
-                    int rows = cmd.ExecuteNonQuery();
-                    return rows > 0;
+                    cmd.ExecuteNonQuery();
+                    return true;
                 }
             }
             catch (Exception ex)
@@ -110,11 +117,11 @@ namespace BusinessLogic.Repository
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Action", "DELETE");
-                    cmd.Parameters.AddWithValue("@GuestId", guestId);
+                    cmd.Parameters.AddWithValue("@guest_id", guestId);
 
                     conn.Open();
-                    int rows = cmd.ExecuteNonQuery();
-                    return rows > 0;
+                    cmd.ExecuteNonQuery();
+                    return true;
                 }
             }
             catch (Exception ex)
