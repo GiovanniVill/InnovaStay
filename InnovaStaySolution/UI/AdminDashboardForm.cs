@@ -14,5 +14,11 @@ namespace UI
         {
             InitializeComponent();
         }
+
+        private void btnRM_Click(object sender, EventArgs e)
+        {
+            DesignRoomMaintenanceForm roomForm = new DesignRoomMaintenanceForm();
+            roomForm.Show();
+        }
     }
 }
