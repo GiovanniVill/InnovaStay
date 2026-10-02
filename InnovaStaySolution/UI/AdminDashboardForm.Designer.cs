@@ -110,6 +110,7 @@
             btnRM.TabIndex = 6;
             btnRM.Text = "Room Maintenance";
             btnRM.UseVisualStyleBackColor = false;
+            btnRM.Click += btnRM_Click;
             // 
             // btnUM
             // 
