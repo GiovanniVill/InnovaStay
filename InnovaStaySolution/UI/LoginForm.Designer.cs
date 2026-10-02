@@ -136,7 +136,7 @@
             cmbRole.BackColor = Color.Khaki;
             cmbRole.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             cmbRole.FormattingEnabled = true;
-            cmbRole.Items.AddRange(new object[] { "Admin", "Frontdesk" });
+            cmbRole.Items.AddRange(new object[] { "Admin", "Front Desk" });
             cmbRole.Location = new Point(12, 122);
             cmbRole.Name = "cmbRole";
             cmbRole.Size = new Size(251, 29);

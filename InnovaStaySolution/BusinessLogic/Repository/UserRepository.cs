@@ -7,7 +7,7 @@ namespace BusinessLogic.Repository
 {
     public class UserRepository
     {
-        private readonly string _connectionString = "Server=localhost;Database=InnovaStayDB;Trusted_Connection=True;TrustServerCertificate=True;";
+        private readonly string _connectionString = @"Server=(localdb)\MSSQLLocalDB;Database=InnovaStayDB;Trusted_Connection=True;TrustServerCertificate=True;";
 
         public AuthResult Authenticate(string username, string password)
         {
