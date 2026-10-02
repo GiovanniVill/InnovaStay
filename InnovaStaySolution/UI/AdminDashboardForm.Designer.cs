@@ -122,6 +122,7 @@
             btnUM.TabIndex = 7;
             btnUM.Text = "User Management";
             btnUM.UseVisualStyleBackColor = false;
+            btnUM.Click += btnUM_Click;
             // 
             // AdminDashboardForm
             // 
