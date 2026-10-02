@@ -8,7 +8,7 @@ namespace BusinessLogic.Repository
 {
     public class RoomRepository
     {
-        private readonly string _connectionString = "Server=localhost;Database=InnovaStayDB;Trusted_Connection=True;TrustServerCertificate=True;";
+        private readonly string _connectionString = @"Server=(localdb)\MSSQLLocalDB;Database=InnovaStayDB;Trusted_Connection=True;TrustServerCertificate=True;";
 
         public bool AddRoom(RoomModel room, out string errorMessage)
         {

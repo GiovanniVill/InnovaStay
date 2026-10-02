@@ -117,6 +117,7 @@
             btnAddRoom.TabIndex = 9;
             btnAddRoom.Text = "Add Room";
             btnAddRoom.UseVisualStyleBackColor = false;
+            btnAddRoom.Click += btnAddRoom_Click_1;
             // 
             // btnEditRoom
             // 
@@ -128,6 +129,7 @@
             btnEditRoom.TabIndex = 10;
             btnEditRoom.Text = "Edit Room";
             btnEditRoom.UseVisualStyleBackColor = false;
+            btnEditRoom.Click += btnEditRoom_Click_1;
             // 
             // btnViewRoom
             // 
@@ -139,6 +141,7 @@
             btnViewRoom.TabIndex = 11;
             btnViewRoom.Text = "View Room";
             btnViewRoom.UseVisualStyleBackColor = false;
+            btnViewRoom.Click += btnViewRoom_Click_1;
             // 
             // btnDeactivateRoom
             // 
@@ -150,6 +153,7 @@
             btnDeactivateRoom.TabIndex = 12;
             btnDeactivateRoom.Text = "Deactivate Room";
             btnDeactivateRoom.UseVisualStyleBackColor = false;
+            btnDeactivateRoom.Click += btnDeactivateRoom_Click_1;
             // 
             // cmbRoomType
             // 
