@@ -14,5 +14,10 @@ namespace UI
         {
             InitializeComponent();
         }
+
+        private void btnBP_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
