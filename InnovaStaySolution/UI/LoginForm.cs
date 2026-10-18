@@ -14,11 +14,6 @@ namespace UI
         {
             InitializeComponent();
             _authController = new AuthController();
-
-            if (cmbRole.SelectedIndex == -1 && cmbRole.Items.Count > 0)
-            {
-                cmbRole.SelectedIndex = 0;
-            }
         }
 
 
@@ -27,65 +22,61 @@ namespace UI
         {
             string username = txtUsername.Text.Trim();
             string password = txtPassword.Text.Trim();
-            string selectedRole = cmbRole.SelectedItem?.ToString() ?? string.Empty;
-
-            // Uses label6 (or change to your status label name)
-            Label statusLabel = this.Controls.ContainsKey("lblStatus") ? (Label)this.Controls["lblStatus"] : label6;
 
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                statusLabel.ForeColor = Color.Red;
-                statusLabel.Text = "Empty fields are not allowed.";
+                lblEmptyF.Text = "Please enter both username and password.";
+                lblEmptyF.Visible = true;
                 return;
             }
 
-            if (string.IsNullOrEmpty(selectedRole))
+            var result = _authController.Login(username, password);
+
+            if (result != null && string.Equals(result.Status, "SUCCESS", StringComparison.OrdinalIgnoreCase))
             {
-                statusLabel.ForeColor = Color.Red;
-                statusLabel.Text = "Please select a role.";
-                return;
-            }
-
-            AuthResult result = _authController.Login(username, password);
-
-            if (result.Status == "SUCCESS")
-            {
-                if (!result.Role.Equals(selectedRole, StringComparison.OrdinalIgnoreCase))
-                {
-                    statusLabel.ForeColor = Color.Red;
-                    statusLabel.Text = $"Unauthorized: Role is '{result.Role}', not '{selectedRole}'.";
-                    return;
-                }
-
-                statusLabel.Text = string.Empty;
-                txtPassword.Clear();
+                lblEmptyF.Visible = false;
                 this.Hide();
 
-                if (selectedRole.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(result.Role, "Admin", StringComparison.OrdinalIgnoreCase))
                 {
                     var adminDash = new AdminDashboardForm();
-                    adminDash.Tag = this;
                     adminDash.FormClosed += (s, args) => this.Close();
                     adminDash.Show();
                 }
-                else
+                else if (string.Equals(result.Role, "Front Desk", StringComparison.OrdinalIgnoreCase))
                 {
                     var frontDeskDash = new FrontDeskDashboardForm();
-                    frontDeskDash.Tag = this;
                     frontDeskDash.FormClosed += (s, args) => this.Close();
                     frontDeskDash.Show();
                 }
+                else
+                {
+                    lblEmptyF.Text = $"Unrecognized role: {result.Role}";
+                    lblEmptyF.Visible = true;
+                    this.Show();
+                }
             }
-            else if (result.Status == "LOCKED")
+            else if (result != null && string.Equals(result.Status, "LOCKED", StringComparison.OrdinalIgnoreCase))
             {
-                statusLabel.ForeColor = Color.DarkRed;
-                statusLabel.Text = "Account locked: Maximum failed attempts exceeded.";
+                lblEmptyF.Text = "Account is locked due to too many failed attempts.";
+                lblEmptyF.Visible = true;
             }
             else
             {
-                statusLabel.ForeColor = Color.Red;
-                statusLabel.Text = $"Invalid credentials. Attempts left: {result.AttemptsLeft}";
+                int attempts = result?.AttemptsLeft ?? 0;
+                lblEmptyF.Text = $"Invalid credentials. Attempts left: {attempts}";
+                lblEmptyF.Visible = true;
             }
+
+        }
+        private void txtUsername_TextChanged(object sender, EventArgs e)
+        {
+            lblEmptyF.Visible = false;
+        }
+
+        private void txtPassword_TextChanged(object sender, EventArgs e)
+        {
+            lblEmptyF.Visible = false;
         }
     }
 }

@@ -190,7 +190,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.MintCream;
-            ClientSize = new Size(640, 434);
+            ClientSize = new Size(1156, 784);
             Controls.Add(btnGuestManagement);
             Controls.Add(label2);
             Controls.Add(btnBP);
