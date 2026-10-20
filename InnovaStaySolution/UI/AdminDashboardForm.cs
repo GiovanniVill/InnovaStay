@@ -62,7 +62,7 @@ namespace UI
             childForm.Show();
         }
 
-        private void btnDashboard_Click(object sender, EventArgs e)
+        private void btnDashboard_Click_1(object sender, EventArgs e)
         {
             ShowDashboardHome();
         }
@@ -105,5 +105,7 @@ namespace UI
                 loginForm.Show();
             }
         }
+
+
     }
 }
