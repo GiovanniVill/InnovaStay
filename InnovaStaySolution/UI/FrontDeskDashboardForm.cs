@@ -14,5 +14,12 @@ namespace UI
         {
             InitializeComponent();
         }
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            
+            LoginForm log = new LoginForm();
+            log.Show();
+            this.Hide();
+        }
     }
 }

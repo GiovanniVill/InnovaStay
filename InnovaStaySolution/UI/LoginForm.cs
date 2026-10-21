@@ -14,6 +14,8 @@ namespace UI
         {
             InitializeComponent();
             _authController = new AuthController();
+            btnLogin.Click += btnLogin_Click_1;
+
 
             if (cmbRole.SelectedIndex == -1 && cmbRole.Items.Count > 0)
             {
@@ -87,5 +89,7 @@ namespace UI
                 statusLabel.Text = $"Invalid credentials. Attempts left: {result.AttemptsLeft}";
             }
         }
+
+       
     }
 }
