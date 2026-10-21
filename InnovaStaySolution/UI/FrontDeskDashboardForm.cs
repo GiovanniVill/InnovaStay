@@ -10,9 +10,29 @@ namespace UI
 {
     public partial class FrontDeskDashboardForm : Form
     {
+        private Form? activeForm = null;
+
         public FrontDeskDashboardForm()
         {
             InitializeComponent();
+        }
+
+        private void OpenChildForm(Form childForm)
+        {
+            if (activeForm != null)
+            {
+                activeForm.Close();
+            }
+
+            activeForm = childForm;
+            childForm.TopLevel = false;
+            childForm.FormBorderStyle = FormBorderStyle.None;
+            childForm.Dock = DockStyle.Fill;
+
+            panelMainContent.Controls.Add(childForm);
+            panelMainContent.Tag = childForm;
+            childForm.BringToFront();
+            childForm.Show();
         }
 
         private void btnBP_Click(object sender, EventArgs e)
@@ -22,8 +42,7 @@ namespace UI
 
         private void btnGuestManagement_Click(object sender, EventArgs e)
         {
-            GuestManagementForm guestForm = new GuestManagementForm();
-            guestForm.Show();
+            OpenChildForm(new GuestManagementForm());
         }
 
         private void btnLogout_Click(object sender, EventArgs e)

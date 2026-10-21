@@ -10,6 +10,7 @@ namespace UI
     public partial class GuestManagementForm : Form
     {
         private readonly GuestController _guestController;
+        private int selectedGuestId = -1;
 
         public GuestManagementForm()
         {
@@ -70,7 +71,7 @@ namespace UI
 
         private void btnAddGuest_Click(object sender, EventArgs e)
         {
-            var (firstName, lastName) = ParseFullName(txtFullName.Text);
+            var (firstName, lastName) = ParseFullName(txtLname.Text);
 
             var guest = new GuestModel
             {
@@ -96,17 +97,17 @@ namespace UI
 
         private void btnEditGuest_Click(object sender, EventArgs e)
         {
-            if (!int.TryParse(txtGuestID.Text.Trim(), out int guestId))
+            if (selectedGuestId == -1)
             {
-                MessageBox.Show("Please select a valid guest from the list to edit.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a guest from the table to edit.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var (firstName, lastName) = ParseFullName(txtFullName.Text);
+            var (firstName, lastName) = ParseFullName(txtLname.Text);
 
             var guest = new GuestModel
             {
-                GuestId = guestId,
+                GuestId = selectedGuestId,
                 FirstName = firstName,
                 LastName = lastName,
                 PhoneNumber = txtContact.Text.Trim(),
@@ -129,7 +130,7 @@ namespace UI
 
         private void btnSearchGuest_Click(object sender, EventArgs e)
         {
-            string searchName = txtFullName.Text.Trim().ToLower();
+            string searchName = txtLname.Text.Trim().ToLower();
             string searchPhone = txtContact.Text.Trim();
 
             try
@@ -153,8 +154,8 @@ namespace UI
         {
             if (e.RowIndex >= 0 && dgvGuest.Rows[e.RowIndex].DataBoundItem is GuestModel selectedGuest)
             {
-                txtGuestID.Text = selectedGuest.GuestId.ToString();
-                txtFullName.Text = selectedGuest.FullName;
+                selectedGuestId = selectedGuest.GuestId;
+                txtLname.Text = selectedGuest.FullName;
                 txtContact.Text = selectedGuest.PhoneNumber;
                 txtEmail.Text = selectedGuest.Email;
                 txtAddress.Text = selectedGuest.Address;
@@ -163,8 +164,8 @@ namespace UI
 
         private void ClearInputs()
         {
-            txtGuestID.Clear();
-            txtFullName.Clear();
+            selectedGuestId = -1;
+            txtLname.Clear();
             txtContact.Clear();
             txtEmail.Clear();
             txtAddress.Clear();

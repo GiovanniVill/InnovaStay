@@ -380,6 +380,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "InnovaStay - Admin Dashboard";
             WindowState = FormWindowState.Maximized;
+            Load += AdminDashboardForm_Load_1;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
