@@ -18,6 +18,12 @@ namespace UI
             this.WindowState = FormWindowState.Maximized;
         }
 
+        private void AdminDashboardForm_Load(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Maximized;
+            ShowDashboardHome();
+        }
+
         private void ShowDashboardHome()
         {
             if (activeForm != null)
@@ -26,6 +32,7 @@ namespace UI
                 activeForm = null;
             }
 
+            // Make sure the default Activity table and label are visible
             lblCurrentActivity.Visible = true;
             dgvCurrentActivity.Visible = true;
             dgvCurrentActivity.BringToFront();
@@ -40,6 +47,7 @@ namespace UI
                 activeForm.Close();
             }
 
+            // Hide the default Activity table and label
             lblCurrentActivity.Visible = false;
             dgvCurrentActivity.Visible = false;
 
@@ -66,7 +74,8 @@ namespace UI
 
         private void btnUM_Click(object sender, EventArgs e)
         {
-
+            // When you are ready for User Management, uncomment and use your form name:
+            // OpenChildForm(new UserManagementForm());
         }
 
         private void LoadCurrentActivity()
@@ -97,10 +106,14 @@ namespace UI
             }
         }
 
-        private void AdminDashboardForm_Load_1(object sender, EventArgs e)
+        private void panel4_Paint(object sender, PaintEventArgs e)
         {
-            this.WindowState = FormWindowState.Maximized;
-            ShowDashboardHome();
+
+        }
+
+        private void dgvCurrentActivity_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
