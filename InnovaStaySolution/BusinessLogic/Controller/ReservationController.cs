@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using BusinessLogic.Repository;
 using Model;
 
@@ -28,6 +28,19 @@ namespace BusinessLogic.Controller
                 return (false, "Calculated total must be greater than zero.");
 
             return _repository.CreateReservation(reservation);
+        }
+
+        public List<ReservationModel> GetActiveStays()
+        {
+            return _repository.GetActiveStays();
+        }
+
+        public (bool Success, string Message) CheckOutGuest(int reservationId, int roomId)
+        {
+            if (reservationId <= 0 || roomId <= 0)
+                return (false, "Invalid reservation or room selected.");
+
+            return _repository.ProcessCheckOut(reservationId, roomId);
         }
     }
 }
