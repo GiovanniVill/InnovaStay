@@ -88,5 +88,16 @@ namespace UI
                 loginForm.Show();
             }
         }
+
+        private void btnOut_Click(object sender, EventArgs e)
+        {
+            using (var checkOutForm = new CheckOutForm())
+            {
+                if (checkOutForm.ShowDialog() == DialogResult.OK)
+                {
+                    LoadDashboardOverview();
+                }
+            }
+        }
     }
 }

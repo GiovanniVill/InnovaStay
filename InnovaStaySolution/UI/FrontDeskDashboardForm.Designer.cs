@@ -94,6 +94,7 @@
             btnOut.TabIndex = 6;
             btnOut.Text = "Check-Out";
             btnOut.UseVisualStyleBackColor = false;
+            btnOut.Click += btnOut_Click;
             // 
             // btnCreateRes
             // 
