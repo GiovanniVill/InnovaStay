@@ -159,5 +159,9 @@
         private Label label3;
         private Label label2;
         private Label label1;
+        private Label lblRoomStatus;
+        private Label lblRoomType;
+        private Label lblRoomRate;
+        private Label label5;
     }
 }
