@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 using BusinessLogic.Controller;
 using Model;
@@ -21,6 +23,10 @@ namespace UI
 
         private void DesignRoomMaintenanceForm_Load_1(object sender, EventArgs e)
         {
+            // Populate common rate options into the dropdown
+            cmbRate.Items.Clear();
+            cmbRate.Items.AddRange(new object[] { "1500.00", "2200.00", "3500.00", "5000.00" });
+
             LoadRoomGrid();
         }
 
@@ -58,17 +64,17 @@ namespace UI
                     _selectedRoomNumber = room.RoomNumber;
 
                     cmbRoomType.Text = room.RoomType;
-                    txtRoomRate.Text = room.PricePerNight.ToString("F2");
+                    cmbRate.Text = room.PricePerNight.ToString("0.00");
                 }
             }
         }
 
-        // Auto-suggest default rates when selecting a room type (can still be edited)
+        // Auto-selects and sets the exact price in cmbRate when Room Type changes
         private void cmbRoomType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbRoomType.SelectedItem == null) return;
+            string selectedType = cmbRoomType.SelectedItem?.ToString() ?? cmbRoomType.Text.Trim();
+            if (string.IsNullOrWhiteSpace(selectedType)) return;
 
-            string selectedType = cmbRoomType.SelectedItem.ToString();
             decimal defaultRate = selectedType switch
             {
                 "Single" => 1500.00m,
@@ -78,7 +84,7 @@ namespace UI
                 _ => 1500.00m
             };
 
-            txtRoomRate.Text = defaultRate.ToString("0.00");
+            cmbRate.Text = defaultRate.ToString("0.00");
         }
 
         // Helper to auto-generate the next sequential room number
@@ -107,6 +113,20 @@ namespace UI
             return nextNumber.ToString();
         }
 
+        // Helper to safely parse rate strings even if formatted with 'P', '₱', or commas
+        private bool TryParseRate(string rawInput, out decimal rate)
+        {
+            rate = 0;
+            if (string.IsNullOrWhiteSpace(rawInput)) return false;
+
+            string cleaned = rawInput.Replace("P", "", StringComparison.OrdinalIgnoreCase)
+                                     .Replace("₱", "")
+                                     .Replace(",", "")
+                                     .Trim();
+
+            return decimal.TryParse(cleaned, NumberStyles.Any, CultureInfo.InvariantCulture, out rate) && rate > 0;
+        }
+
         private void btnAddRoom_Click_1(object sender, EventArgs e)
         {
             if (cmbRoomType.SelectedItem == null && string.IsNullOrWhiteSpace(cmbRoomType.Text))
@@ -116,10 +136,11 @@ namespace UI
                 return;
             }
 
-            if (!decimal.TryParse(txtRoomRate.Text.Trim(), out decimal rate) || rate <= 0)
+            string rawRate = cmbRate.SelectedItem?.ToString() ?? cmbRate.Text.Trim();
+            if (!TryParseRate(rawRate, out decimal rate))
             {
                 MessageBox.Show("Price per night must be greater than zero.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtRoomRate.Focus();
+                cmbRate.Focus();
                 return;
             }
 
@@ -147,25 +168,29 @@ namespace UI
 
         private void btnEditRoom_Click_1(object sender, EventArgs e)
         {
-            if (_selectedRoomId == 0 && string.IsNullOrWhiteSpace(_selectedRoomNumber))
+            RoomModel? targetRoom = null;
+
+            if (dgvRooms.CurrentRow != null && dgvRooms.CurrentRow.DataBoundItem is RoomModel roomFromGrid)
+            {
+                targetRoom = roomFromGrid;
+            }
+            else if (_selectedRoomId != 0)
+            {
+                List<RoomModel> allRooms = _roomController.GetAllRooms();
+                targetRoom = allRooms?.Find(r => r.RoomId == _selectedRoomId || string.Equals(r.RoomNumber, _selectedRoomNumber, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (targetRoom == null)
             {
                 MessageBox.Show("Please select a room from the list to edit.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (!decimal.TryParse(txtRoomRate.Text.Trim(), out decimal rate) || rate <= 0)
+            string rawRate = cmbRate.SelectedItem?.ToString() ?? cmbRate.Text.Trim();
+            if (!TryParseRate(rawRate, out decimal rate))
             {
                 MessageBox.Show("Price per night must be greater than zero.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtRoomRate.Focus();
-                return;
-            }
-
-            List<RoomModel> allRooms = _roomController.GetAllRooms();
-            var targetRoom = allRooms.Find(r => r.RoomId == _selectedRoomId || string.Equals(r.RoomNumber, _selectedRoomNumber, StringComparison.OrdinalIgnoreCase));
-
-            if (targetRoom == null)
-            {
-                MessageBox.Show("Selected room could not be found.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbRate.Focus();
                 return;
             }
 
@@ -185,24 +210,51 @@ namespace UI
 
         private void btnViewRoom_Click_1(object sender, EventArgs e)
         {
-            LoadRoomGrid();
-            MessageBox.Show("Room list refreshed from database.", "Refreshed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            RoomModel? selectedRoom = null;
+
+            if (dgvRooms.CurrentRow != null && dgvRooms.CurrentRow.DataBoundItem is RoomModel roomFromGrid)
+            {
+                selectedRoom = roomFromGrid;
+            }
+            else if (_selectedRoomId != 0)
+            {
+                List<RoomModel> allRooms = _roomController.GetAllRooms();
+                selectedRoom = allRooms?.Find(r => r.RoomId == _selectedRoomId);
+            }
+
+            if (selectedRoom == null)
+            {
+                MessageBox.Show("Please select a room from the list to view.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            RoomInfo viewForm = new RoomInfo(
+                selectedRoom.RoomNumber ?? string.Empty,
+                selectedRoom.RoomType ?? string.Empty,
+                selectedRoom.PricePerNight.ToString("N2"),
+                selectedRoom.Status ?? "Available"
+            );
+
+            viewForm.ShowDialog();
         }
 
         private void btnDeactivateRoom_Click_1(object sender, EventArgs e)
         {
-            if (_selectedRoomId == 0 && string.IsNullOrWhiteSpace(_selectedRoomNumber))
-            {
-                MessageBox.Show("Please select the room you want to deactivate from the list.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            RoomModel? targetRoom = null;
 
-            List<RoomModel> allRooms = _roomController.GetAllRooms();
-            var targetRoom = allRooms.Find(r => r.RoomId == _selectedRoomId || string.Equals(r.RoomNumber, _selectedRoomNumber, StringComparison.OrdinalIgnoreCase));
+            if (dgvRooms.CurrentRow != null && dgvRooms.CurrentRow.DataBoundItem is RoomModel roomFromGrid)
+            {
+                targetRoom = roomFromGrid;
+            }
+            else if (_selectedRoomId != 0)
+            {
+                List<RoomModel> allRooms = _roomController.GetAllRooms();
+                targetRoom = allRooms?.Find(r => r.RoomId == _selectedRoomId || string.Equals(r.RoomNumber, _selectedRoomNumber, StringComparison.OrdinalIgnoreCase));
+            }
 
             if (targetRoom == null)
             {
-                MessageBox.Show("Selected room could not be found.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select the room you want to deactivate from the list.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -225,10 +277,16 @@ namespace UI
         {
             _selectedRoomId = 0;
             _selectedRoomNumber = string.Empty;
-            txtRoomRate.Clear();
+            cmbRate.SelectedIndex = -1;
+            cmbRate.Text = string.Empty;
             cmbRoomType.SelectedIndex = -1;
             cmbRoomType.Text = string.Empty;
             dgvRooms.ClearSelection();
+        }
+
+        private void cmbRate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

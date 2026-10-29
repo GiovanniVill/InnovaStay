@@ -30,7 +30,6 @@
         {
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            txtRoomRate = new TextBox();
             label3 = new Label();
             btnAddRoom = new Button();
             btnEditRoom = new Button();
@@ -38,24 +37,16 @@
             btnClear = new Button();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             pnlInputCard = new Panel();
+            cmbRoomType = new ComboBox();
+            label2 = new Label();
             pnlGridCard = new Panel();
             dgvRooms = new DataGridView();
             label5 = new Label();
-            cmbRoomType = new ComboBox();
-            label2 = new Label();
+            cmbRate = new ComboBox();
             pnlInputCard.SuspendLayout();
             pnlGridCard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvRooms).BeginInit();
             SuspendLayout();
-            // 
-            // txtRoomRate
-            // 
-            txtRoomRate.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtRoomRate.Location = new Point(13, 118);
-            txtRoomRate.Multiline = true;
-            txtRoomRate.Name = "txtRoomRate";
-            txtRoomRate.Size = new Size(303, 33);
-            txtRoomRate.TabIndex = 5;
             // 
             // label3
             // 
@@ -129,6 +120,7 @@
             pnlInputCard.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             pnlInputCard.BackColor = Color.White;
             pnlInputCard.BorderStyle = BorderStyle.FixedSingle;
+            pnlInputCard.Controls.Add(cmbRate);
             pnlInputCard.Controls.Add(btnClear);
             pnlInputCard.Controls.Add(cmbRoomType);
             pnlInputCard.Controls.Add(btnViewRoom);
@@ -136,11 +128,31 @@
             pnlInputCard.Controls.Add(label2);
             pnlInputCard.Controls.Add(btnAddRoom);
             pnlInputCard.Controls.Add(label3);
-            pnlInputCard.Controls.Add(txtRoomRate);
             pnlInputCard.Location = new Point(15, 15);
             pnlInputCard.Name = "pnlInputCard";
             pnlInputCard.Size = new Size(330, 480);
             pnlInputCard.TabIndex = 14;
+            // 
+            // cmbRoomType
+            // 
+            cmbRoomType.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cmbRoomType.FormattingEnabled = true;
+            cmbRoomType.Items.AddRange(new object[] { "Single", "Deluxe", "Suite" });
+            cmbRoomType.Location = new Point(12, 50);
+            cmbRoomType.Name = "cmbRoomType";
+            cmbRoomType.Size = new Size(303, 25);
+            cmbRoomType.TabIndex = 13;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label2.ForeColor = Color.FromArgb(71, 85, 105);
+            label2.Location = new Point(12, 20);
+            label2.Name = "label2";
+            label2.Size = new Size(69, 15);
+            label2.TabIndex = 2;
+            label2.Text = "Room Type:";
             // 
             // pnlGridCard
             // 
@@ -194,26 +206,16 @@
             label5.TabIndex = 0;
             label5.Text = "Room Inventory List";
             // 
-            // cmbRoomType
+            // cmbRate
             // 
-            cmbRoomType.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            cmbRoomType.FormattingEnabled = true;
-            cmbRoomType.Items.AddRange(new object[] { "Single", "Deluxe", "Suite" });
-            cmbRoomType.Location = new Point(12, 50);
-            cmbRoomType.Name = "cmbRoomType";
-            cmbRoomType.Size = new Size(303, 25);
-            cmbRoomType.TabIndex = 13;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2.ForeColor = Color.FromArgb(71, 85, 105);
-            label2.Location = new Point(12, 20);
-            label2.Name = "label2";
-            label2.Size = new Size(69, 15);
-            label2.TabIndex = 2;
-            label2.Text = "Room Type:";
+            cmbRate.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cmbRate.FormattingEnabled = true;
+            cmbRate.Items.AddRange(new object[] { "P1.500", "P2.500", "P3.500" });
+            cmbRate.Location = new Point(12, 119);
+            cmbRate.Name = "cmbRate";
+            cmbRate.Size = new Size(303, 25);
+            cmbRate.TabIndex = 14;
+            cmbRate.SelectedIndexChanged += cmbRate_SelectedIndexChanged;
             // 
             // DesignRoomMaintenanceForm
             // 
@@ -237,7 +239,6 @@
         }
 
         #endregion
-        private TextBox txtRoomRate;
         private Label label3;
         private Button btnAddRoom;
         private Button btnEditRoom;
@@ -250,5 +251,6 @@
         private Label label5;
         private ComboBox cmbRoomType;
         private Label label2;
+        private ComboBox cmbRate;
     }
 }
