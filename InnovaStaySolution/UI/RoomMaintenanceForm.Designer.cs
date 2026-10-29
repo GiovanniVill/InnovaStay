@@ -1,6 +1,6 @@
 ﻿namespace UI
 {
-    partial class DesignRoomMaintenanceForm
+    partial class RoomMaintenanceForm
     {
         /// <summary>
         /// Required designer variable.
@@ -43,10 +43,10 @@
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             cmbRoomType = new ComboBox();
             pnlInputCard = new Panel();
-            txtRoomNumber = new TextBox();
             pnlGridCard = new Panel();
             dgvRooms = new DataGridView();
             label5 = new Label();
+            txtRoomNumber = new MaskedTextBox();
             pnlInputCard.SuspendLayout();
             pnlGridCard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvRooms).BeginInit();
@@ -57,7 +57,7 @@
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.FromArgb(71, 85, 105);
-            label1.Location = new Point(12, 50);
+            label1.Location = new Point(12, 61);
             label1.Name = "label1";
             label1.Size = new Size(110, 20);
             label1.TabIndex = 0;
@@ -201,16 +201,6 @@
             pnlInputCard.Size = new Size(458, 818);
             pnlInputCard.TabIndex = 14;
             // 
-            // txtRoomNumber
-            // 
-            txtRoomNumber.BorderStyle = BorderStyle.FixedSingle;
-            txtRoomNumber.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtRoomNumber.Location = new Point(12, 74);
-            txtRoomNumber.Multiline = true;
-            txtRoomNumber.Name = "txtRoomNumber";
-            txtRoomNumber.Size = new Size(303, 33);
-            txtRoomNumber.TabIndex = 1;
-            // 
             // pnlGridCard
             // 
             pnlGridCard.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
@@ -265,7 +255,14 @@
             label5.TabIndex = 0;
             label5.Text = "Room Inventory List";
             // 
-            // DesignRoomMaintenanceForm
+            // txtRoomNumber
+            // 
+            txtRoomNumber.Location = new Point(128, 62);
+            txtRoomNumber.Name = "txtRoomNumber";
+            txtRoomNumber.Size = new Size(187, 27);
+            txtRoomNumber.TabIndex = 14;
+            // 
+            // RoomMaintenanceForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -276,7 +273,7 @@
             Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.None;
             MinimizeBox = false;
-            Name = "DesignRoomMaintenanceForm";
+            Name = "RoomMaintenanceForm";
             Text = "Admin - Room Maintenance";
             Load += DesignRoomMaintenanceForm_Load_1;
             pnlInputCard.ResumeLayout(false);
@@ -305,6 +302,6 @@
         private Panel pnlGridCard;
         private DataGridView dgvRooms;
         private Label label5;
-        private TextBox txtRoomNumber;
+        private MaskedTextBox txtRoomNumber;
     }
 }

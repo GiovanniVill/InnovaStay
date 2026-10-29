@@ -1,9 +1,10 @@
+using BusinessLogic.Controller;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using BusinessLogic.Controller;
-using Model;
+using System.Xml.Linq;
 
 namespace UI
 {
@@ -71,7 +72,7 @@ namespace UI
 
         private void btnAddGuest_Click(object sender, EventArgs e)
         {
-            var (firstName, lastName) = ParseFullName(txtLname.Text);
+            var (firstName, lastName) = ParseFullName(txtFullName.Text);
 
             var guest = new GuestModel
             {
@@ -103,7 +104,7 @@ namespace UI
                 return;
             }
 
-            var (firstName, lastName) = ParseFullName(txtLname.Text);
+            var (firstName, lastName) = ParseFullName(txtFullName.Text);
 
             var guest = new GuestModel
             {
@@ -130,7 +131,7 @@ namespace UI
 
         private void btnSearchGuest_Click(object sender, EventArgs e)
         {
-            string searchName = txtLname.Text.Trim().ToLower();
+            string searchName = txtFullName.Text.Trim().ToLower();
             string searchPhone = txtContact.Text.Trim();
 
             try
@@ -155,7 +156,7 @@ namespace UI
             if (e.RowIndex >= 0 && dgvGuest.Rows[e.RowIndex].DataBoundItem is GuestModel selectedGuest)
             {
                 selectedGuestId = selectedGuest.GuestId;
-                txtLname.Text = selectedGuest.FullName;
+                txtFullName.Text = selectedGuest.FullName;
                 txtContact.Text = selectedGuest.PhoneNumber;
                 txtEmail.Text = selectedGuest.Email;
                 txtAddress.Text = selectedGuest.Address;
@@ -165,7 +166,7 @@ namespace UI
         private void ClearInputs()
         {
             selectedGuestId = -1;
-            txtLname.Clear();
+            txtFullName.Clear();
             txtContact.Clear();
             txtEmail.Clear();
             txtAddress.Clear();

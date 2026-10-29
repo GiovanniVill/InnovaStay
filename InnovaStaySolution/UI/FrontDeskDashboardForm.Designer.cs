@@ -35,11 +35,11 @@
             label2 = new Label();
             btnGuestManagement = new Button();
             panel1 = new Panel();
+            btnDashboard = new Button();
             label1 = new Label();
             btnLogout = new Button();
             panelMainContent = new Panel();
             label3 = new Label();
-            btnDashboard = new Button();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -143,6 +143,21 @@
             panel1.Size = new Size(240, 784);
             panel1.TabIndex = 13;
             // 
+            // btnDashboard
+            // 
+            btnDashboard.BackColor = Color.DarkKhaki;
+            btnDashboard.FlatStyle = FlatStyle.Flat;
+            btnDashboard.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDashboard.ForeColor = Color.Beige;
+            btnDashboard.Location = new Point(24, 146);
+            btnDashboard.Name = "btnDashboard";
+            btnDashboard.Padding = new Padding(12, 0, 0, 0);
+            btnDashboard.Size = new Size(200, 56);
+            btnDashboard.TabIndex = 16;
+            btnDashboard.Text = "Dashboard";
+            btnDashboard.TextAlign = ContentAlignment.MiddleLeft;
+            btnDashboard.UseVisualStyleBackColor = false;
+            // 
             // label1
             // 
             label1.AutoSize = true;
@@ -176,7 +191,7 @@
             panelMainContent.BorderStyle = BorderStyle.FixedSingle;
             panelMainContent.Location = new Point(268, 146);
             panelMainContent.Name = "panelMainContent";
-            panelMainContent.Size = new Size(876, 596);
+            panelMainContent.Size = new Size(907, 596);
             panelMainContent.TabIndex = 14;
             // 
             // label3
@@ -185,33 +200,18 @@
             label3.BackColor = Color.Transparent;
             label3.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label3.ForeColor = Color.Olive;
-            label3.Location = new Point(268, 27);
+            label3.Location = new Point(258, 27);
             label3.Name = "label3";
-            label3.Size = new Size(320, 41);
+            label3.Size = new Size(276, 41);
             label3.TabIndex = 15;
-            label3.Text = "Frontdesk Dashboard";
-            // 
-            // btnDashboard
-            // 
-            btnDashboard.BackColor = Color.DarkKhaki;
-            btnDashboard.FlatStyle = FlatStyle.Flat;
-            btnDashboard.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnDashboard.ForeColor = Color.Beige;
-            btnDashboard.Location = new Point(24, 146);
-            btnDashboard.Name = "btnDashboard";
-            btnDashboard.Padding = new Padding(12, 0, 0, 0);
-            btnDashboard.Size = new Size(200, 56);
-            btnDashboard.TabIndex = 16;
-            btnDashboard.Text = "Dashboard";
-            btnDashboard.TextAlign = ContentAlignment.MiddleLeft;
-            btnDashboard.UseVisualStyleBackColor = false;
+            label3.Text = "FRONTDESK USER";
             // 
             // FrontDeskDashboardForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(1156, 784);
+            ClientSize = new Size(1187, 784);
             Controls.Add(label3);
             Controls.Add(panelMainContent);
             Controls.Add(panel1);

@@ -6,12 +6,12 @@ using Model;
 
 namespace UI
 {
-    public partial class DesignRoomMaintenanceForm : Form
+    public partial class RoomMaintenanceForm : Form
     {
         private readonly RoomController _roomController;
         private readonly string _currentUserRole = "Admin";
 
-        public DesignRoomMaintenanceForm()
+        public RoomMaintenanceForm()
         {
             InitializeComponent();
             _roomController = new RoomController();
@@ -185,7 +185,6 @@ namespace UI
         private void DesignRoomMaintenanceForm_Load_1(object sender, EventArgs e)
         {
             LoadRoomGrid();
-        
-    }
+        }
     }
 }

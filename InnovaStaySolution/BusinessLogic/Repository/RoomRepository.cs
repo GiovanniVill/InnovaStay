@@ -28,7 +28,7 @@ namespace BusinessLogic.Repository
 
                     conn.Open();
                     int rows = cmd.ExecuteNonQuery();
-                    return rows > 0;
+                    return rows > 0 || rows == -1;
                 }
             }
             catch (Exception ex)
@@ -90,7 +90,7 @@ namespace BusinessLogic.Repository
 
                     conn.Open();
                     int rows = cmd.ExecuteNonQuery();
-                    return rows > 0;
+                    return rows > 0 || rows == -1;
                 }
             }
             catch (Exception ex)
@@ -114,7 +114,7 @@ namespace BusinessLogic.Repository
 
                     conn.Open();
                     int rows = cmd.ExecuteNonQuery();
-                    return rows > 0;
+                    return rows > 0 || rows == -1;
                 }
             }
             catch (Exception ex)
