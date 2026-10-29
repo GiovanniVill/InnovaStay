@@ -1,6 +1,6 @@
 ﻿namespace UI
 {
-    partial class DesignRoomMaintenanceForm
+    partial class RoomMaintenanceForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,9 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+<<<<<<< HEAD:InnovaStaySolution/UI/RoomMaintenanceForm.Designer.cs
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            label1 = new Label();
+            label2 = new Label();
+            txtRoomRate = new TextBox();
+=======
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+>>>>>>> main:InnovaStaySolution/UI/DesignRoomMaintenanceForm.Designer.cs
             label3 = new Label();
+            label4 = new Label();
+            cmbRoomStatus = new ComboBox();
             btnAddRoom = new Button();
             btnEditRoom = new Button();
             btnViewRoom = new Button();
@@ -42,30 +52,92 @@
             pnlGridCard = new Panel();
             dgvRooms = new DataGridView();
             label5 = new Label();
+<<<<<<< HEAD:InnovaStaySolution/UI/RoomMaintenanceForm.Designer.cs
+            txtRoomNumber = new MaskedTextBox();
+=======
             cmbRate = new ComboBox();
+>>>>>>> main:InnovaStaySolution/UI/DesignRoomMaintenanceForm.Designer.cs
             pnlInputCard.SuspendLayout();
             pnlGridCard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvRooms).BeginInit();
             SuspendLayout();
             // 
+<<<<<<< HEAD:InnovaStaySolution/UI/RoomMaintenanceForm.Designer.cs
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.ForeColor = Color.FromArgb(71, 85, 105);
+            label1.Location = new Point(12, 61);
+            label1.Name = "label1";
+            label1.Size = new Size(110, 20);
+            label1.TabIndex = 0;
+            label1.Text = "Room Number:";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label2.ForeColor = Color.FromArgb(71, 85, 105);
+            label2.Location = new Point(12, 110);
+            label2.Name = "label2";
+            label2.Size = new Size(87, 20);
+            label2.TabIndex = 2;
+            label2.Text = "Room Type:";
+            // 
+            // txtRoomRate
+            // 
+            txtRoomRate.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            txtRoomRate.Location = new Point(12, 188);
+            txtRoomRate.Multiline = true;
+            txtRoomRate.Name = "txtRoomRate";
+            txtRoomRate.Size = new Size(303, 33);
+            txtRoomRate.TabIndex = 5;
+            // 
+=======
+>>>>>>> main:InnovaStaySolution/UI/DesignRoomMaintenanceForm.Designer.cs
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label3.ForeColor = Color.FromArgb(71, 85, 105);
+<<<<<<< HEAD:InnovaStaySolution/UI/RoomMaintenanceForm.Designer.cs
+            label3.Location = new Point(12, 165);
+=======
             label3.Location = new Point(13, 90);
+>>>>>>> main:InnovaStaySolution/UI/DesignRoomMaintenanceForm.Designer.cs
             label3.Name = "label3";
-            label3.Size = new Size(68, 15);
+            label3.Size = new Size(86, 20);
             label3.TabIndex = 4;
             label3.Text = "Room Rate:";
             // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label4.ForeColor = Color.FromArgb(71, 85, 105);
+            label4.Location = new Point(12, 224);
+            label4.Name = "label4";
+            label4.Size = new Size(96, 20);
+            label4.TabIndex = 6;
+            label4.Text = "Room Status:";
+            // 
+            // cmbRoomStatus
+            // 
+            cmbRoomStatus.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cmbRoomStatus.FormattingEnabled = true;
+            cmbRoomStatus.Location = new Point(12, 247);
+            cmbRoomStatus.Name = "cmbRoomStatus";
+            cmbRoomStatus.Size = new Size(303, 29);
+            cmbRoomStatus.TabIndex = 8;
+            // 
             // btnAddRoom
             // 
-            btnAddRoom.BackColor = Color.FromArgb(37, 99, 235);
+            btnAddRoom.BackColor = Color.DarkKhaki;
             btnAddRoom.FlatStyle = FlatStyle.Flat;
-            btnAddRoom.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnAddRoom.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnAddRoom.ForeColor = Color.White;
-            btnAddRoom.Location = new Point(12, 283);
+            btnAddRoom.Location = new Point(12, 311);
             btnAddRoom.Name = "btnAddRoom";
             btnAddRoom.Size = new Size(126, 41);
             btnAddRoom.TabIndex = 9;
@@ -75,11 +147,11 @@
             // 
             // btnEditRoom
             // 
-            btnEditRoom.BackColor = Color.FromArgb(30, 41, 59);
+            btnEditRoom.BackColor = Color.DarkKhaki;
             btnEditRoom.FlatStyle = FlatStyle.Flat;
-            btnEditRoom.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnEditRoom.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnEditRoom.ForeColor = Color.White;
-            btnEditRoom.Location = new Point(187, 283);
+            btnEditRoom.Location = new Point(187, 311);
             btnEditRoom.Name = "btnEditRoom";
             btnEditRoom.Size = new Size(128, 41);
             btnEditRoom.TabIndex = 10;
@@ -89,11 +161,11 @@
             // 
             // btnViewRoom
             // 
-            btnViewRoom.BackColor = Color.FromArgb(71, 85, 105);
+            btnViewRoom.BackColor = Color.DarkKhaki;
             btnViewRoom.FlatStyle = FlatStyle.Flat;
-            btnViewRoom.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnViewRoom.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnViewRoom.ForeColor = Color.White;
-            btnViewRoom.Location = new Point(12, 352);
+            btnViewRoom.Location = new Point(12, 382);
             btnViewRoom.Name = "btnViewRoom";
             btnViewRoom.Size = new Size(126, 41);
             btnViewRoom.TabIndex = 11;
@@ -103,11 +175,11 @@
             // 
             // btnClear
             // 
-            btnClear.BackColor = Color.FromArgb(226, 232, 240);
+            btnClear.BackColor = Color.FromArgb(239, 68, 68);
             btnClear.FlatStyle = FlatStyle.Flat;
-            btnClear.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnClear.ForeColor = Color.FromArgb(51, 65, 85);
-            btnClear.Location = new Point(187, 352);
+            btnClear.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnClear.ForeColor = Color.White;
+            btnClear.Location = new Point(187, 382);
             btnClear.Name = "btnClear";
             btnClear.Size = new Size(128, 41);
             btnClear.TabIndex = 12;
@@ -115,10 +187,22 @@
             btnClear.UseVisualStyleBackColor = false;
             btnClear.Click += btnDeactivateRoom_Click_1;
             // 
+<<<<<<< HEAD:InnovaStaySolution/UI/RoomMaintenanceForm.Designer.cs
+            // cmbRoomType
+            // 
+            cmbRoomType.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cmbRoomType.FormattingEnabled = true;
+            cmbRoomType.Location = new Point(12, 133);
+            cmbRoomType.Name = "cmbRoomType";
+            cmbRoomType.Size = new Size(303, 29);
+            cmbRoomType.TabIndex = 13;
+            // 
+=======
+>>>>>>> main:InnovaStaySolution/UI/DesignRoomMaintenanceForm.Designer.cs
             // pnlInputCard
             // 
             pnlInputCard.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            pnlInputCard.BackColor = Color.White;
+            pnlInputCard.BackColor = Color.Beige;
             pnlInputCard.BorderStyle = BorderStyle.FixedSingle;
             pnlInputCard.Controls.Add(cmbRate);
             pnlInputCard.Controls.Add(btnClear);
@@ -130,7 +214,7 @@
             pnlInputCard.Controls.Add(label3);
             pnlInputCard.Location = new Point(15, 15);
             pnlInputCard.Name = "pnlInputCard";
-            pnlInputCard.Size = new Size(330, 480);
+            pnlInputCard.Size = new Size(458, 818);
             pnlInputCard.TabIndex = 14;
             // 
             // cmbRoomType
@@ -157,20 +241,40 @@
             // pnlGridCard
             // 
             pnlGridCard.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            pnlGridCard.BackColor = Color.White;
+            pnlGridCard.BackColor = Color.Silver;
             pnlGridCard.BorderStyle = BorderStyle.FixedSingle;
             pnlGridCard.Controls.Add(dgvRooms);
             pnlGridCard.Controls.Add(label5);
             pnlGridCard.Location = new Point(360, 15);
             pnlGridCard.Name = "pnlGridCard";
-            pnlGridCard.Size = new Size(620, 480);
+            pnlGridCard.Size = new Size(756, 818);
             pnlGridCard.TabIndex = 15;
             // 
             // dgvRooms
             // 
             dgvRooms.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvRooms.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvRooms.BackgroundColor = Color.White;
             dgvRooms.BorderStyle = BorderStyle.None;
+<<<<<<< HEAD:InnovaStaySolution/UI/RoomMaintenanceForm.Designer.cs
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(241, 245, 249);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle1.ForeColor = Color.FromArgb(51, 65, 85);
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvRooms.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dgvRooms.ColumnHeadersHeight = 38;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(224, 231, 255);
+            dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(15, 23, 42);
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dgvRooms.DefaultCellStyle = dataGridViewCellStyle2;
+=======
             dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = Color.FromArgb(241, 245, 249);
             dataGridViewCellStyle3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
@@ -188,11 +292,13 @@
             dataGridViewCellStyle4.SelectionForeColor = Color.FromArgb(15, 23, 42);
             dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
             dgvRooms.DefaultCellStyle = dataGridViewCellStyle4;
+>>>>>>> main:InnovaStaySolution/UI/DesignRoomMaintenanceForm.Designer.cs
             dgvRooms.EnableHeadersVisualStyles = false;
-            dgvRooms.GridColor = Color.FromArgb(241, 245, 249);
-            dgvRooms.Location = new Point(15, 50);
+            dgvRooms.Location = new Point(3, 61);
             dgvRooms.Name = "dgvRooms";
-            dgvRooms.Size = new Size(590, 415);
+            dgvRooms.RowHeadersWidth = 51;
+            dgvRooms.RowTemplate.Height = 30;
+            dgvRooms.Size = new Size(748, 592);
             dgvRooms.TabIndex = 1;
             // 
             // label5
@@ -202,10 +308,22 @@
             label5.ForeColor = Color.FromArgb(15, 23, 42);
             label5.Location = new Point(15, 15);
             label5.Name = "label5";
-            label5.Size = new Size(164, 21);
+            label5.Size = new Size(204, 28);
             label5.TabIndex = 0;
             label5.Text = "Room Inventory List";
             // 
+<<<<<<< HEAD:InnovaStaySolution/UI/RoomMaintenanceForm.Designer.cs
+            // txtRoomNumber
+            // 
+            txtRoomNumber.Location = new Point(128, 62);
+            txtRoomNumber.Name = "txtRoomNumber";
+            txtRoomNumber.Size = new Size(187, 27);
+            txtRoomNumber.TabIndex = 14;
+            // 
+            // RoomMaintenanceForm
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+=======
             // cmbRate
             // 
             cmbRate.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -220,14 +338,16 @@
             // DesignRoomMaintenanceForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
+>>>>>>> main:InnovaStaySolution/UI/DesignRoomMaintenanceForm.Designer.cs
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(248, 250, 252);
-            ClientSize = new Size(1000, 520);
+            BackColor = Color.White;
+            ClientSize = new Size(1128, 858);
             Controls.Add(pnlGridCard);
             Controls.Add(pnlInputCard);
             Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.None;
-            Name = "DesignRoomMaintenanceForm";
+            MinimizeBox = false;
+            Name = "RoomMaintenanceForm";
             Text = "Admin - Room Maintenance";
             Load += DesignRoomMaintenanceForm_Load_1;
             pnlInputCard.ResumeLayout(false);
@@ -239,7 +359,16 @@
         }
 
         #endregion
+<<<<<<< HEAD:InnovaStaySolution/UI/RoomMaintenanceForm.Designer.cs
+
+        private Label label1;
+        private Label label2;
+        private TextBox txtRoomRate;
+=======
+>>>>>>> main:InnovaStaySolution/UI/DesignRoomMaintenanceForm.Designer.cs
         private Label label3;
+        private Label label4;
+        private ComboBox cmbRoomStatus;
         private Button btnAddRoom;
         private Button btnEditRoom;
         private Button btnViewRoom;
@@ -249,8 +378,12 @@
         private Panel pnlGridCard;
         private DataGridView dgvRooms;
         private Label label5;
+<<<<<<< HEAD:InnovaStaySolution/UI/RoomMaintenanceForm.Designer.cs
+        private MaskedTextBox txtRoomNumber;
+=======
         private ComboBox cmbRoomType;
         private Label label2;
         private ComboBox cmbRate;
+>>>>>>> main:InnovaStaySolution/UI/DesignRoomMaintenanceForm.Designer.cs
     }
 }

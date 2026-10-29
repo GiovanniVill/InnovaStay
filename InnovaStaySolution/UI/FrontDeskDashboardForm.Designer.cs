@@ -36,8 +36,13 @@
             btnGuestManagement = new Button();
             panel1 = new Panel();
             btnDashboard = new Button();
+            label1 = new Label();
             btnLogout = new Button();
             panelMainContent = new Panel();
+<<<<<<< HEAD
+            label3 = new Label();
+            panel1.SuspendLayout();
+=======
             dgvRecentPayments = new DataGridView();
             panel3 = new Panel();
             label9 = new Label();
@@ -66,16 +71,17 @@
             pnlReservations.SuspendLayout();
             pnlCheckout.SuspendLayout();
             pnlCheckIn.SuspendLayout();
+>>>>>>> main
             SuspendLayout();
             // 
             // btnCheck
             // 
-            btnCheck.BackColor = Color.FromArgb(22, 163, 74);
+            btnCheck.BackColor = Color.FromArgb(0, 192, 0);
             btnCheck.Cursor = Cursors.Hand;
             btnCheck.FlatStyle = FlatStyle.Flat;
             btnCheck.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnCheck.ForeColor = Color.White;
-            btnCheck.Location = new Point(16, 566);
+            btnCheck.Location = new Point(24, 562);
             btnCheck.Name = "btnCheck";
             btnCheck.Size = new Size(200, 40);
             btnCheck.TabIndex = 5;
@@ -84,11 +90,11 @@
             // 
             // btnOut
             // 
-            btnOut.BackColor = Color.FromArgb(71, 85, 105);
+            btnOut.BackColor = Color.Navy;
             btnOut.FlatStyle = FlatStyle.Flat;
             btnOut.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnOut.ForeColor = Color.White;
-            btnOut.Location = new Point(16, 626);
+            btnOut.Location = new Point(24, 608);
             btnOut.Name = "btnOut";
             btnOut.Size = new Size(200, 40);
             btnOut.TabIndex = 6;
@@ -98,14 +104,14 @@
             // 
             // btnCreateRes
             // 
-            btnCreateRes.BackColor = Color.FromArgb(30, 41, 59);
+            btnCreateRes.BackColor = Color.DarkKhaki;
             btnCreateRes.Cursor = Cursors.Hand;
             btnCreateRes.FlatStyle = FlatStyle.Flat;
             btnCreateRes.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnCreateRes.ForeColor = Color.White;
-            btnCreateRes.Location = new Point(16, 119);
+            btnCreateRes.Location = new Point(24, 220);
             btnCreateRes.Name = "btnCreateRes";
-            btnCreateRes.Size = new Size(200, 40);
+            btnCreateRes.Size = new Size(200, 56);
             btnCreateRes.TabIndex = 9;
             btnCreateRes.Text = "Create Reservation";
             btnCreateRes.UseVisualStyleBackColor = false;
@@ -113,14 +119,14 @@
             // 
             // btnBP
             // 
-            btnBP.BackColor = Color.FromArgb(30, 41, 59);
+            btnBP.BackColor = Color.DarkKhaki;
             btnBP.Cursor = Cursors.Hand;
             btnBP.FlatStyle = FlatStyle.Flat;
             btnBP.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnBP.ForeColor = Color.White;
-            btnBP.Location = new Point(16, 190);
+            btnBP.Location = new Point(24, 296);
             btnBP.Name = "btnBP";
-            btnBP.Size = new Size(200, 40);
+            btnBP.Size = new Size(200, 56);
             btnBP.TabIndex = 10;
             btnBP.Text = "Billing/Payment";
             btnBP.UseVisualStyleBackColor = false;
@@ -130,23 +136,23 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.ForeColor = Color.FromArgb(30, 41, 59);
-            label2.Location = new Point(246, 26);
+            label2.ForeColor = Color.Olive;
+            label2.Location = new Point(16, 27);
             label2.Name = "label2";
-            label2.Size = new Size(137, 32);
+            label2.Size = new Size(208, 41);
             label2.TabIndex = 11;
-            label2.Text = "Front Desk";
+            label2.Text = "INNOVASTAY";
             // 
             // btnGuestManagement
             // 
-            btnGuestManagement.BackColor = Color.FromArgb(30, 41, 59);
+            btnGuestManagement.BackColor = Color.DarkKhaki;
             btnGuestManagement.Cursor = Cursors.Hand;
             btnGuestManagement.FlatStyle = FlatStyle.Flat;
             btnGuestManagement.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnGuestManagement.ForeColor = Color.White;
-            btnGuestManagement.Location = new Point(16, 273);
+            btnGuestManagement.Location = new Point(24, 373);
             btnGuestManagement.Name = "btnGuestManagement";
-            btnGuestManagement.Size = new Size(200, 40);
+            btnGuestManagement.Size = new Size(200, 56);
             btnGuestManagement.TabIndex = 12;
             btnGuestManagement.Text = "Guest Management";
             btnGuestManagement.UseVisualStyleBackColor = false;
@@ -154,9 +160,11 @@
             // 
             // panel1
             // 
-            panel1.BackColor = Color.FromArgb(15, 23, 42);
+            panel1.BackColor = Color.Beige;
             panel1.Controls.Add(btnDashboard);
+            panel1.Controls.Add(label1);
             panel1.Controls.Add(btnLogout);
+            panel1.Controls.Add(label2);
             panel1.Controls.Add(btnGuestManagement);
             panel1.Controls.Add(btnCreateRes);
             panel1.Controls.Add(btnOut);
@@ -170,17 +178,29 @@
             // 
             // btnDashboard
             // 
-            btnDashboard.BackColor = Color.FromArgb(30, 41, 59);
-            btnDashboard.Cursor = Cursors.Hand;
+            btnDashboard.BackColor = Color.DarkKhaki;
             btnDashboard.FlatStyle = FlatStyle.Flat;
-            btnDashboard.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-            btnDashboard.ForeColor = Color.White;
-            btnDashboard.Location = new Point(16, 40);
+            btnDashboard.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDashboard.ForeColor = Color.Beige;
+            btnDashboard.Location = new Point(24, 146);
             btnDashboard.Name = "btnDashboard";
-            btnDashboard.Size = new Size(200, 40);
-            btnDashboard.TabIndex = 14;
+            btnDashboard.Padding = new Padding(12, 0, 0, 0);
+            btnDashboard.Size = new Size(200, 56);
+            btnDashboard.TabIndex = 16;
             btnDashboard.Text = "Dashboard";
+            btnDashboard.TextAlign = ContentAlignment.MiddleLeft;
             btnDashboard.UseVisualStyleBackColor = false;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.ForeColor = Color.DimGray;
+            label1.Location = new Point(36, 68);
+            label1.Name = "label1";
+            label1.Size = new Size(157, 19);
+            label1.TabIndex = 15;
+            label1.Text = "FRONTDESK CONSOLE";
             // 
             // btnLogout
             // 
@@ -189,7 +209,7 @@
             btnLogout.FlatStyle = FlatStyle.Flat;
             btnLogout.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
             btnLogout.ForeColor = Color.White;
-            btnLogout.Location = new Point(16, 686);
+            btnLogout.Location = new Point(24, 702);
             btnLogout.Name = "btnLogout";
             btnLogout.Size = new Size(200, 40);
             btnLogout.TabIndex = 13;
@@ -200,19 +220,26 @@
             // panelMainContent
             // 
             panelMainContent.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panelMainContent.BackColor = Color.White;
             panelMainContent.BorderStyle = BorderStyle.FixedSingle;
-            panelMainContent.Controls.Add(dgvRecentPayments);
-            panelMainContent.Controls.Add(panel3);
-            panelMainContent.Controls.Add(panel2);
-            panelMainContent.Controls.Add(pnlRooms);
-            panelMainContent.Controls.Add(pnlReservations);
-            panelMainContent.Controls.Add(pnlCheckout);
-            panelMainContent.Controls.Add(pnlCheckIn);
-            panelMainContent.Location = new Point(246, 78);
+            panelMainContent.Location = new Point(268, 146);
             panelMainContent.Name = "panelMainContent";
-            panelMainContent.Size = new Size(898, 694);
+            panelMainContent.Size = new Size(907, 596);
             panelMainContent.TabIndex = 14;
             // 
+<<<<<<< HEAD
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.BackColor = Color.Transparent;
+            label3.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.ForeColor = Color.Olive;
+            label3.Location = new Point(258, 27);
+            label3.Name = "label3";
+            label3.Size = new Size(276, 41);
+            label3.TabIndex = 15;
+            label3.Text = "FRONTDESK USER";
+=======
             // dgvRecentPayments
             // 
             dgvRecentPayments.AllowUserToAddRows = false;
@@ -428,22 +455,26 @@
             lblCheckInCount.Size = new Size(34, 40);
             lblCheckInCount.TabIndex = 8;
             lblCheckInCount.Text = "0";
+>>>>>>> main
             // 
             // FrontDeskDashboardForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(248, 250, 252);
-            ClientSize = new Size(1156, 784);
+            BackColor = Color.White;
+            ClientSize = new Size(1187, 784);
+            Controls.Add(label3);
             Controls.Add(panelMainContent);
             Controls.Add(panel1);
-            Controls.Add(label2);
             Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Name = "FrontDeskDashboardForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Dashboard - Front desk";
             WindowState = FormWindowState.Maximized;
             panel1.ResumeLayout(false);
+<<<<<<< HEAD
+            panel1.PerformLayout();
+=======
             panelMainContent.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvRecentPayments).EndInit();
             panel3.ResumeLayout(false);
@@ -458,6 +489,7 @@
             pnlCheckout.PerformLayout();
             pnlCheckIn.ResumeLayout(false);
             pnlCheckIn.PerformLayout();
+>>>>>>> main
             ResumeLayout(false);
             PerformLayout();
         }
@@ -471,26 +503,9 @@
         private Button btnGuestManagement;
         private Panel panel1;
         private Button btnLogout;
-        private Button btnDashboard;
         private Panel panelMainContent;
-        private Label label5;
-        private Label label4;
-        private Label label3;
         private Label label1;
-        private Panel pnlCheckIn;
-        private Panel pnlRooms;
-        private Panel pnlReservations;
-        private Panel pnlCheckout;
-        private Label lblActiveReservations;
-        private Label lblAvailableRooms;
-        private Label lblCheckoutCount;
-        private Label lblCheckInCount;
-        private Panel panel3;
-        private Panel panel2;
-        private Label label9;
-        private Label label7;
-        private Label label8;
-        private Label lblTodayRevenue;
-        private DataGridView dgvRecentPayments;
+        private Label label3;
+        private Button btnDashboard;
     }
 }

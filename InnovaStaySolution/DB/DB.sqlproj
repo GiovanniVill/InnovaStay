@@ -64,6 +64,8 @@
   <ItemGroup>
     <Build Include="Table\Users.sql" />
     <Build Include="StoredProc\spAuthenticateUser.sql" />
+    <Build Include="Table\UserProfiles.sql" />
+    <Build Include="StoredProc\spUserManagement.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="PostScript\SeedUsers.sql" />

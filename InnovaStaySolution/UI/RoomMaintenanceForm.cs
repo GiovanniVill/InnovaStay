@@ -8,14 +8,14 @@ using Model;
 
 namespace UI
 {
-    public partial class DesignRoomMaintenanceForm : Form
+    public partial class RoomMaintenanceForm : Form
     {
         private readonly RoomController _roomController;
         private readonly string _currentUserRole = "Admin";
         private int _selectedRoomId = 0;
         private string _selectedRoomNumber = string.Empty;
 
-        public DesignRoomMaintenanceForm()
+        public RoomMaintenanceForm()
         {
             InitializeComponent();
             _roomController = new RoomController();
@@ -286,7 +286,11 @@ namespace UI
 
         private void cmbRate_SelectedIndexChanged(object sender, EventArgs e)
         {
+<<<<<<< HEAD:InnovaStaySolution/UI/RoomMaintenanceForm.cs
+            LoadRoomGrid();
+=======
 
+>>>>>>> main:InnovaStaySolution/UI/DesignRoomMaintenanceForm.cs
         }
     }
 }

@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+﻿using System;
+=======
 ﻿using BusinessLogic.Controller;
 using Model;
 using System;
@@ -7,22 +10,35 @@ using System.Data;
 using System.Drawing;
 using System.Linq; // Added for LINQ .Count()
 using System.Text;
+>>>>>>> main
 using System.Windows.Forms;
 
 namespace UI
 {
     public partial class AdminDashboardForm : Form
     {
+<<<<<<< HEAD
+        private Form activeChildForm = null;
+=======
         private Form? activeForm = null;
         private readonly RoomController _roomController; // Added field declaration
+>>>>>>> main
 
         public AdminDashboardForm()
         {
             InitializeComponent();
-            _roomController = new RoomController(); // Instantiated controller
-            this.WindowState = FormWindowState.Maximized;
-        }
+<<<<<<< HEAD
 
+=======
+            _roomController = new RoomController(); // Instantiated controller
+>>>>>>> main
+            this.WindowState = FormWindowState.Maximized;
+
+<<<<<<< HEAD
+            // Ipakita ang Dashboard sa unang pagbukas.
+            pnlDashboard.Visible = true;
+            pnlUserManagement.Visible = false;
+=======
         private void ShowDashboardHome()
         {
             if (activeForm != null)
@@ -37,71 +53,118 @@ namespace UI
 
             LoadCurrentActivity();
             LoadDashboardOverview(); // Refreshes card metrics when returning home
+>>>>>>> main
         }
 
         private void OpenChildForm(Form childForm)
         {
-            if (activeForm != null)
+            try
             {
-                activeForm.Close();
+                // Isara ang dating form kung mayroon.
+                if (activeChildForm != null)
+                {
+                    activeChildForm.Close();
+                    activeChildForm.Dispose();
+                    activeChildForm = null;
+                }
+
+                // Linisin ang content panel.
+                pnlUserManagement.Controls.Clear();
+
+                // Ihanda ang bagong child form.
+                activeChildForm = childForm;
+                childForm.TopLevel = false;
+                childForm.FormBorderStyle = FormBorderStyle.None;
+                childForm.Dock = DockStyle.Fill;
+
+                // Idagdag ang child form sa content panel.
+                pnlUserManagement.Controls.Add(childForm);
+
+                // Itago ang Dashboard at ipakita ang content panel.
+                pnlDashboard.Visible = false;
+                pnlUserManagement.Visible = true;
+                pnlUserManagement.BringToFront();
+
+                // Ipakita ang child form.
+                childForm.Show();
+                childForm.BringToFront();
             }
-
-            lblCurrentActivity.Visible = false;
-            dgvCurrentActivity.Visible = false;
-
-            activeForm = childForm;
-            childForm.TopLevel = false;
-            childForm.FormBorderStyle = FormBorderStyle.None;
-            childForm.Dock = DockStyle.Fill;
-
-            panelMainContent.Controls.Add(childForm);
-            panelMainContent.Tag = childForm;
-            childForm.BringToFront();
-            childForm.Show();
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Error sa pagbukas ng form: " + ex.Message,
+                    "Form Load Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
-        private void btnDashboard_Click_1(object sender, EventArgs e)
+        private void ShowDashboardHome()
         {
-            ShowDashboardHome();
-        }
+            try
+            {
+                // Isara ang kasalukuyang child form.
+                if (activeChildForm != null)
+                {
+                    activeChildForm.Close();
+                    activeChildForm.Dispose();
+                    activeChildForm = null;
+                }
 
-        private void btnRM_Click(object sender, EventArgs e)
-        {
-            OpenChildForm(new DesignRoomMaintenanceForm());
+                // Linisin ang content panel.
+                pnlUserManagement.Controls.Clear();
+                pnlUserManagement.Visible = false;
+
+                // Ipakita muli ang Dashboard.
+                pnlDashboard.Visible = true;
+                pnlDashboard.BringToFront();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Error sa pagbalik sa dashboard: " + ex.Message,
+                    "Dashboard Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void btnUM_Click(object sender, EventArgs e)
         {
-
+            OpenChildForm(new UserManagementForm());
         }
 
-        private void LoadCurrentActivity()
+        private void btnRM_Click(object sender, EventArgs e)
         {
-            if (dgvCurrentActivity.Columns.Count == 0)
-            {
-                dgvCurrentActivity.Columns.Add("Time", "Time");
-                dgvCurrentActivity.Columns.Add("User", "User");
-                dgvCurrentActivity.Columns.Add("Role", "Role");
-                dgvCurrentActivity.Columns.Add("Activity", "Activity Description");
-            }
-
-            dgvCurrentActivity.Rows.Clear();
-            dgvCurrentActivity.Rows.Add(DateTime.Now.ToString("hh:mm tt"), "admin", "Admin", "Logged in to Admin Console");
-            dgvCurrentActivity.Rows.Add(DateTime.Now.AddMinutes(-15).ToString("hh:mm tt"), "frontdesk1", "Front Desk", "Checked in guest: Room 204");
-            dgvCurrentActivity.Rows.Add(DateTime.Now.AddMinutes(-35).ToString("hh:mm tt"), "admin", "Admin", "Updated Room 102 to Maintenance");
+            OpenChildForm(new RoomMaintenanceForm());
         }
 
-        private void btnLogOut_Click_1(object sender, EventArgs e)
+        private void btnDashboard_Click(object sender, EventArgs e)
         {
-            var confirm = MessageBox.Show("Are you sure you want to log out?", "Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            ShowDashboardHome();
+        }
+
+        private void btnLogOut_Click(object sender, EventArgs e)
+        {
+            DialogResult confirm = MessageBox.Show(
+                "Sigurado ka bang nais mong mag-logout?",
+                "Log Out",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
             if (confirm == DialogResult.Yes)
             {
                 this.Hide();
-                var loginForm = new LoginForm();
+
+                LoginForm loginForm = new LoginForm();
+
                 loginForm.FormClosed += (s, args) => this.Close();
+
                 loginForm.Show();
             }
         }
+<<<<<<< HEAD
+=======
 
         private void LoadDashboardOverview()
         {
@@ -149,5 +212,6 @@ namespace UI
             this.WindowState = FormWindowState.Maximized;
             ShowDashboardHome();
         }
+>>>>>>> main
     }
 }

@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[UserProfiles]
+(
+    [ProfileID] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    [UserID] INT NOT NULL UNIQUE,
+    [FullName] VARCHAR(100) NOT NULL,
+    [CreatedAt] DATETIME DEFAULT GETDATE() NOT NULL,
+    CONSTRAINT [FK_UserProfiles_Users] FOREIGN KEY ([UserID]) REFERENCES [dbo].[Users]([UserID]) ON DELETE CASCADE
+);
