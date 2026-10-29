@@ -17,6 +17,11 @@ namespace UI
             InitializeComponent();
         }
 
+        private void FrontDeskDashboardForm_Load(object sender, EventArgs e)
+        {
+            LoadDashboardOverview();
+        }
+
         private void OpenChildForm(Form childForm)
         {
             if (activeForm != null)
@@ -35,14 +40,41 @@ namespace UI
             childForm.Show();
         }
 
-        private void btnBP_Click(object sender, EventArgs e)
+        private void LoadDashboardOverview()
         {
+            // Close active child form to return to the dashboard overview cards
+            if (activeForm != null)
+            {
+                activeForm.Close();
+                activeForm = null;
+            }
+        }
 
+        private void btnDashboard_Click(object sender, EventArgs e)
+        {
+            LoadDashboardOverview();
+        }
+
+        private void btnCreateRes_Click(object sender, EventArgs e)
+        {
+            // Opens the Create Reservation form as a modal dialog
+            using (var form = new CreateReservationForm())
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    LoadDashboardOverview();
+                }
+            }
         }
 
         private void btnGuestManagement_Click(object sender, EventArgs e)
         {
             OpenChildForm(new GuestManagementForm());
+        }
+
+        private void btnBP_Click(object sender, EventArgs e)
+        {
+            // Billing / Payment click handler
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
@@ -54,6 +86,17 @@ namespace UI
                 var loginForm = new LoginForm();
                 loginForm.FormClosed += (s, args) => this.Close();
                 loginForm.Show();
+            }
+        }
+
+        private void btnOut_Click(object sender, EventArgs e)
+        {
+            using (var checkOutForm = new CheckOutForm())
+            {
+                if (checkOutForm.ShowDialog() == DialogResult.OK)
+                {
+                    LoadDashboardOverview();
+                }
             }
         }
     }
