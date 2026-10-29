@@ -123,5 +123,57 @@ namespace BusinessLogic.Repository
                 return false;
             }
         }
+
+        // US-05: Check room availability based on selected check-in and check-out dates
+        public List<RoomModel> GetAvailableRoomsByDates(DateTime checkIn, DateTime checkOut)
+        {
+            var list = new List<RoomModel>();
+
+            using (var conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+
+                // 1. Get all rooms from the system
+                var allRooms = GetAllRooms();
+
+                // 2. Fetch room IDs that have active booking overlaps during the selected date window
+                var bookedRoomIds = new HashSet<int>();
+                string conflictQuery = @"
+                    IF OBJECT_ID('dbo.Reservations', 'U') IS NOT NULL
+                    BEGIN
+                        SELECT RoomId
+                        FROM dbo.Reservations
+                        WHERE Status IN ('Confirmed', 'CheckedIn')
+                          AND @CheckIn < CheckOutDate
+                          AND @CheckOut > CheckInDate;
+                    END";
+
+                using (var cmd = new SqlCommand(conflictQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@CheckIn", checkIn.Date);
+                    cmd.Parameters.AddWithValue("@CheckOut", checkOut.Date);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            bookedRoomIds.Add(Convert.ToInt32(reader["RoomId"]));
+                        }
+                    }
+                }
+
+                // 3. Keep rooms not under Maintenance and not booked during the chosen window
+                foreach (var room in allRooms)
+                {
+                    bool isMaintenance = string.Equals(room.Status, "Maintenance", StringComparison.OrdinalIgnoreCase);
+                    if (!isMaintenance && !bookedRoomIds.Contains(room.RoomId))
+                    {
+                        list.Add(room);
+                    }
+                }
+            }
+
+            return list;
+        }
     }
 }

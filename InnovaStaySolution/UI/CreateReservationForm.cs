@@ -21,17 +21,14 @@ namespace UI
             _roomController = new RoomController();
             _reservationController = new ReservationController();
 
-            this.Load += (s, e) => InitializeReservationForm();
-
-            btnCancel.Click += (s, e) => this.Close();
-            btnConfirmReservation.Click += (s, e) => ExecuteReservation();
-
+            // Wire change listeners
             cmbRoom.SelectedIndexChanged += cmbRoom_SelectedIndexChanged;
             dtpCheckIn.ValueChanged += dtpCheckIn_ValueChanged;
             dtpCheckOut.ValueChanged += dtpCheckOut_ValueChanged;
         }
 
-        private void InitializeReservationForm()
+        // Handles the Form Load event registered in Designer
+        private void CreateReservationForm_Load_1(object sender, EventArgs e)
         {
             dtpCheckIn.Value = DateTime.Today;
             dtpCheckOut.Value = DateTime.Today.AddDays(1);
@@ -71,20 +68,19 @@ namespace UI
             }
         }
 
+        // US-05: Queries available rooms by overlapping check-in/out date range
         private void LoadAvailableRooms()
         {
             try
             {
-                var rooms = _roomController.GetAllRooms();
-                var availableRooms = rooms != null
-                    ? rooms.FindAll(r => string.Equals(r.Status, "Available", StringComparison.OrdinalIgnoreCase))
-                    : new List<RoomModel>();
+                var availableRooms = _roomController.GetAvailableRoomsByDates(dtpCheckIn.Value.Date, dtpCheckOut.Value.Date);
 
                 cmbRoom.DataSource = null;
                 cmbRoom.DataSource = availableRooms;
                 cmbRoom.DisplayMember = "RoomNumber";
                 cmbRoom.ValueMember = "RoomId";
                 cmbRoom.SelectedIndex = -1;
+                _selectedRoomRate = 0m;
             }
             catch (Exception ex)
             {
@@ -112,11 +108,13 @@ namespace UI
             {
                 dtpCheckOut.Value = dtpCheckIn.Value.AddDays(1);
             }
+            LoadAvailableRooms();
             CalculateTotal();
         }
 
         private void dtpCheckOut_ValueChanged(object? sender, EventArgs e)
         {
+            LoadAvailableRooms();
             CalculateTotal();
         }
 
@@ -129,7 +127,8 @@ namespace UI
             lblTotalAmount.Text = $"PHP {total:N2} ({nights} {(nights == 1 ? "night" : "nights")})";
         }
 
-        private void ExecuteReservation()
+        // Handles Reserve button click registered in Designer
+        private void btnConfirmReservation_Click(object sender, EventArgs e)
         {
             if (cmbGuest.SelectedValue == null)
             {
@@ -139,7 +138,7 @@ namespace UI
 
             if (cmbRoom.SelectedValue == null)
             {
-                MessageBox.Show("Please select a room.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select an available room.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -171,10 +170,10 @@ namespace UI
             }
         }
 
-        private void CreateReservationForm_Load(object sender, EventArgs e) => InitializeReservationForm();
-        private void CreateReservationForm_Load_1(object sender, EventArgs e) => InitializeReservationForm();
-        private void btnConfirmReservation_Click(object sender, EventArgs e) => ExecuteReservation();
-        private void btnCancel_Click(object sender, EventArgs e) => this.Close();
-        private void btnCancel_Click_1(object sender, EventArgs e) => this.Close();
+        // Handles Cancel button click registered in Designer
+        private void btnCancel_Click_1(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
