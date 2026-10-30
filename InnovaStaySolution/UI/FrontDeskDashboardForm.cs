@@ -26,7 +26,9 @@ namespace UI
         {
             if (activeForm != null)
             {
-                activeForm.Close();
+                var temp = activeForm;
+                activeForm = null;
+                temp.Close();
             }
 
             activeForm = childForm;
@@ -34,6 +36,7 @@ namespace UI
             childForm.FormBorderStyle = FormBorderStyle.None;
             childForm.Dock = DockStyle.Fill;
 
+            panelMainContent.Controls.Clear();
             panelMainContent.Controls.Add(childForm);
             panelMainContent.Tag = childForm;
             childForm.BringToFront();
@@ -45,9 +48,12 @@ namespace UI
             // Close active child form to return to the dashboard overview cards
             if (activeForm != null)
             {
-                activeForm.Close();
+                var temp = activeForm;
                 activeForm = null;
+                temp.Close();
             }
+
+            panelMainContent.Controls.Clear();
         }
 
         private void btnDashboard_Click(object sender, EventArgs e)
@@ -57,14 +63,7 @@ namespace UI
 
         private void btnCreateRes_Click(object sender, EventArgs e)
         {
-            // Opens the Create Reservation form as a modal dialog
-            using (var form = new CreateReservationForm())
-            {
-                if (form.ShowDialog() == DialogResult.OK)
-                {
-                    LoadDashboardOverview();
-                }
-            }
+            OpenChildForm(new CreateReservationForm());
         }
 
         private void btnGuestManagement_Click(object sender, EventArgs e)
@@ -91,13 +90,8 @@ namespace UI
 
         private void btnOut_Click(object sender, EventArgs e)
         {
-            using (var checkOutForm = new CheckOutForm())
-            {
-                if (checkOutForm.ShowDialog() == DialogResult.OK)
-                {
-                    LoadDashboardOverview();
-                }
-            }
+            // Embeds CheckOutForm inside panelMainContent
+            OpenChildForm(new CheckOutForm());
         }
     }
 }
