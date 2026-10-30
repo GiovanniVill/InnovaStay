@@ -1,66 +1,36 @@
-<<<<<<< HEAD
-﻿using System;
-=======
-﻿using BusinessLogic.Controller;
-using Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq; // Added for LINQ .Count()
+using System.Linq;
 using System.Text;
->>>>>>> main
 using System.Windows.Forms;
+using BusinessLogic.Controller;
+using Model;
 
 namespace UI
 {
     public partial class AdminDashboardForm : Form
     {
-<<<<<<< HEAD
-        private Form activeChildForm = null;
-=======
-        private Form? activeForm = null;
-        private readonly RoomController _roomController; // Added field declaration
->>>>>>> main
+        private Form? activeChildForm = null;
+        private readonly RoomController _roomController;
 
         public AdminDashboardForm()
         {
             InitializeComponent();
-<<<<<<< HEAD
 
-=======
-            _roomController = new RoomController(); // Instantiated controller
->>>>>>> main
+            _roomController = new RoomController();
             this.WindowState = FormWindowState.Maximized;
-
-<<<<<<< HEAD
-            // Ipakita ang Dashboard sa unang pagbukas.
             pnlDashboard.Visible = true;
             pnlUserManagement.Visible = false;
-=======
-        private void ShowDashboardHome()
-        {
-            if (activeForm != null)
-            {
-                activeForm.Close();
-                activeForm = null;
-            }
-
-            lblCurrentActivity.Visible = true;
-            dgvCurrentActivity.Visible = true;
-            dgvCurrentActivity.BringToFront();
-
-            LoadCurrentActivity();
-            LoadDashboardOverview(); // Refreshes card metrics when returning home
->>>>>>> main
         }
 
-        private void OpenChildForm(Form childForm)
+        private void ShowDashboardHome()
         {
             try
             {
-                // Isara ang dating form kung mayroon.
+                // Isara ang kasalukuyang binuksang child form kung mayroon
                 if (activeChildForm != null)
                 {
                     activeChildForm.Close();
@@ -68,24 +38,62 @@ namespace UI
                     activeChildForm = null;
                 }
 
-                // Linisin ang content panel.
+                // Linisin ang user management content panel
+                pnlUserManagement.Controls.Clear();
+                pnlUserManagement.Visible = false;
+
+                // Ipakita ang dashboard overview panel at mga grid controls
+                pnlDashboard.Visible = true;
+                pnlDashboard.BringToFront();
+
+                if (lblCurrentActivity != null) lblCurrentActivity.Visible = true;
+                if (dgvCurrentActivity != null)
+                {
+                    dgvCurrentActivity.Visible = true;
+                    dgvCurrentActivity.BringToFront();
+                }
+
+                // I-refresh ang data
+                LoadCurrentActivity();
+                LoadDashboardOverview();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Error sa pagbalik sa dashboard: " + ex.Message,
+                    "Dashboard Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void OpenChildForm(Form childForm)
+        {
+            try
+            {
+                // Isara ang dating form kung mayroon
+                if (activeChildForm != null)
+                {
+                    activeChildForm.Close();
+                    activeChildForm.Dispose();
+                    activeChildForm = null;
+                }
+
+                // Linisin ang content panel bago magpasok ng bago
                 pnlUserManagement.Controls.Clear();
 
-                // Ihanda ang bagong child form.
+                // Ihanda ang bagong child form
                 activeChildForm = childForm;
                 childForm.TopLevel = false;
                 childForm.FormBorderStyle = FormBorderStyle.None;
                 childForm.Dock = DockStyle.Fill;
 
-                // Idagdag ang child form sa content panel.
+                // Idagdag at ipakita sa panel
                 pnlUserManagement.Controls.Add(childForm);
-
-                // Itago ang Dashboard at ipakita ang content panel.
                 pnlDashboard.Visible = false;
                 pnlUserManagement.Visible = true;
                 pnlUserManagement.BringToFront();
 
-                // Ipakita ang child form.
                 childForm.Show();
                 childForm.BringToFront();
             }
@@ -94,36 +102,6 @@ namespace UI
                 MessageBox.Show(
                     "Error sa pagbukas ng form: " + ex.Message,
                     "Form Load Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-        }
-
-        private void ShowDashboardHome()
-        {
-            try
-            {
-                // Isara ang kasalukuyang child form.
-                if (activeChildForm != null)
-                {
-                    activeChildForm.Close();
-                    activeChildForm.Dispose();
-                    activeChildForm = null;
-                }
-
-                // Linisin ang content panel.
-                pnlUserManagement.Controls.Clear();
-                pnlUserManagement.Visible = false;
-
-                // Ipakita muli ang Dashboard.
-                pnlDashboard.Visible = true;
-                pnlDashboard.BringToFront();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Error sa pagbalik sa dashboard: " + ex.Message,
-                    "Dashboard Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
@@ -157,14 +135,10 @@ namespace UI
                 this.Hide();
 
                 LoginForm loginForm = new LoginForm();
-
                 loginForm.FormClosed += (s, args) => this.Close();
-
                 loginForm.Show();
             }
         }
-<<<<<<< HEAD
-=======
 
         private void LoadDashboardOverview()
         {
@@ -207,11 +181,24 @@ namespace UI
             }
         }
 
+        private void LoadCurrentActivity()
+        {
+            try
+            {
+                // Kung may existing method ka na para dito sa database o controller,
+                // dito ito tatawagin para mag-populate ang dgvCurrentActivity.
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to load current activity: " + ex.Message,
+                    "Activity Log Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void AdminDashboardForm_Load_1(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Maximized;
             ShowDashboardHome();
         }
->>>>>>> main
     }
 }

@@ -286,11 +286,7 @@ namespace UI
 
         private void cmbRate_SelectedIndexChanged(object sender, EventArgs e)
         {
-<<<<<<< HEAD:InnovaStaySolution/UI/RoomMaintenanceForm.cs
             LoadRoomGrid();
-=======
-
->>>>>>> main:InnovaStaySolution/UI/DesignRoomMaintenanceForm.cs
         }
     }
 }
