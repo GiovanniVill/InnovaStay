@@ -39,10 +39,6 @@
             label1 = new Label();
             btnLogout = new Button();
             panelMainContent = new Panel();
-<<<<<<< HEAD
-            label3 = new Label();
-            panel1.SuspendLayout();
-=======
             dgvRecentPayments = new DataGridView();
             panel3 = new Panel();
             label9 = new Label();
@@ -60,8 +56,9 @@
             label3 = new Label();
             lblCheckoutCount = new Label();
             pnlCheckIn = new Panel();
-            label1 = new Label();
+            label6 = new Label();
             lblCheckInCount = new Label();
+            labelTitle = new Label();
             panel1.SuspendLayout();
             panelMainContent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvRecentPayments).BeginInit();
@@ -71,7 +68,6 @@
             pnlReservations.SuspendLayout();
             pnlCheckout.SuspendLayout();
             pnlCheckIn.SuspendLayout();
->>>>>>> main
             SuspendLayout();
             // 
             // btnCheck
@@ -222,24 +218,18 @@
             panelMainContent.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panelMainContent.BackColor = Color.White;
             panelMainContent.BorderStyle = BorderStyle.FixedSingle;
+            panelMainContent.Controls.Add(dgvRecentPayments);
+            panelMainContent.Controls.Add(panel3);
+            panelMainContent.Controls.Add(panel2);
+            panelMainContent.Controls.Add(pnlRooms);
+            panelMainContent.Controls.Add(pnlReservations);
+            panelMainContent.Controls.Add(pnlCheckout);
+            panelMainContent.Controls.Add(pnlCheckIn);
             panelMainContent.Location = new Point(268, 146);
             panelMainContent.Name = "panelMainContent";
             panelMainContent.Size = new Size(907, 596);
             panelMainContent.TabIndex = 14;
             // 
-<<<<<<< HEAD
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.BackColor = Color.Transparent;
-            label3.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.ForeColor = Color.Olive;
-            label3.Location = new Point(258, 27);
-            label3.Name = "label3";
-            label3.Size = new Size(276, 41);
-            label3.TabIndex = 15;
-            label3.Text = "FRONTDESK USER";
-=======
             // dgvRecentPayments
             // 
             dgvRecentPayments.AllowUserToAddRows = false;
@@ -248,6 +238,7 @@
             dgvRecentPayments.Location = new Point(20, 230);
             dgvRecentPayments.Name = "dgvRecentPayments";
             dgvRecentPayments.ReadOnly = true;
+            dgvRecentPayments.RowHeadersWidth = 51;
             dgvRecentPayments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvRecentPayments.Size = new Size(850, 280);
             dgvRecentPayments.TabIndex = 10;
@@ -269,7 +260,7 @@
             label9.ForeColor = SystemColors.WindowFrame;
             label9.Location = new Point(40, 10);
             label9.Name = "label9";
-            label9.Size = new Size(95, 15);
+            label9.Size = new Size(119, 20);
             label9.TabIndex = 13;
             label9.Text = "Available Rooms";
             // 
@@ -280,7 +271,7 @@
             label7.ForeColor = Color.Black;
             label7.Location = new Point(74, 35);
             label7.Name = "label7";
-            label7.Size = new Size(34, 40);
+            label7.Size = new Size(43, 50);
             label7.TabIndex = 12;
             label7.Text = "0";
             // 
@@ -301,7 +292,7 @@
             label8.ForeColor = SystemColors.WindowFrame;
             label8.Location = new Point(16, 10);
             label8.Name = "label8";
-            label8.Size = new Size(95, 15);
+            label8.Size = new Size(122, 20);
             label8.TabIndex = 13;
             label8.Text = "Today's Revenue";
             // 
@@ -312,7 +303,7 @@
             lblTodayRevenue.ForeColor = Color.Black;
             lblTodayRevenue.Location = new Point(140, 35);
             lblTodayRevenue.Name = "lblTodayRevenue";
-            lblTodayRevenue.Size = new Size(95, 40);
+            lblTodayRevenue.Size = new Size(126, 50);
             lblTodayRevenue.TabIndex = 12;
             lblTodayRevenue.Text = "₱0.00";
             // 
@@ -336,7 +327,7 @@
             label4.ForeColor = SystemColors.WindowFrame;
             label4.Location = new Point(40, 10);
             label4.Name = "label4";
-            label4.Size = new Size(95, 15);
+            label4.Size = new Size(119, 20);
             label4.TabIndex = 2;
             label4.Text = "Available Rooms";
             // 
@@ -347,7 +338,7 @@
             lblAvailableRooms.ForeColor = Color.Black;
             lblAvailableRooms.Location = new Point(74, 35);
             lblAvailableRooms.Name = "lblAvailableRooms";
-            lblAvailableRooms.Size = new Size(34, 40);
+            lblAvailableRooms.Size = new Size(43, 50);
             lblAvailableRooms.TabIndex = 10;
             lblAvailableRooms.Text = "0";
             // 
@@ -371,7 +362,7 @@
             lblActiveReservations.ForeColor = Color.Black;
             lblActiveReservations.Location = new Point(77, 35);
             lblActiveReservations.Name = "lblActiveReservations";
-            lblActiveReservations.Size = new Size(34, 40);
+            lblActiveReservations.Size = new Size(43, 50);
             lblActiveReservations.TabIndex = 11;
             lblActiveReservations.Text = "0";
             // 
@@ -382,7 +373,7 @@
             label5.ForeColor = SystemColors.WindowFrame;
             label5.Location = new Point(42, 10);
             label5.Name = "label5";
-            label5.Size = new Size(109, 15);
+            label5.Size = new Size(139, 20);
             label5.TabIndex = 3;
             label5.Text = "Active Reservations";
             // 
@@ -406,7 +397,7 @@
             label3.ForeColor = SystemColors.WindowFrame;
             label3.Location = new Point(42, 10);
             label3.Name = "label3";
-            label3.Size = new Size(100, 15);
+            label3.Size = new Size(128, 20);
             label3.TabIndex = 1;
             label3.Text = "Today's Checkout";
             // 
@@ -417,7 +408,7 @@
             lblCheckoutCount.ForeColor = Color.Black;
             lblCheckoutCount.Location = new Point(72, 35);
             lblCheckoutCount.Name = "lblCheckoutCount";
-            lblCheckoutCount.Size = new Size(34, 40);
+            lblCheckoutCount.Size = new Size(43, 50);
             lblCheckoutCount.TabIndex = 9;
             lblCheckoutCount.Text = "0";
             // 
@@ -425,7 +416,7 @@
             // 
             pnlCheckIn.BackColor = Color.White;
             pnlCheckIn.BorderStyle = BorderStyle.FixedSingle;
-            pnlCheckIn.Controls.Add(label1);
+            pnlCheckIn.Controls.Add(label6);
             pnlCheckIn.Controls.Add(lblCheckInCount);
             pnlCheckIn.Location = new Point(20, 22);
             pnlCheckIn.Margin = new Padding(8);
@@ -434,16 +425,16 @@
             pnlCheckIn.Size = new Size(200, 100);
             pnlCheckIn.TabIndex = 4;
             // 
-            // label1
+            // label6
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.ForeColor = SystemColors.WindowFrame;
-            label1.Location = new Point(38, 10);
-            label1.Name = "label1";
-            label1.Size = new Size(96, 15);
-            label1.TabIndex = 0;
-            label1.Text = "Today's Check-in";
+            label6.AutoSize = true;
+            label6.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label6.ForeColor = SystemColors.WindowFrame;
+            label6.Location = new Point(38, 10);
+            label6.Name = "label6";
+            label6.Size = new Size(122, 20);
+            label6.TabIndex = 0;
+            label6.Text = "Today's Check-in";
             // 
             // lblCheckInCount
             // 
@@ -452,10 +443,21 @@
             lblCheckInCount.ForeColor = Color.Black;
             lblCheckInCount.Location = new Point(66, 35);
             lblCheckInCount.Name = "lblCheckInCount";
-            lblCheckInCount.Size = new Size(34, 40);
+            lblCheckInCount.Size = new Size(43, 50);
             lblCheckInCount.TabIndex = 8;
             lblCheckInCount.Text = "0";
->>>>>>> main
+            // 
+            // labelTitle
+            // 
+            labelTitle.AutoSize = true;
+            labelTitle.BackColor = Color.Transparent;
+            labelTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelTitle.ForeColor = Color.Olive;
+            labelTitle.Location = new Point(258, 27);
+            labelTitle.Name = "labelTitle";
+            labelTitle.Size = new Size(276, 41);
+            labelTitle.TabIndex = 15;
+            labelTitle.Text = "FRONTDESK USER";
             // 
             // FrontDeskDashboardForm
             // 
@@ -463,7 +465,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1187, 784);
-            Controls.Add(label3);
+            Controls.Add(labelTitle);
             Controls.Add(panelMainContent);
             Controls.Add(panel1);
             Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -472,9 +474,7 @@
             Text = "Dashboard - Front desk";
             WindowState = FormWindowState.Maximized;
             panel1.ResumeLayout(false);
-<<<<<<< HEAD
             panel1.PerformLayout();
-=======
             panelMainContent.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvRecentPayments).EndInit();
             panel3.ResumeLayout(false);
@@ -489,12 +489,12 @@
             pnlCheckout.PerformLayout();
             pnlCheckIn.ResumeLayout(false);
             pnlCheckIn.PerformLayout();
->>>>>>> main
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
+
         private Button btnCheck;
         private Button btnOut;
         private Button btnCreateRes;
@@ -507,5 +507,24 @@
         private Label label1;
         private Label label3;
         private Button btnDashboard;
+        private Label labelTitle;
+        private DataGridView dgvRecentPayments;
+        private Panel panel3;
+        private Label label9;
+        private Label label7;
+        private Panel panel2;
+        private Label label8;
+        private Label lblTodayRevenue;
+        private Panel pnlRooms;
+        private Label label4;
+        private Label lblAvailableRooms;
+        private Panel pnlReservations;
+        private Label lblActiveReservations;
+        private Label label5;
+        private Panel pnlCheckout;
+        private Label lblCheckoutCount;
+        private Panel pnlCheckIn;
+        private Label label6;
+        private Label lblCheckInCount;
     }
 }
