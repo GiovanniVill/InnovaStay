@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             btnCheck = new Button();
             btnOut = new Button();
             btnCreateRes = new Button();
@@ -38,36 +39,31 @@
             btnDashboard = new Button();
             label1 = new Label();
             btnLogout = new Button();
-            panelMainContent = new Panel();
-            dgvRecentPayments = new DataGridView();
-            panel3 = new Panel();
-            label9 = new Label();
-            label7 = new Label();
-            panel2 = new Panel();
-            label8 = new Label();
-            lblTodayRevenue = new Label();
-            pnlRooms = new Panel();
-            label4 = new Label();
-            lblAvailableRooms = new Label();
-            pnlReservations = new Panel();
-            lblActiveReservations = new Label();
-            label5 = new Label();
-            pnlCheckout = new Panel();
             label3 = new Label();
-            lblCheckoutCount = new Label();
-            pnlCheckIn = new Panel();
+            panel5 = new Panel();
+            lblAvailableRooms = new Label();
             label6 = new Label();
+            panel3 = new Panel();
             lblCheckInCount = new Label();
-            labelTitle = new Label();
+            lblTotal = new Label();
+            panel4 = new Panel();
+            lblOccupiedCount = new Label();
+            label5 = new Label();
+            panel6 = new Panel();
+            lblCheckOutCount = new Label();
+            lblAvail = new Label();
+            lblCurrentActivity = new Label();
+            dgvFrontDeskSchedule = new DataGridView();
+            panelMainContent = new Panel();
+            pnlFrontDeskActivity = new Panel();
             panel1.SuspendLayout();
-            panelMainContent.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvRecentPayments).BeginInit();
+            panel5.SuspendLayout();
             panel3.SuspendLayout();
-            panel2.SuspendLayout();
-            pnlRooms.SuspendLayout();
-            pnlReservations.SuspendLayout();
-            pnlCheckout.SuspendLayout();
-            pnlCheckIn.SuspendLayout();
+            panel4.SuspendLayout();
+            panel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvFrontDeskSchedule).BeginInit();
+            panelMainContent.SuspendLayout();
+            pnlFrontDeskActivity.SuspendLayout();
             SuspendLayout();
             // 
             // btnCheck
@@ -169,7 +165,7 @@
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(240, 784);
+            panel1.Size = new Size(247, 1055);
             panel1.TabIndex = 13;
             // 
             // btnDashboard
@@ -213,261 +209,219 @@
             btnLogout.UseVisualStyleBackColor = false;
             btnLogout.Click += btnLogout_Click;
             // 
-            // panelMainContent
+            // label3
             // 
-            panelMainContent.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            panelMainContent.BackColor = Color.White;
-            panelMainContent.BorderStyle = BorderStyle.FixedSingle;
-            panelMainContent.Controls.Add(dgvRecentPayments);
-            panelMainContent.Controls.Add(panel3);
-            panelMainContent.Controls.Add(panel2);
-            panelMainContent.Controls.Add(pnlRooms);
-            panelMainContent.Controls.Add(pnlReservations);
-            panelMainContent.Controls.Add(pnlCheckout);
-            panelMainContent.Controls.Add(pnlCheckIn);
-            panelMainContent.Location = new Point(268, 146);
-            panelMainContent.Name = "panelMainContent";
-            panelMainContent.Size = new Size(907, 596);
-            panelMainContent.TabIndex = 14;
+            label3.AutoSize = true;
+            label3.BackColor = Color.Transparent;
+            label3.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.ForeColor = Color.Olive;
+            label3.Location = new Point(258, 27);
+            label3.Name = "label3";
+            label3.Size = new Size(276, 41);
+            label3.TabIndex = 15;
+            label3.Text = "FRONTDESK USER";
             // 
-            // dgvRecentPayments
+            // panel5
             // 
-            dgvRecentPayments.AllowUserToAddRows = false;
-            dgvRecentPayments.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvRecentPayments.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvRecentPayments.Location = new Point(20, 230);
-            dgvRecentPayments.Name = "dgvRecentPayments";
-            dgvRecentPayments.ReadOnly = true;
-            dgvRecentPayments.RowHeadersWidth = 51;
-            dgvRecentPayments.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvRecentPayments.Size = new Size(850, 280);
-            dgvRecentPayments.TabIndex = 10;
-            // 
-            // panel3
-            // 
-            panel3.BorderStyle = BorderStyle.FixedSingle;
-            panel3.Controls.Add(label9);
-            panel3.Controls.Add(label7);
-            panel3.Location = new Point(452, 134);
-            panel3.Name = "panel3";
-            panel3.Size = new Size(200, 80);
-            panel3.TabIndex = 9;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label9.ForeColor = SystemColors.WindowFrame;
-            label9.Location = new Point(40, 10);
-            label9.Name = "label9";
-            label9.Size = new Size(119, 20);
-            label9.TabIndex = 13;
-            label9.Text = "Available Rooms";
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Font = new Font("Segoe UI", 21.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label7.ForeColor = Color.Black;
-            label7.Location = new Point(74, 35);
-            label7.Name = "label7";
-            label7.Size = new Size(43, 50);
-            label7.TabIndex = 12;
-            label7.Text = "0";
-            // 
-            // panel2
-            // 
-            panel2.BorderStyle = BorderStyle.FixedSingle;
-            panel2.Controls.Add(label8);
-            panel2.Controls.Add(lblTodayRevenue);
-            panel2.Location = new Point(20, 134);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(416, 80);
-            panel2.TabIndex = 8;
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.ForeColor = SystemColors.WindowFrame;
-            label8.Location = new Point(16, 10);
-            label8.Name = "label8";
-            label8.Size = new Size(122, 20);
-            label8.TabIndex = 13;
-            label8.Text = "Today's Revenue";
-            // 
-            // lblTodayRevenue
-            // 
-            lblTodayRevenue.AutoSize = true;
-            lblTodayRevenue.Font = new Font("Segoe UI", 21.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTodayRevenue.ForeColor = Color.Black;
-            lblTodayRevenue.Location = new Point(140, 35);
-            lblTodayRevenue.Name = "lblTodayRevenue";
-            lblTodayRevenue.Size = new Size(126, 50);
-            lblTodayRevenue.TabIndex = 12;
-            lblTodayRevenue.Text = "₱0.00";
-            // 
-            // pnlRooms
-            // 
-            pnlRooms.BackColor = Color.White;
-            pnlRooms.BorderStyle = BorderStyle.FixedSingle;
-            pnlRooms.Controls.Add(label4);
-            pnlRooms.Controls.Add(lblAvailableRooms);
-            pnlRooms.Location = new Point(452, 22);
-            pnlRooms.Margin = new Padding(8);
-            pnlRooms.Name = "pnlRooms";
-            pnlRooms.Padding = new Padding(10);
-            pnlRooms.Size = new Size(200, 100);
-            pnlRooms.TabIndex = 7;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.ForeColor = SystemColors.WindowFrame;
-            label4.Location = new Point(40, 10);
-            label4.Name = "label4";
-            label4.Size = new Size(119, 20);
-            label4.TabIndex = 2;
-            label4.Text = "Available Rooms";
+            panel5.BackColor = Color.Silver;
+            panel5.Controls.Add(lblAvailableRooms);
+            panel5.Controls.Add(label6);
+            panel5.Location = new Point(698, 3);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(189, 97);
+            panel5.TabIndex = 26;
             // 
             // lblAvailableRooms
             // 
             lblAvailableRooms.AutoSize = true;
-            lblAvailableRooms.Font = new Font("Segoe UI", 21.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblAvailableRooms.ForeColor = Color.Black;
-            lblAvailableRooms.Location = new Point(74, 35);
+            lblAvailableRooms.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblAvailableRooms.ForeColor = Color.FromArgb(30, 41, 59);
+            lblAvailableRooms.Location = new Point(18, 38);
             lblAvailableRooms.Name = "lblAvailableRooms";
-            lblAvailableRooms.Size = new Size(43, 50);
-            lblAvailableRooms.TabIndex = 10;
+            lblAvailableRooms.Size = new Size(40, 46);
+            lblAvailableRooms.TabIndex = 4;
             lblAvailableRooms.Text = "0";
-            // 
-            // pnlReservations
-            // 
-            pnlReservations.BackColor = Color.White;
-            pnlReservations.BorderStyle = BorderStyle.FixedSingle;
-            pnlReservations.Controls.Add(lblActiveReservations);
-            pnlReservations.Controls.Add(label5);
-            pnlReservations.Location = new Point(668, 22);
-            pnlReservations.Margin = new Padding(8);
-            pnlReservations.Name = "pnlReservations";
-            pnlReservations.Padding = new Padding(10);
-            pnlReservations.Size = new Size(200, 100);
-            pnlReservations.TabIndex = 6;
-            // 
-            // lblActiveReservations
-            // 
-            lblActiveReservations.AutoSize = true;
-            lblActiveReservations.Font = new Font("Segoe UI", 21.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblActiveReservations.ForeColor = Color.Black;
-            lblActiveReservations.Location = new Point(77, 35);
-            lblActiveReservations.Name = "lblActiveReservations";
-            lblActiveReservations.Size = new Size(43, 50);
-            lblActiveReservations.TabIndex = 11;
-            lblActiveReservations.Text = "0";
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label5.ForeColor = SystemColors.WindowFrame;
-            label5.Location = new Point(42, 10);
-            label5.Name = "label5";
-            label5.Size = new Size(139, 20);
-            label5.TabIndex = 3;
-            label5.Text = "Active Reservations";
-            // 
-            // pnlCheckout
-            // 
-            pnlCheckout.BackColor = Color.White;
-            pnlCheckout.BorderStyle = BorderStyle.FixedSingle;
-            pnlCheckout.Controls.Add(label3);
-            pnlCheckout.Controls.Add(lblCheckoutCount);
-            pnlCheckout.Location = new Point(236, 22);
-            pnlCheckout.Margin = new Padding(8);
-            pnlCheckout.Name = "pnlCheckout";
-            pnlCheckout.Padding = new Padding(10);
-            pnlCheckout.Size = new Size(200, 100);
-            pnlCheckout.TabIndex = 5;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.ForeColor = SystemColors.WindowFrame;
-            label3.Location = new Point(42, 10);
-            label3.Name = "label3";
-            label3.Size = new Size(128, 20);
-            label3.TabIndex = 1;
-            label3.Text = "Today's Checkout";
-            // 
-            // lblCheckoutCount
-            // 
-            lblCheckoutCount.AutoSize = true;
-            lblCheckoutCount.Font = new Font("Segoe UI", 21.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblCheckoutCount.ForeColor = Color.Black;
-            lblCheckoutCount.Location = new Point(72, 35);
-            lblCheckoutCount.Name = "lblCheckoutCount";
-            lblCheckoutCount.Size = new Size(43, 50);
-            lblCheckoutCount.TabIndex = 9;
-            lblCheckoutCount.Text = "0";
-            // 
-            // pnlCheckIn
-            // 
-            pnlCheckIn.BackColor = Color.White;
-            pnlCheckIn.BorderStyle = BorderStyle.FixedSingle;
-            pnlCheckIn.Controls.Add(label6);
-            pnlCheckIn.Controls.Add(lblCheckInCount);
-            pnlCheckIn.Location = new Point(20, 22);
-            pnlCheckIn.Margin = new Padding(8);
-            pnlCheckIn.Name = "pnlCheckIn";
-            pnlCheckIn.Padding = new Padding(10);
-            pnlCheckIn.Size = new Size(200, 100);
-            pnlCheckIn.TabIndex = 4;
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label6.ForeColor = SystemColors.WindowFrame;
-            label6.Location = new Point(38, 10);
+            label6.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Bold);
+            label6.ForeColor = Color.Black;
+            label6.Location = new Point(18, 17);
             label6.Name = "label6";
-            label6.Size = new Size(122, 20);
-            label6.TabIndex = 0;
-            label6.Text = "Today's Check-in";
+            label6.Size = new Size(113, 19);
+            label6.TabIndex = 4;
+            label6.Text = "Available Rooms";
+            // 
+            // panel3
+            // 
+            panel3.BackColor = Color.Silver;
+            panel3.Controls.Add(lblCheckInCount);
+            panel3.Controls.Add(lblTotal);
+            panel3.Location = new Point(4, 3);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(189, 97);
+            panel3.TabIndex = 23;
             // 
             // lblCheckInCount
             // 
             lblCheckInCount.AutoSize = true;
-            lblCheckInCount.Font = new Font("Segoe UI", 21.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblCheckInCount.ForeColor = Color.Black;
-            lblCheckInCount.Location = new Point(66, 35);
+            lblCheckInCount.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCheckInCount.ForeColor = Color.FromArgb(30, 41, 59);
+            lblCheckInCount.Location = new Point(15, 38);
             lblCheckInCount.Name = "lblCheckInCount";
-            lblCheckInCount.Size = new Size(43, 50);
-            lblCheckInCount.TabIndex = 8;
+            lblCheckInCount.Size = new Size(40, 46);
+            lblCheckInCount.TabIndex = 0;
             lblCheckInCount.Text = "0";
             // 
-            // labelTitle
+            // lblTotal
             // 
-            labelTitle.AutoSize = true;
-            labelTitle.BackColor = Color.Transparent;
-            labelTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelTitle.ForeColor = Color.Olive;
-            labelTitle.Location = new Point(258, 27);
-            labelTitle.Name = "labelTitle";
-            labelTitle.Size = new Size(276, 41);
-            labelTitle.TabIndex = 15;
-            labelTitle.Text = "FRONTDESK USER";
+            lblTotal.AutoSize = true;
+            lblTotal.BackColor = Color.Transparent;
+            lblTotal.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTotal.ForeColor = Color.Black;
+            lblTotal.Location = new Point(15, 15);
+            lblTotal.Name = "lblTotal";
+            lblTotal.Size = new Size(106, 19);
+            lblTotal.TabIndex = 1;
+            lblTotal.Text = "Today's Arrivals";
+            // 
+            // panel4
+            // 
+            panel4.BackColor = Color.Silver;
+            panel4.Controls.Add(lblOccupiedCount);
+            panel4.Controls.Add(label5);
+            panel4.Location = new Point(470, 2);
+            panel4.Name = "panel4";
+            panel4.Size = new Size(189, 97);
+            panel4.TabIndex = 25;
+            // 
+            // lblOccupiedCount
+            // 
+            lblOccupiedCount.AutoSize = true;
+            lblOccupiedCount.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblOccupiedCount.ForeColor = Color.FromArgb(30, 41, 59);
+            lblOccupiedCount.Location = new Point(14, 38);
+            lblOccupiedCount.Name = "lblOccupiedCount";
+            lblOccupiedCount.Size = new Size(40, 46);
+            lblOccupiedCount.TabIndex = 2;
+            lblOccupiedCount.Text = "0";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Bold);
+            label5.ForeColor = Color.Black;
+            label5.Location = new Point(14, 17);
+            label5.Name = "label5";
+            label5.Size = new Size(116, 19);
+            label5.TabIndex = 3;
+            label5.Text = "Occupied Rooms";
+            // 
+            // panel6
+            // 
+            panel6.BackColor = Color.Silver;
+            panel6.Controls.Add(lblCheckOutCount);
+            panel6.Controls.Add(lblAvail);
+            panel6.Location = new Point(236, 3);
+            panel6.Name = "panel6";
+            panel6.Size = new Size(189, 97);
+            panel6.TabIndex = 24;
+            // 
+            // lblCheckOutCount
+            // 
+            lblCheckOutCount.AutoSize = true;
+            lblCheckOutCount.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCheckOutCount.ForeColor = Color.FromArgb(30, 41, 59);
+            lblCheckOutCount.Location = new Point(13, 38);
+            lblCheckOutCount.Name = "lblCheckOutCount";
+            lblCheckOutCount.Size = new Size(40, 46);
+            lblCheckOutCount.TabIndex = 2;
+            lblCheckOutCount.Text = "0";
+            // 
+            // lblAvail
+            // 
+            lblAvail.AutoSize = true;
+            lblAvail.Font = new Font("Segoe UI Semibold", 8.25F, FontStyle.Bold);
+            lblAvail.ForeColor = Color.Black;
+            lblAvail.Location = new Point(13, 15);
+            lblAvail.Name = "lblAvail";
+            lblAvail.Size = new Size(127, 19);
+            lblAvail.TabIndex = 2;
+            lblAvail.Text = "Today's Departures";
+            // 
+            // lblCurrentActivity
+            // 
+            lblCurrentActivity.AutoSize = true;
+            lblCurrentActivity.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCurrentActivity.ForeColor = Color.Black;
+            lblCurrentActivity.Location = new Point(14, 0);
+            lblCurrentActivity.Name = "lblCurrentActivity";
+            lblCurrentActivity.Size = new Size(377, 28);
+            lblCurrentActivity.TabIndex = 0;
+            lblCurrentActivity.Text = "Today's Schedule And In-House Guests";
+            // 
+            // dgvFrontDeskSchedule
+            // 
+            dgvFrontDeskSchedule.AllowUserToAddRows = false;
+            dgvFrontDeskSchedule.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dgvFrontDeskSchedule.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvFrontDeskSchedule.BackgroundColor = Color.White;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(241, 245, 249);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvFrontDeskSchedule.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dgvFrontDeskSchedule.ColumnHeadersHeight = 35;
+            dgvFrontDeskSchedule.EnableHeadersVisualStyles = false;
+            dgvFrontDeskSchedule.Location = new Point(258, 230);
+            dgvFrontDeskSchedule.MultiSelect = false;
+            dgvFrontDeskSchedule.Name = "dgvFrontDeskSchedule";
+            dgvFrontDeskSchedule.ReadOnly = true;
+            dgvFrontDeskSchedule.RowHeadersVisible = false;
+            dgvFrontDeskSchedule.RowHeadersWidth = 51;
+            dgvFrontDeskSchedule.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvFrontDeskSchedule.Size = new Size(804, 744);
+            dgvFrontDeskSchedule.TabIndex = 22;
+            // 
+            // panelMainContent
+            // 
+            panelMainContent.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panelMainContent.BackColor = Color.Silver;
+            panelMainContent.BorderStyle = BorderStyle.FixedSingle;
+            panelMainContent.Controls.Add(lblCurrentActivity);
+            panelMainContent.Location = new Point(258, 198);
+            panelMainContent.Name = "panelMainContent";
+            panelMainContent.Size = new Size(804, 697);
+            panelMainContent.TabIndex = 27;
+            // 
+            // pnlFrontDeskActivity
+            // 
+            pnlFrontDeskActivity.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pnlFrontDeskActivity.BorderStyle = BorderStyle.FixedSingle;
+            pnlFrontDeskActivity.Controls.Add(panel3);
+            pnlFrontDeskActivity.Controls.Add(panel5);
+            pnlFrontDeskActivity.Controls.Add(panel6);
+            pnlFrontDeskActivity.Controls.Add(panel4);
+            pnlFrontDeskActivity.Location = new Point(253, 68);
+            pnlFrontDeskActivity.Name = "pnlFrontDeskActivity";
+            pnlFrontDeskActivity.Size = new Size(817, 914);
+            pnlFrontDeskActivity.TabIndex = 10;
             // 
             // FrontDeskDashboardForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(1187, 784);
-            Controls.Add(labelTitle);
+            ClientSize = new Size(1840, 1055);
+            Controls.Add(dgvFrontDeskSchedule);
             Controls.Add(panelMainContent);
+            Controls.Add(label3);
             Controls.Add(panel1);
+            Controls.Add(pnlFrontDeskActivity);
             Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             Name = "FrontDeskDashboardForm";
             StartPosition = FormStartPosition.CenterScreen;
@@ -475,20 +429,18 @@
             WindowState = FormWindowState.Maximized;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            panelMainContent.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgvRecentPayments).EndInit();
+            panel5.ResumeLayout(false);
+            panel5.PerformLayout();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
-            panel2.ResumeLayout(false);
-            panel2.PerformLayout();
-            pnlRooms.ResumeLayout(false);
-            pnlRooms.PerformLayout();
-            pnlReservations.ResumeLayout(false);
-            pnlReservations.PerformLayout();
-            pnlCheckout.ResumeLayout(false);
-            pnlCheckout.PerformLayout();
-            pnlCheckIn.ResumeLayout(false);
-            pnlCheckIn.PerformLayout();
+            panel4.ResumeLayout(false);
+            panel4.PerformLayout();
+            panel6.ResumeLayout(false);
+            panel6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvFrontDeskSchedule).EndInit();
+            panelMainContent.ResumeLayout(false);
+            panelMainContent.PerformLayout();
+            pnlFrontDeskActivity.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -503,28 +455,24 @@
         private Button btnGuestManagement;
         private Panel panel1;
         private Button btnLogout;
-        private Panel panelMainContent;
         private Label label1;
         private Label label3;
         private Button btnDashboard;
-        private Label labelTitle;
-        private DataGridView dgvRecentPayments;
-        private Panel panel3;
-        private Label label9;
-        private Label label7;
-        private Panel panel2;
-        private Label label8;
-        private Label lblTodayRevenue;
-        private Panel pnlRooms;
-        private Label label4;
+        private Panel panel5;
         private Label lblAvailableRooms;
-        private Panel pnlReservations;
-        private Label lblActiveReservations;
-        private Label label5;
-        private Panel pnlCheckout;
-        private Label lblCheckoutCount;
-        private Panel pnlCheckIn;
         private Label label6;
+        private Panel panel3;
         private Label lblCheckInCount;
+        private Label lblTotal;
+        private Panel panel4;
+        private Label lblOccupiedCount;
+        private Label label5;
+        private Panel panel6;
+        private Label lblCheckOutCount;
+        private Label lblAvail;
+        private Label lblCurrentActivity;
+        private DataGridView dgvFrontDeskSchedule;
+        private Panel panelMainContent;
+        private Panel pnlFrontDeskActivity;
     }
 }

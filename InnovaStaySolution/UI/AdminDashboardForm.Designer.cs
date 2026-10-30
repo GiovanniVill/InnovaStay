@@ -273,6 +273,7 @@
             // panel3
             // 
             panel3.BackColor = Color.Silver;
+            panel3.Controls.Add(pnlUserManagement);
             panel3.Controls.Add(lblTotalRooms);
             panel3.Controls.Add(lblTotal);
             panel3.Location = new Point(3, 5);
@@ -370,9 +371,9 @@
             // pnlUserManagement
             // 
             pnlUserManagement.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            pnlUserManagement.Location = new Point(247, 63);
+            pnlUserManagement.Location = new Point(26, 54);
             pnlUserManagement.Name = "pnlUserManagement";
-            pnlUserManagement.Size = new Size(891, 920);
+            pnlUserManagement.Size = new Size(0, 7);
             pnlUserManagement.TabIndex = 23;
             pnlUserManagement.Visible = false;
             // 
@@ -382,7 +383,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(241, 245, 249);
             ClientSize = new Size(1150, 998);
-            Controls.Add(pnlUserManagement);
             Controls.Add(pnlDashboard);
             Controls.Add(label3);
             Controls.Add(panel1);

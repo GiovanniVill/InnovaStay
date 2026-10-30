@@ -1,66 +1,67 @@
-<<<<<<< HEAD
-﻿using System;
-=======
-﻿using BusinessLogic.Controller;
-using Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq; // Added for LINQ .Count()
+using System.Linq;
 using System.Text;
->>>>>>> main
 using System.Windows.Forms;
+using BusinessLogic.Controller;
+using Model;
 
 namespace UI
 {
     public partial class AdminDashboardForm : Form
     {
-<<<<<<< HEAD
-        private Form activeChildForm = null;
-=======
-        private Form? activeForm = null;
-        private readonly RoomController _roomController; // Added field declaration
->>>>>>> main
+        private Form? activeChildForm = null;
+        private readonly RoomController _roomController;
 
         public AdminDashboardForm()
         {
             InitializeComponent();
-<<<<<<< HEAD
-
-=======
-            _roomController = new RoomController(); // Instantiated controller
->>>>>>> main
+            _roomController = new RoomController();
             this.WindowState = FormWindowState.Maximized;
-
-<<<<<<< HEAD
-            // Ipakita ang Dashboard sa unang pagbukas.
             pnlDashboard.Visible = true;
             pnlUserManagement.Visible = false;
-=======
+        }
+
         private void ShowDashboardHome()
         {
-            if (activeForm != null)
+            try
             {
-                activeForm.Close();
-                activeForm = null;
+                if (activeChildForm != null)
+                {
+                    activeChildForm.Close();
+                    activeChildForm.Dispose();
+                    activeChildForm = null;
+                }
+
+                pnlUserManagement.Controls.Clear();
+                pnlUserManagement.Visible = false;
+
+                pnlDashboard.Visible = true;
+                pnlDashboard.BringToFront();
+
+                if (lblCurrentActivity != null) lblCurrentActivity.Visible = true;
+                if (dgvCurrentActivity != null)
+                {
+                    dgvCurrentActivity.Visible = true;
+                    dgvCurrentActivity.BringToFront();
+                }
+
+                LoadCurrentActivity();
+                LoadDashboardOverview();
             }
-
-            lblCurrentActivity.Visible = true;
-            dgvCurrentActivity.Visible = true;
-            dgvCurrentActivity.BringToFront();
-
-            LoadCurrentActivity();
-            LoadDashboardOverview(); // Refreshes card metrics when returning home
->>>>>>> main
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error sa pagbalik sa dashboard: " + ex.Message, "Dashboard Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void OpenChildForm(Form childForm)
         {
             try
             {
-                // Isara ang dating form kung mayroon.
                 if (activeChildForm != null)
                 {
                     activeChildForm.Close();
@@ -68,64 +69,24 @@ namespace UI
                     activeChildForm = null;
                 }
 
-                // Linisin ang content panel.
                 pnlUserManagement.Controls.Clear();
 
-                // Ihanda ang bagong child form.
                 activeChildForm = childForm;
                 childForm.TopLevel = false;
                 childForm.FormBorderStyle = FormBorderStyle.None;
                 childForm.Dock = DockStyle.Fill;
 
-                // Idagdag ang child form sa content panel.
-                pnlUserManagement.Controls.Add(childForm);
-
-                // Itago ang Dashboard at ipakita ang content panel.
                 pnlDashboard.Visible = false;
                 pnlUserManagement.Visible = true;
                 pnlUserManagement.BringToFront();
 
-                // Ipakita ang child form.
+                pnlUserManagement.Controls.Add(childForm);
                 childForm.Show();
                 childForm.BringToFront();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Error sa pagbukas ng form: " + ex.Message,
-                    "Form Load Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-        }
-
-        private void ShowDashboardHome()
-        {
-            try
-            {
-                // Isara ang kasalukuyang child form.
-                if (activeChildForm != null)
-                {
-                    activeChildForm.Close();
-                    activeChildForm.Dispose();
-                    activeChildForm = null;
-                }
-
-                // Linisin ang content panel.
-                pnlUserManagement.Controls.Clear();
-                pnlUserManagement.Visible = false;
-
-                // Ipakita muli ang Dashboard.
-                pnlDashboard.Visible = true;
-                pnlDashboard.BringToFront();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Error sa pagbalik sa dashboard: " + ex.Message,
-                    "Dashboard Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show("Error sa pagbukas ng form: " + ex.Message, "Form Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -155,16 +116,11 @@ namespace UI
             if (confirm == DialogResult.Yes)
             {
                 this.Hide();
-
                 LoginForm loginForm = new LoginForm();
-
                 loginForm.FormClosed += (s, args) => this.Close();
-
                 loginForm.Show();
             }
         }
-<<<<<<< HEAD
-=======
 
         private void LoadDashboardOverview()
         {
@@ -174,20 +130,16 @@ namespace UI
 
                 if (allRooms != null && allRooms.Count > 0)
                 {
-                    // Total Rooms
                     lblTotalRooms.Text = allRooms.Count.ToString();
 
-                    // Available Rooms
                     int availableCount = allRooms.Count(r =>
                         string.Equals(r.Status, "Available", StringComparison.OrdinalIgnoreCase));
                     lblAvailable.Text = availableCount.ToString();
 
-                    // Occupied Rooms
                     int occupiedCount = allRooms.Count(r =>
                         string.Equals(r.Status, "Occupied", StringComparison.OrdinalIgnoreCase));
                     lblOccupied.Text = occupiedCount.ToString();
 
-                    // Reservations
                     int reservationCount = allRooms.Count(r =>
                         string.Equals(r.Status, "Reserved", StringComparison.OrdinalIgnoreCase));
                     lblReservations.Text = reservationCount.ToString();
@@ -202,8 +154,18 @@ namespace UI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Failed to load dashboard overview: " + ex.Message,
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Failed to load dashboard overview: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadCurrentActivity()
+        {
+            try
+            {
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to load current activity: " + ex.Message, "Activity Log Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -212,6 +174,5 @@ namespace UI
             this.WindowState = FormWindowState.Maximized;
             ShowDashboardHome();
         }
->>>>>>> main
     }
 }
