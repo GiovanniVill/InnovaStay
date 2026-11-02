@@ -1,21 +1,38 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
+using Model;
 
 namespace UI
 {
     public partial class RoomInfo : Form
     {
+        private readonly RoomModel? _room;
+
         public RoomInfo()
         {
             InitializeComponent();
         }
 
-        public RoomInfo(string roomNumber, string roomType, string rate, string status) : this()
+        public RoomInfo(RoomModel room) : this()
         {
-            lblRoomNumber.Text = roomNumber;
-            lblRoomType.Text = roomType;
-            lblRoomRate.Text = rate;
-            lblRoomStatus.Text = status;
+            _room = room;
+        }
+
+        private void RoomInfo_Load_1(object sender, EventArgs e)
+        {
+            if (_room != null)
+            {
+                lblRoomNo.Text = _room.RoomNumber;
+                lblType.Text = _room.RoomType;
+                lblRate.Text = $"PHP {_room.PricePerNight:N2}";
+                lblStatus.Text = _room.Status;
+            }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

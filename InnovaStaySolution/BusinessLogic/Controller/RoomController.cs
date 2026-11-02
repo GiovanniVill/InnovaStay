@@ -51,10 +51,14 @@ namespace BusinessLogic.Controller
             return _roomRepository.GetAllRooms();
         }
 
-        // US-05: Query rooms available for specific check-in and check-out dates
         public List<RoomModel> GetAvailableRoomsByDates(DateTime checkIn, DateTime checkOut)
         {
             return _roomRepository.GetAvailableRoomsByDates(checkIn, checkOut);
+        }
+
+        public string GetNextRoomNumber()
+        {
+            return _roomRepository.GetNextRoomNumber();
         }
 
         public (bool Success, string Message) UpdateRoom(RoomModel room, string userRole)

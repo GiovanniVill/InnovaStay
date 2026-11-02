@@ -28,7 +28,7 @@ namespace BusinessLogic.Repository
 
                     conn.Open();
                     int rows = cmd.ExecuteNonQuery();
-                    return rows > 0 || rows == -1;
+                    return rows > 0;
                 }
             }
             catch (Exception ex)
@@ -90,7 +90,7 @@ namespace BusinessLogic.Repository
 
                     conn.Open();
                     int rows = cmd.ExecuteNonQuery();
-                    return rows > 0 || rows == -1;
+                    return rows > 0;
                 }
             }
             catch (Exception ex)
@@ -114,7 +114,7 @@ namespace BusinessLogic.Repository
 
                     conn.Open();
                     int rows = cmd.ExecuteNonQuery();
-                    return rows > 0 || rows == -1;
+                    return rows > 0;
                 }
             }
             catch (Exception ex)
@@ -124,7 +124,6 @@ namespace BusinessLogic.Repository
             }
         }
 
-        // US-05: Check room availability based on selected check-in and check-out dates
         public List<RoomModel> GetAvailableRoomsByDates(DateTime checkIn, DateTime checkOut)
         {
             var list = new List<RoomModel>();
@@ -133,11 +132,9 @@ namespace BusinessLogic.Repository
             {
                 conn.Open();
 
-                // 1. Get all rooms from the system
                 var allRooms = GetAllRooms();
-
-                // 2. Fetch room IDs that have active booking overlaps during the selected date window
                 var bookedRoomIds = new HashSet<int>();
+
                 string conflictQuery = @"
                     IF OBJECT_ID('dbo.Reservations', 'U') IS NOT NULL
                     BEGIN
@@ -162,7 +159,6 @@ namespace BusinessLogic.Repository
                     }
                 }
 
-                // 3. Keep rooms not under Maintenance and not booked during the chosen window
                 foreach (var room in allRooms)
                 {
                     bool isMaintenance = string.Equals(room.Status, "Maintenance", StringComparison.OrdinalIgnoreCase);
@@ -174,6 +170,23 @@ namespace BusinessLogic.Repository
             }
 
             return list;
+        }
+
+        // Auto-calculates the next sequential room number
+        public string GetNextRoomNumber()
+        {
+            var rooms = GetAllRooms();
+            int maxNumber = 100;
+
+            foreach (var r in rooms)
+            {
+                if (int.TryParse(r.RoomNumber, out int val) && val > maxNumber)
+                {
+                    maxNumber = val;
+                }
+            }
+
+            return (maxNumber + 1).ToString();
         }
     }
 }

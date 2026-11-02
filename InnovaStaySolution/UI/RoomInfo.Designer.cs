@@ -28,43 +28,47 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblRoomStatus = new Label();
-            this.lblRoomRate = new Label();
-            this.lblRoomType = new Label();
+            lblRoomStatus = new Label();
+            lblRoomRate = new Label();
+            lblRoomType = new Label();
             lblRoomNumber = new Label();
             label4 = new Label();
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
-            this.label5 = new Label();
+            label5 = new Label();
+            lblRoomNo = new Label();
+            lblType = new Label();
+            lblRate = new Label();
+            lblStatus = new Label();
             SuspendLayout();
             // 
             // lblRoomStatus
             // 
-            this.lblRoomStatus.AutoSize = true;
-            this.lblRoomStatus.Location = new Point(122, 291);
-            this.lblRoomStatus.Name = "lblRoomStatus";
-            this.lblRoomStatus.Size = new Size(19, 15);
-            this.lblRoomStatus.TabIndex = 15;
-            this.lblRoomStatus.Text = "ㅤ";
+            lblRoomStatus.AutoSize = true;
+            lblRoomStatus.Location = new Point(122, 291);
+            lblRoomStatus.Name = "lblRoomStatus";
+            lblRoomStatus.Size = new Size(19, 15);
+            lblRoomStatus.TabIndex = 15;
+            lblRoomStatus.Text = "ㅤ";
             // 
             // lblRoomRate
             // 
-            this.lblRoomRate.AutoSize = true;
-            this.lblRoomRate.Location = new Point(109, 217);
-            this.lblRoomRate.Name = "lblRoomRate";
-            this.lblRoomRate.Size = new Size(19, 15);
-            this.lblRoomRate.TabIndex = 14;
-            this.lblRoomRate.Text = "ㅤ";
+            lblRoomRate.AutoSize = true;
+            lblRoomRate.Location = new Point(109, 217);
+            lblRoomRate.Name = "lblRoomRate";
+            lblRoomRate.Size = new Size(19, 15);
+            lblRoomRate.TabIndex = 14;
+            lblRoomRate.Text = "ㅤ";
             // 
             // lblRoomType
             // 
-            this.lblRoomType.AutoSize = true;
-            this.lblRoomType.Location = new Point(112, 143);
-            this.lblRoomType.Name = "lblRoomType";
-            this.lblRoomType.Size = new Size(19, 15);
-            this.lblRoomType.TabIndex = 13;
-            this.lblRoomType.Text = "ㅤ";
+            lblRoomType.AutoSize = true;
+            lblRoomType.Location = new Point(112, 143);
+            lblRoomType.Name = "lblRoomType";
+            lblRoomType.Size = new Size(19, 15);
+            lblRoomType.TabIndex = 13;
+            lblRoomType.Text = "ㅤ";
             // 
             // lblRoomNumber
             // 
@@ -119,24 +123,70 @@
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.BackColor = Color.Transparent;
-            this.label5.Font = new Font("Sitka Heading", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            this.label5.Location = new Point(67, 9);
-            this.label5.Name = "label5";
-            this.label5.Size = new Size(213, 35);
-            this.label5.TabIndex = 16;
-            this.label5.Text = "Room Information";
+            label5.AutoSize = true;
+            label5.BackColor = Color.Transparent;
+            label5.Font = new Font("Sitka Heading", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label5.Location = new Point(67, 9);
+            label5.Name = "label5";
+            label5.Size = new Size(213, 35);
+            label5.TabIndex = 16;
+            label5.Text = "Room Information";
+            // 
+            // lblRoomNo
+            // 
+            lblRoomNo.AutoSize = true;
+            lblRoomNo.BackColor = Color.Transparent;
+            lblRoomNo.Font = new Font("Sitka Heading", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblRoomNo.Location = new Point(163, 65);
+            lblRoomNo.Name = "lblRoomNo";
+            lblRoomNo.Size = new Size(34, 23);
+            lblRoomNo.TabIndex = 17;
+            lblRoomNo.Text = "----";
+            // 
+            // lblType
+            // 
+            lblType.AutoSize = true;
+            lblType.Font = new Font("Sitka Heading", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblType.Location = new Point(163, 135);
+            lblType.Name = "lblType";
+            lblType.Size = new Size(34, 23);
+            lblType.TabIndex = 18;
+            lblType.Text = "----";
+            // 
+            // lblRate
+            // 
+            lblRate.AutoSize = true;
+            lblRate.Font = new Font("Sitka Heading", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblRate.Location = new Point(163, 217);
+            lblRate.Name = "lblRate";
+            lblRate.Size = new Size(34, 23);
+            lblRate.TabIndex = 19;
+            lblRate.Text = "----";
+            // 
+            // lblStatus
+            // 
+            lblStatus.AutoSize = true;
+            lblStatus.BackColor = Color.Transparent;
+            lblStatus.Font = new Font("Sitka Heading", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblStatus.Location = new Point(163, 283);
+            lblStatus.Name = "lblStatus";
+            lblStatus.Size = new Size(34, 23);
+            lblStatus.TabIndex = 20;
+            lblStatus.Text = "----";
             // 
             // RoomInfo
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(358, 363);
-            Controls.Add(this.label5);
-            Controls.Add(this.lblRoomStatus);
-            Controls.Add(this.lblRoomRate);
-            Controls.Add(this.lblRoomType);
+            Controls.Add(lblStatus);
+            Controls.Add(lblRate);
+            Controls.Add(lblType);
+            Controls.Add(lblRoomNo);
+            Controls.Add(label5);
+            Controls.Add(lblRoomStatus);
+            Controls.Add(lblRoomRate);
+            Controls.Add(lblRoomType);
             Controls.Add(lblRoomNumber);
             Controls.Add(label4);
             Controls.Add(label3);
@@ -144,6 +194,7 @@
             Controls.Add(label1);
             Name = "RoomInfo";
             Text = "RoomInfo";
+            Load += RoomInfo_Load_1;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -163,5 +214,9 @@
         private Label lblRoomType;
         private Label lblRoomRate;
         private Label label5;
+        private Label lblRoomNo;
+        private Label lblType;
+        private Label lblRate;
+        private Label lblStatus;
     }
 }
