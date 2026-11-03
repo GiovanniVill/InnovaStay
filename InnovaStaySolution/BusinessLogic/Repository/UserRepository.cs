@@ -55,17 +55,45 @@ namespace BusinessLogic.Repository
                     conn.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
+                        // Cache available columns from the result set to prevent IndexOutOfRangeException
+                        var cols = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            cols.Add(reader.GetName(i));
+                        }
+
                         while (reader.Read())
                         {
+                            string username = cols.Contains("Username") && reader["Username"] != DBNull.Value
+                                ? reader["Username"].ToString()! : "";
+
+                            string fullName = cols.Contains("FullName") && reader["FullName"] != DBNull.Value
+                                ? reader["FullName"].ToString()! : username;
+
+                            int userId = cols.Contains("UserID") && reader["UserID"] != DBNull.Value
+                                ? Convert.ToInt32(reader["UserID"]) : 0;
+
+                            string role = cols.Contains("Role") && reader["Role"] != DBNull.Value
+                                ? reader["Role"].ToString()! : "FrontDesk";
+
+                            int failedAttempts = cols.Contains("FailedAttempts") && reader["FailedAttempts"] != DBNull.Value
+                                ? Convert.ToInt32(reader["FailedAttempts"]) : 0;
+
+                            bool isLocked = cols.Contains("IsLocked") && reader["IsLocked"] != DBNull.Value
+                                && Convert.ToBoolean(reader["IsLocked"]);
+
+                            DateTime createdAt = cols.Contains("CreatedAt") && reader["CreatedAt"] != DBNull.Value
+                                ? Convert.ToDateTime(reader["CreatedAt"]) : DateTime.Now;
+
                             list.Add(new UserModel
                             {
-                                UserID = Convert.ToInt32(reader["UserID"]),
-                                Username = reader["Username"].ToString()!,
-                                FullName = reader["FullName"].ToString()!,
-                                Role = reader["Role"].ToString()!,
-                                FailedAttempts = Convert.ToInt32(reader["FailedAttempts"]),
-                                IsLocked = Convert.ToBoolean(reader["IsLocked"]),
-                                CreatedAt = Convert.ToDateTime(reader["CreatedAt"])
+                                UserID = userId,
+                                Username = username,
+                                FullName = fullName,
+                                Role = role,
+                                FailedAttempts = failedAttempts,
+                                IsLocked = isLocked,
+                                CreatedAt = createdAt
                             });
                         }
                     }
@@ -93,7 +121,6 @@ namespace BusinessLogic.Repository
                         conn.Open();
                         int rows = cmd.ExecuteNonQuery();
 
-                        // Dahil may SET NOCOUNT ON sa procedure, -1 o anumang bilang >= 1 ay tagumpay
                         bool ok = (rows >= 1 || rows == -1);
                         return (ok, string.Empty);
                     }

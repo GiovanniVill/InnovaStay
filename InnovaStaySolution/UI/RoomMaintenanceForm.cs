@@ -119,13 +119,11 @@ namespace UI
             this.BackColor = SidebarCream;
             this.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
 
-            // Left Input Card matched to Cream palette
             if (_leftPanel != null)
             {
                 _leftPanel.BackColor = SidebarCream;
             }
 
-            // Input Fields Styling
             if (_txtRoomNum != null)
             {
                 _txtRoomNum.Font = new Font("Segoe UI", 10F);
@@ -148,7 +146,6 @@ namespace UI
                 }
             }
 
-            // Action Buttons
             Button[] primaryBtns = { _btnCreate!, _btnEdit!, _btnView! };
             foreach (var btn in primaryBtns.Where(b => b != null))
             {
@@ -174,7 +171,6 @@ namespace UI
                 _btnDeactivate.MouseLeave += (s, e) => _btnDeactivate.BackColor = DangerRed;
             }
 
-            // DataGridView Theme (Dark Navy Headers + Olive/Tan Highlight, No Blue Highlight)
             if (_grid != null)
             {
                 _grid.BackgroundColor = Color.White;
@@ -188,17 +184,15 @@ namespace UI
                 _grid.RowTemplate.Height = 36;
                 _grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-                // Header - Dark Navy
                 _grid.EnableHeadersVisualStyles = false;
                 _grid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
                 _grid.ColumnHeadersHeight = 38;
                 _grid.ColumnHeadersDefaultCellStyle.BackColor = TableHeaderNavy;
                 _grid.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-                _grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = TableHeaderNavy; // Eliminates blue highlight on headers
+                _grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = TableHeaderNavy;
                 _grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.White;
                 _grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
 
-                // Row Cells
                 _grid.DefaultCellStyle.Font = new Font("Segoe UI", 9.5F);
                 _grid.DefaultCellStyle.ForeColor = Color.FromArgb(40, 40, 40);
                 _grid.DefaultCellStyle.SelectionBackColor = SelectionTan;
@@ -263,6 +257,7 @@ namespace UI
                     _txtSearch.Text = string.Empty;
                 }
                 ApplySearchFilter();
+                ResetToAutomatedDefaults();
             };
 
             Control parent = _grid.Parent ?? this;
@@ -298,7 +293,6 @@ namespace UI
             }
 
             FormatColumns();
-            _grid.ClearSelection(); // Prevents auto-highlighting the first row in blue on load
         }
 
         private void FormatColumns()
@@ -333,6 +327,39 @@ namespace UI
             {
                 _grid.CellClick -= Grid_CellClick;
                 _grid.CellClick += Grid_CellClick;
+
+                // Clicking empty gray space inside grid deselects and resets to Add mode
+                _grid.MouseDown += (s, e) =>
+                {
+                    var hit = _grid.HitTest(e.X, e.Y);
+                    if (hit.Type == DataGridViewHitTestType.None)
+                    {
+                        ResetToAutomatedDefaults();
+                    }
+                };
+            }
+
+            // Clicking outside inputs resets back to Add mode
+            this.Click += (s, e) => ResetToAutomatedDefaults();
+            if (_leftPanel != null)
+            {
+                _leftPanel.Click += (s, e) => ResetToAutomatedDefaults();
+            }
+
+            // Sync type changes to standard base rates
+            if (_cmbType != null)
+            {
+                _cmbType.SelectedIndexChanged += (s, e) =>
+                {
+                    if (_selectedRoomId == 0 && _txtPrice != null)
+                    {
+                        string selected = _cmbType.SelectedItem?.ToString() ?? "";
+                        if (selected == "Single") _txtPrice.Text = "1500.00";
+                        else if (selected == "Double") _txtPrice.Text = "2500.00";
+                        else if (selected == "Deluxe") _txtPrice.Text = "3500.00";
+                        else if (selected == "Suite") _txtPrice.Text = "5000.00";
+                    }
+                };
             }
         }
 
@@ -352,10 +379,18 @@ namespace UI
                 _cmbStatus.Enabled = false;
             }
 
-            if (_txtPrice != null) _txtPrice.Clear();
-            if (_cmbType != null) _cmbType.SelectedIndex = -1;
-            if (_cmbRate != null) _cmbRate.SelectedIndex = -1;
+            if (_cmbType != null && _cmbType.SelectedIndex < 0 && _cmbType.Items.Count > 0)
+            {
+                _cmbType.SelectedIndex = 0;
+            }
+
+            if (_txtPrice != null)
+            {
+                _txtPrice.Text = "1500.00";
+            }
+
             if (_btnCreate != null) _btnCreate.Enabled = true;
+            if (_grid != null) _grid.ClearSelection();
         }
 
         private void RefreshGridAndInputs()
@@ -384,7 +419,7 @@ namespace UI
             string rateText = _txtPrice?.Text.Trim() ?? _cmbRate?.SelectedItem?.ToString() ?? "0";
             if (!decimal.TryParse(rateText, out decimal rate) || rate <= 0)
             {
-                MessageBox.Show("Please enter a valid price per night.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter a valid price per night greater than 0.00.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

@@ -108,7 +108,7 @@
             label2.ForeColor = Color.Olive;
             label2.Location = new Point(16, 27);
             label2.Name = "label2";
-            label2.Size = new Size(208, 41);
+            label2.Size = new Size(165, 32);
             label2.TabIndex = 11;
             label2.Text = "INNOVASTAY";
             // 
@@ -159,6 +159,7 @@
             btnDashboard.Text = "Dashboard";
             btnDashboard.TextAlign = ContentAlignment.MiddleLeft;
             btnDashboard.UseVisualStyleBackColor = false;
+            btnDashboard.Click += btnDashboard_Click_1;
             // 
             // label1
             // 
@@ -167,7 +168,7 @@
             label1.ForeColor = Color.DimGray;
             label1.Location = new Point(36, 68);
             label1.Name = "label1";
-            label1.Size = new Size(157, 19);
+            label1.Size = new Size(120, 13);
             label1.TabIndex = 15;
             label1.Text = "FRONTDESK CONSOLE";
             // 
@@ -204,13 +205,13 @@
             label3.ForeColor = Color.Olive;
             label3.Location = new Point(258, 27);
             label3.Name = "label3";
-            label3.Size = new Size(276, 41);
+            label3.Size = new Size(219, 32);
             label3.TabIndex = 15;
             label3.Text = "FRONTDESK USER";
             // 
             // FrontDeskDashboardForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1187, 784);
