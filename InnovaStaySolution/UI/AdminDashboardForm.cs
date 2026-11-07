@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using BusinessLogic.Controller;
 using Model;
-using Microsoft.Data.SqlClient;
 
 namespace UI
 {
@@ -36,6 +33,7 @@ namespace UI
         public AdminDashboardForm()
         {
             InitializeComponent();
+            this.DoubleBuffered = true;
             _roomController = new RoomController();
             _userController = new UserController();
             this.Resize += AdminDashboardForm_Resize;
@@ -71,35 +69,31 @@ namespace UI
         private void StyleExistingSidebar()
         {
             Panel? sidebar = GetSidebarPanel();
-            if (sidebar != null)
+            if (sidebar == null) return;
+
+            sidebar.BackColor = Color.FromArgb(238, 236, 203);
+            foreach (Control child in sidebar.Controls)
             {
-                sidebar.BackColor = Color.FromArgb(238, 236, 203);
-                foreach (Control child in sidebar.Controls)
+                if (child is Button btn)
                 {
-                    if (child is Button btn)
+                    btn.FlatStyle = FlatStyle.Flat;
+                    btn.FlatAppearance.BorderSize = 0;
+                    btn.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+                    btn.Cursor = Cursors.Hand;
+
+                    if (btn.Text.ToLower().Contains("log"))
                     {
-                        if (btn.Text.ToLower().Contains("log"))
-                        {
-                            btn.FlatStyle = FlatStyle.Flat;
-                            btn.FlatAppearance.BorderSize = 0;
-                            btn.BackColor = DangerRed;
-                            btn.ForeColor = Color.White;
-                            btn.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-                            btn.Cursor = Cursors.Hand;
-                            btn.MouseEnter += (s, e) => btn.BackColor = DangerHover;
-                            btn.MouseLeave += (s, e) => btn.BackColor = DangerRed;
-                        }
-                        else
-                        {
-                            btn.FlatStyle = FlatStyle.Flat;
-                            btn.FlatAppearance.BorderSize = 0;
-                            btn.BackColor = OliveGold;
-                            btn.ForeColor = Color.White;
-                            btn.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-                            btn.Cursor = Cursors.Hand;
-                            btn.MouseEnter += (s, e) => btn.BackColor = OliveDark;
-                            btn.MouseLeave += (s, e) => btn.BackColor = OliveGold;
-                        }
+                        btn.BackColor = DangerRed;
+                        btn.ForeColor = Color.White;
+                        btn.MouseEnter += (s, e) => btn.BackColor = DangerHover;
+                        btn.MouseLeave += (s, e) => btn.BackColor = DangerRed;
+                    }
+                    else
+                    {
+                        btn.BackColor = OliveGold;
+                        btn.ForeColor = Color.White;
+                        btn.MouseEnter += (s, e) => btn.BackColor = OliveDark;
+                        btn.MouseLeave += (s, e) => btn.BackColor = OliveGold;
                     }
                 }
             }
@@ -131,21 +125,6 @@ namespace UI
             return dynamicHost;
         }
 
-        private static string GetModelPropertyString(object obj, string[] candidateNames, string defaultValue = "")
-        {
-            var type = obj.GetType();
-            foreach (var name in candidateNames)
-            {
-                var prop = type.GetProperty(name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-                if (prop != null)
-                {
-                    var val = prop.GetValue(obj);
-                    if (val != null) return val.ToString() ?? defaultValue;
-                }
-            }
-            return defaultValue;
-        }
-
         private void ShowDashboardView()
         {
             _isDashboardActive = true;
@@ -160,7 +139,7 @@ namespace UI
             int availableWidth = Math.Max(700, container.ClientSize.Width - (paddingX * 2));
             int availableHeight = Math.Max(500, container.ClientSize.Height - paddingY);
 
-            // Title & Subtitle
+            // Header Section
             Label lblHeader = new Label
             {
                 Text = "Admin Workspace",
@@ -181,22 +160,18 @@ namespace UI
             };
             container.Controls.Add(lblSubtitle);
 
-            // 1. Fetch live database room records
+            // Fetch live database records
             var rooms = _roomController.GetAllRooms() ?? new List<RoomModel>();
             int totalRooms = rooms.Count;
             int availableRooms = rooms.Count(r => string.Equals(r.Status, "Available", StringComparison.OrdinalIgnoreCase));
+            int reservedRooms = rooms.Count(r => string.Equals(r.Status, "Reserved", StringComparison.OrdinalIgnoreCase) || string.Equals(r.Status, "Occupied", StringComparison.OrdinalIgnoreCase));
             decimal totalRevenue = rooms.Sum(r => r.PricePerNight);
 
-            // 2. Fetch live database user records safely
             var users = _userController.GetAllUsers() ?? new List<UserModel>();
             int totalUsers = users.Count;
-            int activeUsers = users.Count(u =>
-            {
-                string status = GetModelPropertyString(u, new[] { "Status", "AccountStatus", "IsActive" }, "Active");
-                return string.Equals(status, "Active", StringComparison.OrdinalIgnoreCase) || string.Equals(status, "True", StringComparison.OrdinalIgnoreCase);
-            });
+            int activeUsers = users.Count(u => !u.IsLocked);
 
-            // Responsive Top 4 KPI Cards
+            // 4 Top Metric Cards
             int cardGap = 16;
             int cardW = (availableWidth - (cardGap * 3)) / 4;
             int cardH = 115;
@@ -204,7 +179,7 @@ namespace UI
 
             container.Controls.Add(CreateStatCard("Total Rooms", $"{totalRooms} Rooms", $"{availableRooms} Available", paddingX, startY, cardW, cardH, true));
             container.Controls.Add(CreateStatCard("Total Users / Staff", $"{totalUsers} Registered", $"{activeUsers} Active Accounts", paddingX + (cardW + cardGap), startY, cardW, cardH, false));
-            container.Controls.Add(CreateStatCard("System Revenue Potential", $"PHP {totalRevenue:N2}", $"{rooms.Count(r => r.Status == "Reserved")} Booked / Reserved", paddingX + (cardW + cardGap) * 2, startY, cardW, cardH, true));
+            container.Controls.Add(CreateStatCard("System Revenue Potential", $"PHP {totalRevenue:N2}", $"{reservedRooms} Booked / Reserved", paddingX + (cardW + cardGap) * 2, startY, cardW, cardH, true));
             container.Controls.Add(CreateDatabaseStatusCard(paddingX + (cardW + cardGap) * 3, startY, cardW, cardH));
 
             // Main Lower Section
@@ -214,7 +189,7 @@ namespace UI
             int rightPanelW = Math.Max(320, (int)(availableWidth * 0.28));
             int leftGridW = availableWidth - rightPanelW - cardGap;
 
-            // User Grid Panel
+            // Users Table Card
             Panel gridPanel = new Panel
             {
                 Location = new Point(paddingX, gridY),
@@ -269,24 +244,16 @@ namespace UI
             userGrid.Columns.Add("Status", "Status");
             userGrid.Columns.Add("CreatedAt", "Created At");
 
-            // Populate live users from DB without direct property dependencies
-            int index = 1;
             foreach (var u in users)
             {
-                string id = GetModelPropertyString(u, new[] { "UserId", "Id", "ID", "UserID" }, index.ToString());
-                string username = GetModelPropertyString(u, new[] { "Username", "UserName", "Name" }, $"User_{index}");
-                string role = GetModelPropertyString(u, new[] { "Role", "UserRole" }, "Staff");
-                string status = GetModelPropertyString(u, new[] { "Status", "AccountStatus" }, "Active");
-                string createdAt = GetModelPropertyString(u, new[] { "CreatedAt", "CreatedDate", "DateCreated" }, DateTime.Now.ToString("MM/dd/yyyy"));
-
-                userGrid.Rows.Add(id, username, role, status, createdAt);
-                index++;
+                string statusText = u.IsLocked ? "Locked" : "Active";
+                userGrid.Rows.Add(u.UserID, u.Username, u.Role, statusText, u.CreatedAt.ToString("g"));
             }
 
             gridPanel.Controls.Add(userGrid);
             container.Controls.Add(gridPanel);
 
-            // Right-Side Column
+            // Right-Side Widgets Container
             int rightX = gridPanel.Right + cardGap;
             Panel rightContainer = new Panel
             {
@@ -297,49 +264,38 @@ namespace UI
 
             int gapRight = 14;
             int totalRightAvailH = mainSectionH - (gapRight * 2);
-            int card1H = 125;
+            int card1H = 135;
             int card3H = 150;
-            int card2H = Math.Max(160, totalRightAvailH - card1H - card3H);
+            int card2H = Math.Max(150, totalRightAvailH - card1H - card3H);
 
-            // 1. Active Database Accounts
-            Panel sessionCard = CreateSidebarCard("Active Database Accounts", 0, 0, rightPanelW, card1H);
-            var activeList = users.Where(u =>
-            {
-                string status = GetModelPropertyString(u, new[] { "Status", "AccountStatus", "IsActive" }, "Active");
-                return string.Equals(status, "Active", StringComparison.OrdinalIgnoreCase) || string.Equals(status, "True", StringComparison.OrdinalIgnoreCase);
-            }).Take(2).ToList();
+            // 1. Session & Active Status
+            Panel sessionCard = CreateSidebarCard("Active Session & User Accounts", 0, 0, rightPanelW, card1H);
+            string currentLoggedIn = string.IsNullOrEmpty(UserSession.CurrentUsername) ? "admin" : UserSession.CurrentUsername;
 
-            if (activeList.Count > 0)
+            int sessionY = 38;
+            foreach (var u in users.Take(2))
             {
-                string user1 = GetModelPropertyString(activeList[0], new[] { "Username", "UserName" }, "Admin");
-                string role1 = GetModelPropertyString(activeList[0], new[] { "Role" }, "Admin");
-                sessionCard.Controls.Add(CreateSessionItem(user1, $"{role1} (Active)", 14, 38, rightPanelW - 28));
+                bool isCurrentActive = string.Equals(u.Username, currentLoggedIn, StringComparison.OrdinalIgnoreCase);
+                string badge = isCurrentActive ? $"{u.Role} (Active Session)" : $"{u.Role} (Offline)";
+                Color badgeColor = isCurrentActive ? StatusGreen : TextMuted;
 
-                if (activeList.Count > 1)
-                {
-                    string user2 = GetModelPropertyString(activeList[1], new[] { "Username", "UserName" }, "FrontDesk");
-                    string role2 = GetModelPropertyString(activeList[1], new[] { "Role" }, "FrontDesk");
-                    sessionCard.Controls.Add(CreateSessionItem(user2, $"{role2} (Active)", 14, 76, rightPanelW - 28));
-                }
-            }
-            else
-            {
-                sessionCard.Controls.Add(CreateSessionItem("None", "No active accounts", 14, 38, rightPanelW - 28));
+                sessionCard.Controls.Add(CreateSessionItem(u.Username, badge, badgeColor, 14, sessionY, rightPanelW - 28));
+                sessionY += 34;
             }
             rightContainer.Controls.Add(sessionCard);
 
-            // 2. Recent System Actions
+            // 2. System Audit Logs
             Panel auditCard = CreateSidebarCard("Database Activity Logs", 0, card1H + gapRight, rightPanelW, card2H);
             auditCard.Controls.Add(CreateLogEntry("sp_Room_CRUD executed", "Recently", 14, 38, rightPanelW - 28));
-            auditCard.Controls.Add(CreateLogEntry("spGetAllUsersWithProfiles queried", "Just now", 14, 95, rightPanelW - 28));
-            auditCard.Controls.Add(CreateLogEntry("dbo.tbl_Rooms state synchronized", "Live", 14, 152, rightPanelW - 28));
+            auditCard.Controls.Add(CreateLogEntry("spGetAllUsersWithProfiles queried", "Just now", 14, 92, rightPanelW - 28));
+            auditCard.Controls.Add(CreateLogEntry("dbo.tbl_Rooms state synchronized", "Live", 14, 146, rightPanelW - 28));
             rightContainer.Controls.Add(auditCard);
 
-            // 3. Room Breakdown by Category
+            // 3. Room Categories Breakdown
             Panel roomStatsCard = CreateSidebarCard("Room Quick Breakdown", 0, card1H + gapRight + card2H + gapRight, rightPanelW, card3H);
-            roomStatsCard.Controls.Add(CreateMiniStat("Single Rooms", rooms.Count(r => string.Equals(r.RoomType, "Single", StringComparison.OrdinalIgnoreCase)).ToString(), 14, 36, rightPanelW - 28));
-            roomStatsCard.Controls.Add(CreateMiniStat("Double Rooms", rooms.Count(r => string.Equals(r.RoomType, "Double", StringComparison.OrdinalIgnoreCase)).ToString(), 14, 72, rightPanelW - 28));
-            roomStatsCard.Controls.Add(CreateMiniStat("Suites", rooms.Count(r => string.Equals(r.RoomType, "Suite", StringComparison.OrdinalIgnoreCase)).ToString(), 14, 108, rightPanelW - 28));
+            roomStatsCard.Controls.Add(CreateMiniStat("Single Rooms", rooms.Count(r => r.RoomType != null && r.RoomType.IndexOf("Single", StringComparison.OrdinalIgnoreCase) >= 0).ToString(), 14, 36, rightPanelW - 28));
+            roomStatsCard.Controls.Add(CreateMiniStat("Double Rooms", rooms.Count(r => r.RoomType != null && r.RoomType.IndexOf("Double", StringComparison.OrdinalIgnoreCase) >= 0).ToString(), 14, 72, rightPanelW - 28));
+            roomStatsCard.Controls.Add(CreateMiniStat("Suites", rooms.Count(r => r.RoomType != null && r.RoomType.IndexOf("Suite", StringComparison.OrdinalIgnoreCase) >= 0).ToString(), 14, 108, rightPanelW - 28));
             rightContainer.Controls.Add(roomStatsCard);
 
             container.Controls.Add(rightContainer);
@@ -505,7 +461,7 @@ namespace UI
             return card;
         }
 
-        private Control CreateSessionItem(string username, string role, int x, int y, int width)
+        private Control CreateSessionItem(string username, string badgeText, Color badgeColor, int x, int y, int width)
         {
             Panel item = new Panel
             {
@@ -522,18 +478,18 @@ namespace UI
                 AutoSize = true
             };
 
-            Label lblRole = new Label
+            Label lblBadge = new Label
             {
-                Text = role,
+                Text = badgeText,
                 Font = new Font("Segoe UI", 8.5F, FontStyle.Regular),
-                ForeColor = OliveDark,
+                ForeColor = badgeColor,
                 Anchor = AnchorStyles.Top | AnchorStyles.Right,
-                Location = new Point(Math.Max(120, width - 130), 4),
+                Location = new Point(Math.Max(110, width - 150), 4),
                 AutoSize = true
             };
 
             item.Controls.Add(lblUser);
-            item.Controls.Add(lblRole);
+            item.Controls.Add(lblBadge);
             return item;
         }
 
@@ -542,12 +498,12 @@ namespace UI
             Panel p = new Panel
             {
                 Location = new Point(x, y),
-                Size = new Size(width, 50)
+                Size = new Size(width, 48)
             };
 
             Label dot = new Label
             {
-                Text = "-",
+                Text = "•",
                 Font = new Font("Segoe UI", 12F, FontStyle.Bold),
                 ForeColor = OliveGold,
                 Location = new Point(0, -2),
@@ -557,10 +513,10 @@ namespace UI
             Label lblAction = new Label
             {
                 Text = action,
-                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                Font = new Font("Segoe UI", 8.8F, FontStyle.Regular),
                 ForeColor = TextDark,
                 Location = new Point(14, 2),
-                Size = new Size(width - 20, 26)
+                Size = new Size(width - 20, 24)
             };
 
             Label lblTime = new Label
@@ -568,7 +524,7 @@ namespace UI
                 Text = time,
                 Font = new Font("Segoe UI", 8F, FontStyle.Regular),
                 ForeColor = TextMuted,
-                Location = new Point(14, 28),
+                Location = new Point(14, 26),
                 AutoSize = true
             };
 
@@ -628,7 +584,17 @@ namespace UI
             LoadEmbeddedForm(new RoomMaintenanceForm());
         }
 
+        private void btnRoomMaintenance_Click(object sender, EventArgs e)
+        {
+            LoadEmbeddedForm(new RoomMaintenanceForm());
+        }
+
         private void btnUM_Click(object sender, EventArgs e)
+        {
+            LoadEmbeddedForm(new UserManagementForm());
+        }
+
+        private void btnUserManagement_Click(object sender, EventArgs e)
         {
             LoadEmbeddedForm(new UserManagementForm());
         }
@@ -638,8 +604,11 @@ namespace UI
             var confirm = MessageBox.Show("Are you sure you want to log out?", "Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (confirm == DialogResult.Yes)
             {
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                UserSession.Clear();
+                this.Hide();
+                var loginForm = new LoginForm();
+                loginForm.FormClosed += (s, args) => this.Close();
+                loginForm.Show();
             }
         }
     }
