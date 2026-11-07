@@ -10,148 +10,177 @@ namespace BusinessLogic.Repository
     {
         private readonly string _connectionString = @"Server=(localdb)\MSSQLLocalDB;Database=InnovaStayDB;Trusted_Connection=True;TrustServerCertificate=True;";
 
-        public (bool Success, string Message) CreateReservation(ReservationModel reservation)
+        public List<ReservationModel> GetRecentReservations(int limit = 10)
         {
+            var list = new List<ReservationModel>();
+
             try
             {
-                using (var conn = new SqlConnection(_connectionString))
+                using var conn = new SqlConnection(_connectionString);
+                conn.Open();
+
+                string sql = @"
+                    SELECT TOP (@Limit)
+                        r.ReservationID,
+                        r.GuestID,
+                        r.RoomID,
+                        ISNULL(g.FullName, 'Guest #' + CAST(r.GuestID AS NVARCHAR)) AS GuestName,
+                        ISNULL(rm.RoomNumber, 'N/A') AS RoomNumber,
+                        ISNULL(rm.RoomType, 'Standard') AS RoomType,
+                        r.CheckInDate,
+                        r.CheckOutDate,
+                        ISNULL(r.TotalAmount, 0) AS TotalAmount,
+                        ISNULL(r.Status, 'Confirmed') AS Status,
+                        ISNULL(r.CreatedAt, GETDATE()) AS CreatedAt
+                    FROM dbo.Reservations r
+                    LEFT JOIN dbo.tbl_Guests g ON r.GuestID = g.GuestID
+                    LEFT JOIN dbo.tbl_Rooms rm ON r.RoomID = rm.RoomID
+                    ORDER BY r.ReservationID DESC";
+
+                using var cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.Add("@Limit", SqlDbType.Int).Value = limit;
+
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    conn.Open();
-
-                    string ensureTableQuery = @"
-                        IF OBJECT_ID('dbo.Reservations', 'U') IS NULL
-                        BEGIN
-                            CREATE TABLE dbo.Reservations (
-                                ReservationId INT IDENTITY(1,1) PRIMARY KEY,
-                                GuestId INT NOT NULL,
-                                RoomId INT NOT NULL,
-                                CheckInDate DATETIME NOT NULL,
-                                CheckOutDate DATETIME NOT NULL,
-                                TotalAmount DECIMAL(18, 2) NOT NULL,
-                                Status NVARCHAR(50) NOT NULL DEFAULT 'Confirmed',
-                                CreatedAt DATETIME NOT NULL DEFAULT GETDATE()
-                            );
-                        END";
-
-                    using (var initCmd = new SqlCommand(ensureTableQuery, conn))
+                    list.Add(new ReservationModel
                     {
-                        initCmd.ExecuteNonQuery();
-                    }
-
-                    string insertQuery = @"
-                        INSERT INTO dbo.Reservations (GuestId, RoomId, CheckInDate, CheckOutDate, TotalAmount, Status, CreatedAt)
-                        VALUES (@GuestId, @RoomId, @CheckInDate, @CheckOutDate, @TotalAmount, @Status, @CreatedAt);";
-
-                    using (var cmd = new SqlCommand(insertQuery, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@GuestId", reservation.GuestId);
-                        cmd.Parameters.AddWithValue("@RoomId", reservation.RoomId);
-                        cmd.Parameters.AddWithValue("@CheckInDate", reservation.CheckInDate);
-                        cmd.Parameters.AddWithValue("@CheckOutDate", reservation.CheckOutDate);
-                        cmd.Parameters.AddWithValue("@TotalAmount", reservation.TotalAmount);
-                        cmd.Parameters.AddWithValue("@Status", reservation.Status ?? "Confirmed");
-                        cmd.Parameters.AddWithValue("@CreatedAt", DateTime.Now);
-
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    using (var roomCmd = new SqlCommand("sp_Room_CRUD", conn))
-                    {
-                        roomCmd.CommandType = CommandType.StoredProcedure;
-                        roomCmd.Parameters.AddWithValue("@Action", "UPDATE");
-                        roomCmd.Parameters.AddWithValue("@RoomId", reservation.RoomId);
-                        roomCmd.Parameters.AddWithValue("@RoomNumber", DBNull.Value);
-                        roomCmd.Parameters.AddWithValue("@RoomType", DBNull.Value);
-                        roomCmd.Parameters.AddWithValue("@PricePerNight", 0);
-                        roomCmd.Parameters.AddWithValue("@Status", "Reserved");
-                        roomCmd.Parameters.AddWithValue("@Floor", 0);
-
-                        roomCmd.ExecuteNonQuery();
-                    }
-
-                    return (true, "Reservation created successfully!");
+                        ReservationId = Convert.ToInt32(reader["ReservationID"]),
+                        GuestId = Convert.ToInt32(reader["GuestID"]),
+                        RoomId = reader["RoomID"] != DBNull.Value ? Convert.ToInt32(reader["RoomID"]) : 0,
+                        GuestName = reader["GuestName"].ToString() ?? "",
+                        RoomNumber = reader["RoomNumber"].ToString() ?? "",
+                        RoomType = reader["RoomType"].ToString() ?? "",
+                        CheckInDate = Convert.ToDateTime(reader["CheckInDate"]),
+                        CheckOutDate = Convert.ToDateTime(reader["CheckOutDate"]),
+                        TotalAmount = Convert.ToDecimal(reader["TotalAmount"]),
+                        Status = reader["Status"].ToString() ?? "Confirmed",
+                        CreatedAt = Convert.ToDateTime(reader["CreatedAt"])
+                    });
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                return (false, "Database error: " + ex.Message);
+                // Return empty list if table is empty or connection fails
             }
+
+            return list;
         }
 
         public List<ReservationModel> GetActiveStays()
         {
             var list = new List<ReservationModel>();
 
-            using (var conn = new SqlConnection(_connectionString))
+            try
             {
+                using var conn = new SqlConnection(_connectionString);
                 conn.Open();
-                string query = @"
-                    SELECT r.ReservationId, r.GuestId, r.RoomId, r.CheckInDate, r.CheckOutDate, 
-                           r.TotalAmount, r.Status, r.CreatedAt
-                    FROM dbo.Reservations r
-                    WHERE r.Status IN ('Confirmed', 'CheckedIn')
-                    ORDER BY r.ReservationId DESC;";
 
-                using (var cmd = new SqlCommand(query, conn))
-                using (var reader = cmd.ExecuteReader())
+                string sql = @"
+                    SELECT 
+                        r.ReservationID,
+                        r.GuestID,
+                        r.RoomID,
+                        ISNULL(g.FullName, 'Guest #' + CAST(r.GuestID AS NVARCHAR)) AS GuestName,
+                        ISNULL(rm.RoomNumber, 'N/A') AS RoomNumber,
+                        ISNULL(rm.RoomType, 'Standard') AS RoomType,
+                        r.CheckInDate,
+                        r.CheckOutDate,
+                        ISNULL(r.TotalAmount, 0) AS TotalAmount,
+                        ISNULL(r.Status, 'Checked-In') AS Status,
+                        ISNULL(r.CreatedAt, GETDATE()) AS CreatedAt
+                    FROM dbo.Reservations r
+                    LEFT JOIN dbo.tbl_Guests g ON r.GuestID = g.GuestID
+                    LEFT JOIN dbo.tbl_Rooms rm ON r.RoomID = rm.RoomID
+                    WHERE r.Status = 'Checked-In' OR r.Status = 'Confirmed'
+                    ORDER BY r.CheckOutDate ASC";
+
+                using var cmd = new SqlCommand(sql, conn);
+                using var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
                 {
-                    while (reader.Read())
+                    list.Add(new ReservationModel
                     {
-                        list.Add(new ReservationModel
-                        {
-                            ReservationId = Convert.ToInt32(reader["ReservationId"]),
-                            GuestId = Convert.ToInt32(reader["GuestId"]),
-                            RoomId = Convert.ToInt32(reader["RoomId"]),
-                            CheckInDate = Convert.ToDateTime(reader["CheckInDate"]),
-                            CheckOutDate = Convert.ToDateTime(reader["CheckOutDate"]),
-                            TotalAmount = Convert.ToDecimal(reader["TotalAmount"]),
-                            Status = reader["Status"].ToString() ?? string.Empty,
-                            CreatedAt = Convert.ToDateTime(reader["CreatedAt"])
-                        });
-                    }
+                        ReservationId = Convert.ToInt32(reader["ReservationID"]),
+                        GuestId = Convert.ToInt32(reader["GuestID"]),
+                        RoomId = reader["RoomID"] != DBNull.Value ? Convert.ToInt32(reader["RoomID"]) : 0,
+                        GuestName = reader["GuestName"].ToString() ?? "",
+                        RoomNumber = reader["RoomNumber"].ToString() ?? "",
+                        RoomType = reader["RoomType"].ToString() ?? "",
+                        CheckInDate = Convert.ToDateTime(reader["CheckInDate"]),
+                        CheckOutDate = Convert.ToDateTime(reader["CheckOutDate"]),
+                        TotalAmount = Convert.ToDecimal(reader["TotalAmount"]),
+                        Status = reader["Status"].ToString() ?? "Confirmed",
+                        CreatedAt = Convert.ToDateTime(reader["CreatedAt"])
+                    });
                 }
+            }
+            catch
+            {
+                // Fallback to empty list
             }
 
             return list;
+        }
+
+        public (bool Success, string Message) CreateReservation(ReservationModel model)
+        {
+            try
+            {
+                using var conn = new SqlConnection(_connectionString);
+                conn.Open();
+
+                string sql = @"
+                    INSERT INTO dbo.Reservations (GuestID, RoomID, CheckInDate, CheckOutDate, TotalAmount, Status, CreatedAt)
+                    VALUES (@GuestID, @RoomID, @CheckInDate, @CheckOutDate, @TotalAmount, @Status, @CreatedAt);
+
+                    UPDATE dbo.tbl_Rooms SET Status = 'Occupied' WHERE RoomID = @RoomID;";
+
+                using var cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.Add("@GuestID", SqlDbType.Int).Value = model.GuestId;
+                cmd.Parameters.Add("@RoomID", SqlDbType.Int).Value = model.RoomId;
+                cmd.Parameters.Add("@CheckInDate", SqlDbType.DateTime).Value = model.CheckInDate;
+                cmd.Parameters.Add("@CheckOutDate", SqlDbType.DateTime).Value = model.CheckOutDate;
+                cmd.Parameters.Add("@TotalAmount", SqlDbType.Decimal).Value = model.TotalAmount;
+                cmd.Parameters.Add("@Status", SqlDbType.NVarChar, 50).Value = model.Status;
+                cmd.Parameters.Add("@CreatedAt", SqlDbType.DateTime).Value = model.CreatedAt;
+
+                int rows = cmd.ExecuteNonQuery();
+                return (rows > 0, rows > 0 ? "Reservation saved successfully." : "No records inserted.");
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
         }
 
         public (bool Success, string Message) ProcessCheckOut(int reservationId, int roomId)
         {
             try
             {
-                using (var conn = new SqlConnection(_connectionString))
-                {
-                    conn.Open();
+                using var conn = new SqlConnection(_connectionString);
+                conn.Open();
 
-                    // 1. Update reservation status to CheckedOut
-                    string updateResQuery = "UPDATE dbo.Reservations SET Status = 'CheckedOut' WHERE ReservationId = @ReservationId;";
-                    using (var resCmd = new SqlCommand(updateResQuery, conn))
-                    {
-                        resCmd.Parameters.AddWithValue("@ReservationId", reservationId);
-                        resCmd.ExecuteNonQuery();
-                    }
+                string sql = @"
+                    UPDATE dbo.Reservations 
+                    SET Status = 'Checked-Out' 
+                    WHERE ReservationID = @ReservationID;
 
-                    // 2. Set the room status back to Available for turnover
-                    using (var roomCmd = new SqlCommand("sp_Room_CRUD", conn))
-                    {
-                        roomCmd.CommandType = CommandType.StoredProcedure;
-                        roomCmd.Parameters.AddWithValue("@Action", "UPDATE");
-                        roomCmd.Parameters.AddWithValue("@RoomId", roomId);
-                        roomCmd.Parameters.AddWithValue("@RoomNumber", DBNull.Value);
-                        roomCmd.Parameters.AddWithValue("@RoomType", DBNull.Value);
-                        roomCmd.Parameters.AddWithValue("@PricePerNight", 0);
-                        roomCmd.Parameters.AddWithValue("@Status", "Available");
-                        roomCmd.Parameters.AddWithValue("@Floor", 0);
+                    UPDATE dbo.tbl_Rooms 
+                    SET Status = 'Available' 
+                    WHERE RoomID = @RoomID;";
 
-                        roomCmd.ExecuteNonQuery();
-                    }
+                using var cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.Add("@ReservationID", SqlDbType.Int).Value = reservationId;
+                cmd.Parameters.Add("@RoomID", SqlDbType.Int).Value = roomId;
 
-                    return (true, "Guest departure confirmed. Room is now available for turnover!");
-                }
+                int rows = cmd.ExecuteNonQuery();
+                return (rows > 0, rows > 0 ? "Check-out completed." : "Failed to update record.");
             }
             catch (Exception ex)
             {
-                return (false, "Database error: " + ex.Message);
+                return (false, ex.Message);
             }
         }
     }
