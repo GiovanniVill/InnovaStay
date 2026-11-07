@@ -10,7 +10,7 @@ namespace Model
         public DateTime CheckInDate { get; set; }
         public DateTime CheckOutDate { get; set; }
         public decimal TotalAmount { get; set; }
-        public string Status { get; set; } = "Confirmed"; // Confirmed, CheckedIn, CheckedOut, Cancelled
+        public string Status { get; set; } = "Confirmed";
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         // Display properties for UI Grids
