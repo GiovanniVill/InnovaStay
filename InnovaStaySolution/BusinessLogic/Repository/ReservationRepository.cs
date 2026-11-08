@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using Microsoft.Data.SqlClient;
 using Model;
 
@@ -21,21 +22,21 @@ namespace BusinessLogic.Repository
 
                 string sql = @"
                     SELECT TOP (@Limit)
-                        r.ReservationID,
-                        r.GuestID,
-                        r.RoomID,
-                        ISNULL(g.FullName, 'Guest #' + CAST(r.GuestID AS NVARCHAR)) AS GuestName,
-                        ISNULL(rm.RoomNumber, 'N/A') AS RoomNumber,
-                        ISNULL(rm.RoomType, 'Standard') AS RoomType,
+                        r.ReservationId,
+                        r.GuestId,
+                        r.RoomId,
+                        ISNULL(NULLIF(LTRIM(RTRIM(CONCAT(g.first_name, ' ', g.last_name))), ''), 'Guest #' + CAST(r.GuestId AS NVARCHAR)) AS GuestName,
+                        ISNULL(rm.room_number, CAST(r.RoomId AS NVARCHAR)) AS RoomNumber,
+                        ISNULL(rm.room_type, 'Standard') AS RoomType,
                         r.CheckInDate,
                         r.CheckOutDate,
                         ISNULL(r.TotalAmount, 0) AS TotalAmount,
                         ISNULL(r.Status, 'Confirmed') AS Status,
                         ISNULL(r.CreatedAt, GETDATE()) AS CreatedAt
                     FROM dbo.Reservations r
-                    LEFT JOIN dbo.tbl_Guests g ON r.GuestID = g.GuestID
-                    LEFT JOIN dbo.tbl_Rooms rm ON r.RoomID = rm.RoomID
-                    ORDER BY r.ReservationID DESC";
+                    LEFT JOIN dbo.tbl_Guests g ON r.GuestId = g.guest_id
+                    LEFT JOIN dbo.tbl_Rooms rm ON r.RoomId = rm.room_id
+                    ORDER BY r.ReservationId DESC";
 
                 using var cmd = new SqlCommand(sql, conn);
                 cmd.Parameters.Add("@Limit", SqlDbType.Int).Value = limit;
@@ -45,9 +46,9 @@ namespace BusinessLogic.Repository
                 {
                     list.Add(new ReservationModel
                     {
-                        ReservationId = Convert.ToInt32(reader["ReservationID"]),
-                        GuestId = Convert.ToInt32(reader["GuestID"]),
-                        RoomId = reader["RoomID"] != DBNull.Value ? Convert.ToInt32(reader["RoomID"]) : 0,
+                        ReservationId = Convert.ToInt32(reader["ReservationId"]),
+                        GuestId = Convert.ToInt32(reader["GuestId"]),
+                        RoomId = reader["RoomId"] != DBNull.Value ? Convert.ToInt32(reader["RoomId"]) : 0,
                         GuestName = reader["GuestName"].ToString() ?? "",
                         RoomNumber = reader["RoomNumber"].ToString() ?? "",
                         RoomType = reader["RoomType"].ToString() ?? "",
@@ -59,9 +60,9 @@ namespace BusinessLogic.Repository
                     });
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // Return empty list if table is empty or connection fails
+                Debug.WriteLine($"[GetRecentReservations Error]: {ex.Message}");
             }
 
             return list;
@@ -78,22 +79,22 @@ namespace BusinessLogic.Repository
 
                 string sql = @"
                     SELECT 
-                        r.ReservationID,
-                        r.GuestID,
-                        r.RoomID,
-                        ISNULL(g.FullName, 'Guest #' + CAST(r.GuestID AS NVARCHAR)) AS GuestName,
-                        ISNULL(rm.RoomNumber, 'N/A') AS RoomNumber,
-                        ISNULL(rm.RoomType, 'Standard') AS RoomType,
+                        r.ReservationId,
+                        r.GuestId,
+                        r.RoomId,
+                        ISNULL(NULLIF(LTRIM(RTRIM(CONCAT(g.first_name, ' ', g.last_name))), ''), 'Guest #' + CAST(r.GuestId AS NVARCHAR)) AS GuestName,
+                        ISNULL(rm.room_number, CAST(r.RoomId AS NVARCHAR)) AS RoomNumber,
+                        ISNULL(rm.room_type, 'Standard') AS RoomType,
                         r.CheckInDate,
                         r.CheckOutDate,
                         ISNULL(r.TotalAmount, 0) AS TotalAmount,
-                        ISNULL(r.Status, 'Checked-In') AS Status,
+                        ISNULL(r.Status, 'Confirmed') AS Status,
                         ISNULL(r.CreatedAt, GETDATE()) AS CreatedAt
                     FROM dbo.Reservations r
-                    LEFT JOIN dbo.tbl_Guests g ON r.GuestID = g.GuestID
-                    LEFT JOIN dbo.tbl_Rooms rm ON r.RoomID = rm.RoomID
-                    WHERE r.Status = 'Checked-In' OR r.Status = 'Confirmed'
-                    ORDER BY r.CheckOutDate ASC";
+                    LEFT JOIN dbo.tbl_Guests g ON r.GuestId = g.guest_id
+                    LEFT JOIN dbo.tbl_Rooms rm ON r.RoomId = rm.room_id
+                    WHERE r.Status = 'Checked-In' OR r.Status = 'Confirmed' OR r.Status = 'CheckedIn'
+                    ORDER BY r.ReservationId DESC";
 
                 using var cmd = new SqlCommand(sql, conn);
                 using var reader = cmd.ExecuteReader();
@@ -102,9 +103,9 @@ namespace BusinessLogic.Repository
                 {
                     list.Add(new ReservationModel
                     {
-                        ReservationId = Convert.ToInt32(reader["ReservationID"]),
-                        GuestId = Convert.ToInt32(reader["GuestID"]),
-                        RoomId = reader["RoomID"] != DBNull.Value ? Convert.ToInt32(reader["RoomID"]) : 0,
+                        ReservationId = Convert.ToInt32(reader["ReservationId"]),
+                        GuestId = Convert.ToInt32(reader["GuestId"]),
+                        RoomId = reader["RoomId"] != DBNull.Value ? Convert.ToInt32(reader["RoomId"]) : 0,
                         GuestName = reader["GuestName"].ToString() ?? "",
                         RoomNumber = reader["RoomNumber"].ToString() ?? "",
                         RoomType = reader["RoomType"].ToString() ?? "",
@@ -116,9 +117,9 @@ namespace BusinessLogic.Repository
                     });
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // Fallback to empty list
+                Debug.WriteLine($"[GetActiveStays Error]: {ex.Message}");
             }
 
             return list;
@@ -131,20 +132,30 @@ namespace BusinessLogic.Repository
                 using var conn = new SqlConnection(_connectionString);
                 conn.Open();
 
-                string sql = @"
-                    INSERT INTO dbo.Reservations (GuestID, RoomID, CheckInDate, CheckOutDate, TotalAmount, Status, CreatedAt)
-                    VALUES (@GuestID, @RoomID, @CheckInDate, @CheckOutDate, @TotalAmount, @Status, @CreatedAt);
+                // If reservation status is explicitly Checked-In, set room to Occupied.
+                // Otherwise (Confirmed/Pending), set room to Reserved.
+                string targetRoomStatus = string.Equals(model.Status, "Checked-In", StringComparison.OrdinalIgnoreCase) ||
+                                          string.Equals(model.Status, "CheckedIn", StringComparison.OrdinalIgnoreCase)
+                    ? "Occupied"
+                    : "Reserved";
 
-                    UPDATE dbo.tbl_Rooms SET Status = 'Occupied' WHERE RoomID = @RoomID;";
+                string sql = @"
+                    INSERT INTO dbo.Reservations (GuestId, RoomId, CheckInDate, CheckOutDate, TotalAmount, Status, CreatedAt)
+                    VALUES (@GuestId, @RoomId, @CheckInDate, @CheckOutDate, @TotalAmount, @Status, @CreatedAt);
+
+                    UPDATE dbo.tbl_Rooms 
+                    SET status = @RoomStatus 
+                    WHERE room_id = @RoomId;";
 
                 using var cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.Add("@GuestID", SqlDbType.Int).Value = model.GuestId;
-                cmd.Parameters.Add("@RoomID", SqlDbType.Int).Value = model.RoomId;
+                cmd.Parameters.Add("@GuestId", SqlDbType.Int).Value = model.GuestId;
+                cmd.Parameters.Add("@RoomId", SqlDbType.Int).Value = model.RoomId;
                 cmd.Parameters.Add("@CheckInDate", SqlDbType.DateTime).Value = model.CheckInDate;
                 cmd.Parameters.Add("@CheckOutDate", SqlDbType.DateTime).Value = model.CheckOutDate;
                 cmd.Parameters.Add("@TotalAmount", SqlDbType.Decimal).Value = model.TotalAmount;
                 cmd.Parameters.Add("@Status", SqlDbType.NVarChar, 50).Value = model.Status;
                 cmd.Parameters.Add("@CreatedAt", SqlDbType.DateTime).Value = model.CreatedAt;
+                cmd.Parameters.Add("@RoomStatus", SqlDbType.NVarChar, 50).Value = targetRoomStatus;
 
                 int rows = cmd.ExecuteNonQuery();
                 return (rows > 0, rows > 0 ? "Reservation saved successfully." : "No records inserted.");
@@ -164,16 +175,16 @@ namespace BusinessLogic.Repository
 
                 string sql = @"
                     UPDATE dbo.Reservations 
-                    SET Status = 'Checked-Out' 
-                    WHERE ReservationID = @ReservationID;
+                    SET Status = 'CheckedOut' 
+                    WHERE ReservationId = @ReservationId;
 
                     UPDATE dbo.tbl_Rooms 
-                    SET Status = 'Available' 
-                    WHERE RoomID = @RoomID;";
+                    SET status = 'Available' 
+                    WHERE room_id = @RoomId;";
 
                 using var cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.Add("@ReservationID", SqlDbType.Int).Value = reservationId;
-                cmd.Parameters.Add("@RoomID", SqlDbType.Int).Value = roomId;
+                cmd.Parameters.Add("@ReservationId", SqlDbType.Int).Value = reservationId;
+                cmd.Parameters.Add("@RoomId", SqlDbType.Int).Value = roomId;
 
                 int rows = cmd.ExecuteNonQuery();
                 return (rows > 0, rows > 0 ? "Check-out completed." : "Failed to update record.");

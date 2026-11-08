@@ -424,5 +424,18 @@ namespace UI
                 loginForm.Show();
             }
         }
+        public void ShowDashboardWorkspace()
+        {
+            if (activeForm != null)
+            {
+                var temp = activeForm;
+                activeForm = null;
+                temp.Close();
+            }
+
+            pnlDashboardWorkspace.Visible = true;
+            pnlDashboardWorkspace.BringToFront();
+            RefreshAllDatabaseData();
+        }
     }
 }
