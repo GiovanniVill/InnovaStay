@@ -6,41 +6,48 @@ namespace BusinessLogic.Controller
 {
     public class ReservationController
     {
-        private readonly ReservationRepository _repository;
+        private readonly ReservationRepository _reservationRepository;
 
         public ReservationController()
         {
-            _repository = new ReservationRepository();
+            _reservationRepository = new ReservationRepository();
         }
 
-        public (bool Success, string Message) AddReservation(ReservationModel reservation)
+        public List<ReservationModel> GetRecentReservations(int limit = 10)
         {
-            if (reservation.GuestId <= 0)
-                return (false, "Please select a valid guest.");
-
-            if (reservation.RoomId <= 0)
-                return (false, "Please select a valid room.");
-
-            if (reservation.CheckOutDate.Date <= reservation.CheckInDate.Date)
-                return (false, "Check-out date must be after check-in date.");
-
-            if (reservation.TotalAmount <= 0)
-                return (false, "Calculated total must be greater than zero.");
-
-            return _repository.CreateReservation(reservation);
+            return _reservationRepository.GetRecentReservations(limit);
         }
 
         public List<ReservationModel> GetActiveStays()
         {
-            return _repository.GetActiveStays();
+            return _reservationRepository.GetActiveStays();
+        }
+
+        public List<ReservationModel> GetPendingCheckIns()
+        {
+            return _reservationRepository.GetPendingCheckIns();
+        }
+
+        // Handles CreateReservationForm.cs
+        public (bool Success, string Message) AddReservation(ReservationModel model)
+        {
+            return _reservationRepository.CreateReservation(model);
+        }
+
+        // Alias for CreateReservation
+        public (bool Success, string Message) CreateReservation(ReservationModel model)
+        {
+            return _reservationRepository.CreateReservation(model);
+        }
+
+        public (bool Success, string Message) CheckInGuest(int reservationId, int roomId)
+        {
+            return _reservationRepository.ProcessCheckIn(reservationId, roomId);
         }
 
         public (bool Success, string Message) CheckOutGuest(int reservationId, int roomId)
         {
-            if (reservationId <= 0 || roomId <= 0)
-                return (false, "Invalid reservation or room selected.");
-
-            return _repository.ProcessCheckOut(reservationId, roomId);
+            return _reservationRepository.ProcessCheckOut(reservationId, roomId);
         }
     }
 }

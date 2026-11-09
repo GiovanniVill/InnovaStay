@@ -93,7 +93,7 @@ namespace BusinessLogic.Repository
                     FROM dbo.Reservations r
                     LEFT JOIN dbo.tbl_Guests g ON r.GuestId = g.guest_id
                     LEFT JOIN dbo.tbl_Rooms rm ON r.RoomId = rm.room_id
-                    WHERE r.Status = 'Checked-In' OR r.Status = 'Confirmed' OR r.Status = 'CheckedIn'
+                    WHERE r.Status = 'Checked-In' OR r.Status = 'CheckedIn'
                     ORDER BY r.ReservationId DESC";
 
                 using var cmd = new SqlCommand(sql, conn);
@@ -125,6 +125,92 @@ namespace BusinessLogic.Repository
             return list;
         }
 
+        public List<ReservationModel> GetPendingCheckIns()
+        {
+            var list = new List<ReservationModel>();
+
+            try
+            {
+                using var conn = new SqlConnection(_connectionString);
+                conn.Open();
+
+                string sql = @"
+                    SELECT 
+                        r.ReservationId,
+                        r.GuestId,
+                        r.RoomId,
+                        ISNULL(NULLIF(LTRIM(RTRIM(CONCAT(g.first_name, ' ', g.last_name))), ''), 'Guest #' + CAST(r.GuestId AS NVARCHAR)) AS GuestName,
+                        ISNULL(rm.room_number, CAST(r.RoomId AS NVARCHAR)) AS RoomNumber,
+                        ISNULL(rm.room_type, 'Standard') AS RoomType,
+                        r.CheckInDate,
+                        r.CheckOutDate,
+                        ISNULL(r.TotalAmount, 0) AS TotalAmount,
+                        ISNULL(r.Status, 'Confirmed') AS Status,
+                        ISNULL(r.CreatedAt, GETDATE()) AS CreatedAt
+                    FROM dbo.Reservations r
+                    LEFT JOIN dbo.tbl_Guests g ON r.GuestId = g.guest_id
+                    LEFT JOIN dbo.tbl_Rooms rm ON r.RoomId = rm.room_id
+                    WHERE r.Status = 'Confirmed'
+                    ORDER BY r.CheckInDate ASC";
+
+                using var cmd = new SqlCommand(sql, conn);
+                using var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    list.Add(new ReservationModel
+                    {
+                        ReservationId = Convert.ToInt32(reader["ReservationId"]),
+                        GuestId = Convert.ToInt32(reader["GuestId"]),
+                        RoomId = reader["RoomId"] != DBNull.Value ? Convert.ToInt32(reader["RoomId"]) : 0,
+                        GuestName = reader["GuestName"].ToString() ?? "",
+                        RoomNumber = reader["RoomNumber"].ToString() ?? "",
+                        RoomType = reader["RoomType"].ToString() ?? "",
+                        CheckInDate = Convert.ToDateTime(reader["CheckInDate"]),
+                        CheckOutDate = Convert.ToDateTime(reader["CheckOutDate"]),
+                        TotalAmount = Convert.ToDecimal(reader["TotalAmount"]),
+                        Status = reader["Status"].ToString() ?? "Confirmed",
+                        CreatedAt = Convert.ToDateTime(reader["CreatedAt"])
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[GetPendingCheckIns Error]: {ex.Message}");
+            }
+
+            return list;
+        }
+
+        public (bool Success, string Message) ProcessCheckIn(int reservationId, int roomId)
+        {
+            try
+            {
+                using var conn = new SqlConnection(_connectionString);
+                conn.Open();
+
+                string sql = @"
+                    UPDATE dbo.Reservations 
+                    SET Status = 'Checked-In' 
+                    WHERE ReservationId = @ReservationId;
+
+                    UPDATE dbo.tbl_Rooms 
+                    SET status = 'Occupied' 
+                    WHERE room_id = @RoomId;";
+
+                using var cmd = new SqlCommand(sql, conn);
+                cmd.Parameters.Add("@ReservationId", SqlDbType.Int).Value = reservationId;
+                cmd.Parameters.Add("@RoomId", SqlDbType.Int).Value = roomId;
+
+                int rows = cmd.ExecuteNonQuery();
+                return (rows > 0, rows > 0 ? "Check-in successful." : "No records updated.");
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
+
         public (bool Success, string Message) CreateReservation(ReservationModel model)
         {
             try
@@ -132,8 +218,6 @@ namespace BusinessLogic.Repository
                 using var conn = new SqlConnection(_connectionString);
                 conn.Open();
 
-                // If reservation status is explicitly Checked-In, set room to Occupied.
-                // Otherwise (Confirmed/Pending), set room to Reserved.
                 string targetRoomStatus = string.Equals(model.Status, "Checked-In", StringComparison.OrdinalIgnoreCase) ||
                                           string.Equals(model.Status, "CheckedIn", StringComparison.OrdinalIgnoreCase)
                     ? "Occupied"

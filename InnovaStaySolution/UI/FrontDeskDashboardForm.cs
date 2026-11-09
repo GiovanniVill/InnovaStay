@@ -404,7 +404,7 @@ namespace UI
 
         private void btnCheckIn_Click(object sender, EventArgs e)
         {
-            OpenChildForm(new GuestInfo());
+            OpenChildForm(new CheckInForm());
         }
 
         private void btnOut_Click(object sender, EventArgs e)
