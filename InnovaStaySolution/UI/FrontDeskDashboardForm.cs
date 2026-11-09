@@ -437,5 +437,10 @@ namespace UI
             pnlDashboardWorkspace.BringToFront();
             RefreshAllDatabaseData();
         }
+
+        private void btnBilling_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new BillingForm());
+        }
     }
 }
