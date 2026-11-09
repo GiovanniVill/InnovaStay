@@ -17,8 +17,8 @@
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             pnlSidebar = new Panel();
             lblBrandSubtitle = new Label();
             lblBrand = new Label();
@@ -62,6 +62,7 @@
             pnlQueueItem3 = new Panel();
             lblQ3Title = new Label();
             lblQ3Time = new Label();
+            btnBilling = new Button();
             pnlSidebar.SuspendLayout();
             panelMainContent.SuspendLayout();
             pnlDashboardWorkspace.SuspendLayout();
@@ -78,6 +79,7 @@
             // pnlSidebar
             // 
             pnlSidebar.BackColor = Color.FromArgb(238, 236, 203);
+            pnlSidebar.Controls.Add(btnBilling);
             pnlSidebar.Controls.Add(lblBrandSubtitle);
             pnlSidebar.Controls.Add(lblBrand);
             pnlSidebar.Controls.Add(btnDashboard);
@@ -387,23 +389,23 @@
             dgvActivity.BorderStyle = BorderStyle.None;
             dgvActivity.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dgvActivity.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(20, 26, 40);
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(20, 26, 40);
-            dataGridViewCellStyle1.SelectionForeColor = Color.White;
-            dgvActivity.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.FromArgb(20, 26, 40);
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle3.ForeColor = Color.White;
+            dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(20, 26, 40);
+            dataGridViewCellStyle3.SelectionForeColor = Color.White;
+            dgvActivity.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvActivity.ColumnHeadersHeight = 36;
             dgvActivity.Columns.AddRange(new DataGridViewColumn[] { colGuestId, colGuestName, colRoom, colCheckIn, colCheckOut, colTotal, colStatus });
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.White;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = Color.FromArgb(28, 34, 46);
-            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(226, 222, 190);
-            dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(20, 26, 40);
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dgvActivity.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = Color.White;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle4.ForeColor = Color.FromArgb(28, 34, 46);
+            dataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(226, 222, 190);
+            dataGridViewCellStyle4.SelectionForeColor = Color.FromArgb(20, 26, 40);
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
+            dgvActivity.DefaultCellStyle = dataGridViewCellStyle4;
             dgvActivity.EnableHeadersVisualStyles = false;
             dgvActivity.GridColor = Color.FromArgb(240, 242, 245);
             dgvActivity.Location = new Point(14, 44);
@@ -592,6 +594,21 @@
             lblQ3Time.TabIndex = 1;
             lblQ3Time.Text = "Front Desk Request • 7 hours ago";
             // 
+            // btnBilling
+            // 
+            btnBilling.BackColor = Color.FromArgb(184, 172, 102);
+            btnBilling.FlatAppearance.BorderSize = 0;
+            btnBilling.FlatStyle = FlatStyle.Flat;
+            btnBilling.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnBilling.ForeColor = Color.White;
+            btnBilling.Location = new Point(18, 251);
+            btnBilling.Name = "btnBilling";
+            btnBilling.Size = new Size(184, 42);
+            btnBilling.TabIndex = 9;
+            btnBilling.Text = "Billing/Payment";
+            btnBilling.UseVisualStyleBackColor = false;
+            btnBilling.Click += btnBilling_Click;
+            // 
             // FrontDeskDashboardForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -673,5 +690,6 @@
         private System.Windows.Forms.Panel pnlQueueItem3;
         private System.Windows.Forms.Label lblQ3Title;
         private System.Windows.Forms.Label lblQ3Time;
+        private Button btnBilling;
     }
 }
