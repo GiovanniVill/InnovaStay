@@ -34,62 +34,71 @@
             label5 = new Label();
             label6 = new Label();
             label7 = new Label();
+            panel1 = new Panel();
             ((System.ComponentModel.ISupportInitialize)dgvUsers).BeginInit();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // txtUserId
             // 
-            txtUserId.Location = new Point(168, 65);
+            txtUserId.Location = new Point(78, 36);
+            txtUserId.Margin = new Padding(3, 2, 3, 2);
             txtUserId.Name = "txtUserId";
             txtUserId.ReadOnly = true;
-            txtUserId.Size = new Size(125, 27);
+            txtUserId.Size = new Size(201, 23);
             txtUserId.TabIndex = 0;
             txtUserId.UseSystemPasswordChar = true;
             // 
             // txtUsername
             // 
-            txtUsername.Location = new Point(168, 136);
+            txtUsername.Location = new Point(78, 79);
+            txtUsername.Margin = new Padding(3, 2, 3, 2);
             txtUsername.Name = "txtUsername";
-            txtUsername.Size = new Size(125, 27);
+            txtUsername.Size = new Size(201, 23);
             txtUsername.TabIndex = 1;
             // 
             // txtPassword
             // 
-            txtPassword.Location = new Point(168, 204);
+            txtPassword.Location = new Point(78, 118);
+            txtPassword.Margin = new Padding(3, 2, 3, 2);
             txtPassword.Name = "txtPassword";
-            txtPassword.Size = new Size(125, 27);
+            txtPassword.Size = new Size(201, 23);
             txtPassword.TabIndex = 2;
             // 
             // txtFullName
             // 
-            txtFullName.Location = new Point(168, 274);
+            txtFullName.Location = new Point(78, 160);
+            txtFullName.Margin = new Padding(3, 2, 3, 2);
             txtFullName.Name = "txtFullName";
-            txtFullName.Size = new Size(125, 27);
+            txtFullName.Size = new Size(201, 23);
             txtFullName.TabIndex = 3;
             // 
             // cmbRole
             // 
             cmbRole.FormattingEnabled = true;
             cmbRole.Items.AddRange(new object[] { "Admin", "Front Desk" });
-            cmbRole.Location = new Point(168, 349);
+            cmbRole.Location = new Point(78, 195);
+            cmbRole.Margin = new Padding(3, 2, 3, 2);
             cmbRole.Name = "cmbRole";
-            cmbRole.Size = new Size(125, 28);
+            cmbRole.Size = new Size(201, 23);
             cmbRole.TabIndex = 4;
             // 
             // cmbStatus
             // 
             cmbStatus.FormattingEnabled = true;
             cmbStatus.Items.AddRange(new object[] { "Active", "Inactive" });
-            cmbStatus.Location = new Point(168, 419);
+            cmbStatus.Location = new Point(78, 232);
+            cmbStatus.Margin = new Padding(3, 2, 3, 2);
             cmbStatus.Name = "cmbStatus";
-            cmbStatus.Size = new Size(125, 28);
+            cmbStatus.Size = new Size(201, 23);
             cmbStatus.TabIndex = 5;
             // 
             // btnAddUser
             // 
-            btnAddUser.Location = new Point(87, 535);
+            btnAddUser.Location = new Point(168, 268);
+            btnAddUser.Margin = new Padding(3, 2, 3, 2);
             btnAddUser.Name = "btnAddUser";
-            btnAddUser.Size = new Size(127, 47);
+            btnAddUser.Size = new Size(111, 35);
             btnAddUser.TabIndex = 6;
             btnAddUser.Text = "Add User";
             btnAddUser.UseVisualStyleBackColor = true;
@@ -97,9 +106,10 @@
             // 
             // btnUpdateUser
             // 
-            btnUpdateUser.Location = new Point(231, 535);
+            btnUpdateUser.Location = new Point(170, 324);
+            btnUpdateUser.Margin = new Padding(3, 2, 3, 2);
             btnUpdateUser.Name = "btnUpdateUser";
-            btnUpdateUser.Size = new Size(125, 47);
+            btnUpdateUser.Size = new Size(109, 35);
             btnUpdateUser.TabIndex = 7;
             btnUpdateUser.Text = "Update";
             btnUpdateUser.UseVisualStyleBackColor = true;
@@ -107,9 +117,10 @@
             // 
             // btnDeleteUser
             // 
-            btnDeleteUser.Location = new Point(88, 599);
+            btnDeleteUser.Location = new Point(168, 379);
+            btnDeleteUser.Margin = new Padding(3, 2, 3, 2);
             btnDeleteUser.Name = "btnDeleteUser";
-            btnDeleteUser.Size = new Size(126, 43);
+            btnDeleteUser.Size = new Size(110, 32);
             btnDeleteUser.TabIndex = 8;
             btnDeleteUser.Text = "Delete";
             btnDeleteUser.UseVisualStyleBackColor = true;
@@ -117,9 +128,10 @@
             // 
             // btnClearUser
             // 
-            btnClearUser.Location = new Point(231, 599);
+            btnClearUser.Location = new Point(168, 433);
+            btnClearUser.Margin = new Padding(3, 2, 3, 2);
             btnClearUser.Name = "btnClearUser";
-            btnClearUser.Size = new Size(125, 43);
+            btnClearUser.Size = new Size(109, 32);
             btnClearUser.TabIndex = 9;
             btnClearUser.Text = "Clear";
             btnClearUser.UseVisualStyleBackColor = true;
@@ -130,98 +142,113 @@
             dgvUsers.AllowUserToAddRows = false;
             dgvUsers.BackgroundColor = Color.White;
             dgvUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvUsers.Location = new Point(417, 49);
+            dgvUsers.Dock = DockStyle.Fill;
+            dgvUsers.Location = new Point(0, 0);
+            dgvUsers.Margin = new Padding(0);
             dgvUsers.Name = "dgvUsers";
             dgvUsers.ReadOnly = true;
             dgvUsers.RowHeadersWidth = 51;
             dgvUsers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvUsers.Size = new Size(929, 772);
+            dgvUsers.Size = new Size(1277, 666);
             dgvUsers.TabIndex = 10;
             dgvUsers.CellClick += dgvUsers_CellClick;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(79, 65);
+            label2.Location = new Point(14, 44);
             label2.Name = "label2";
-            label2.Size = new Size(57, 20);
+            label2.Size = new Size(44, 15);
             label2.TabIndex = 11;
             label2.Text = "User ID";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(62, 143);
+            label3.Location = new Point(11, 82);
             label3.Name = "label3";
-            label3.Size = new Size(75, 20);
+            label3.Size = new Size(60, 15);
             label3.TabIndex = 12;
             label3.Text = "Username";
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(66, 211);
+            label4.Location = new Point(11, 118);
             label4.Name = "label4";
-            label4.Size = new Size(70, 20);
+            label4.Size = new Size(57, 15);
             label4.TabIndex = 13;
             label4.Text = "Password";
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(61, 277);
+            label5.Location = new Point(11, 160);
             label5.Name = "label5";
-            label5.Size = new Size(76, 20);
+            label5.Size = new Size(61, 15);
             label5.TabIndex = 14;
             label5.Text = "Full Name";
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(97, 357);
+            label6.Location = new Point(11, 198);
             label6.Name = "label6";
-            label6.Size = new Size(39, 20);
+            label6.Size = new Size(30, 15);
             label6.TabIndex = 15;
             label6.Text = "Role";
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(87, 427);
+            label7.Location = new Point(11, 235);
             label7.Name = "label7";
-            label7.Size = new Size(49, 20);
+            label7.Size = new Size(39, 15);
             label7.TabIndex = 16;
             label7.Text = "Status";
             // 
+            // panel1
+            // 
+            panel1.Controls.Add(label2);
+            panel1.Controls.Add(label7);
+            panel1.Controls.Add(btnClearUser);
+            panel1.Controls.Add(txtUserId);
+            panel1.Controls.Add(btnDeleteUser);
+            panel1.Controls.Add(label6);
+            panel1.Controls.Add(btnUpdateUser);
+            panel1.Controls.Add(label3);
+            panel1.Controls.Add(btnAddUser);
+            panel1.Controls.Add(label5);
+            panel1.Controls.Add(cmbStatus);
+            panel1.Controls.Add(txtUsername);
+            panel1.Controls.Add(label4);
+            panel1.Controls.Add(txtPassword);
+            panel1.Controls.Add(cmbRole);
+            panel1.Controls.Add(txtFullName);
+            panel1.Dock = DockStyle.Left;
+            panel1.Location = new Point(0, 0);
+            panel1.Name = "panel1";
+            panel1.Padding = new Padding(16, 20, 16, 20);
+            panel1.Size = new Size(300, 666);
+            panel1.TabIndex = 17;
+            // 
             // UserManagementForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Beige;
-            ClientSize = new Size(1924, 1055);
-            Controls.Add(label7);
-            Controls.Add(label6);
-            Controls.Add(label5);
-            Controls.Add(label4);
-            Controls.Add(label3);
-            Controls.Add(label2);
+            ClientSize = new Size(1277, 666);
+            Controls.Add(panel1);
             Controls.Add(dgvUsers);
-            Controls.Add(btnClearUser);
-            Controls.Add(btnDeleteUser);
-            Controls.Add(btnUpdateUser);
-            Controls.Add(btnAddUser);
-            Controls.Add(cmbStatus);
-            Controls.Add(cmbRole);
-            Controls.Add(txtFullName);
-            Controls.Add(txtPassword);
-            Controls.Add(txtUsername);
-            Controls.Add(txtUserId);
+            FormBorderStyle = FormBorderStyle.None;
+            Margin = new Padding(3, 2, 3, 2);
             Name = "UserManagementForm";
             Text = "UserManagementForm";
             Load += UserManagementForm_Load;
             ((System.ComponentModel.ISupportInitialize)dgvUsers).EndInit();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -244,5 +271,6 @@
         private Label label5;
         private Label label6;
         private Label label7;
+        private Panel panel1;
     }
 }

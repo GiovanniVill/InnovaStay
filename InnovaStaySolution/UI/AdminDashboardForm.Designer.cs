@@ -434,9 +434,9 @@
             lblGridTitle.ForeColor = Color.FromArgb(20, 26, 40);
             lblGridTitle.Location = new Point(16, 14);
             lblGridTitle.Name = "lblGridTitle";
-            lblGridTitle.Size = new Size(372, 21);
+            lblGridTitle.Size = new Size(169, 21);
             lblGridTitle.TabIndex = 0;
-            lblGridTitle.Text = "User / Staff Accounts (InnovaStayDB.dbo.Users)";
+            lblGridTitle.Text = "User / Staff Accounts";
             // 
             // dgvAdminUsers
             // 
@@ -693,9 +693,9 @@
             lblDoubleName.ForeColor = Color.FromArgb(28, 34, 46);
             lblDoubleName.Location = new Point(14, 74);
             lblDoubleName.Name = "lblDoubleName";
-            lblDoubleName.Size = new Size(85, 15);
+            lblDoubleName.Size = new Size(83, 15);
             lblDoubleName.TabIndex = 3;
-            lblDoubleName.Text = "Double Rooms";
+            lblDoubleName.Text = "Deluxe Rooms";
             // 
             // lblSingleCount
             // 

@@ -414,7 +414,7 @@ namespace UI
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            var confirm = MessageBox.Show("Sigurado ka bang nais mong mag-logout?", "Log Out", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var confirm = MessageBox.Show("Are you sure you want to log out?", "Logout", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (confirm == DialogResult.Yes)
             {
                 UserSession.Clear();

@@ -22,8 +22,11 @@ namespace UI
         private readonly Color SelectionTan = Color.FromArgb(226, 222, 190);
         private readonly Color DangerRed = Color.FromArgb(220, 53, 69);
         private readonly Color DangerHover = Color.FromArgb(200, 35, 51);
+        private readonly Color HeaderGray = Color.FromArgb(195, 198, 202);
 
-        // Search Bar Controls
+        // Header and Search Controls
+        private Panel? _headerPanel;
+        private Label? _lblHeaderTitle;
         private Label? _lblSearch;
         private TextBox? _txtSearch;
         private Button? _btnClearSearch;
@@ -32,22 +35,15 @@ namespace UI
         {
             InitializeComponent();
             _userController = new UserController();
-            this.Resize += UserManagementForm_Resize;
         }
 
         private void UserManagementForm_Load(object sender, EventArgs e)
         {
             InitializeDropdowns();
             ApplyInnovaStayStyling();
-            BuildSearchBar();
+            BuildTopHeaderAndSearchBar();
             HookGridEvents();
             RefreshGridAndInputs();
-            AdjustResponsiveLayout();
-        }
-
-        private void UserManagementForm_Resize(object? sender, EventArgs e)
-        {
-            AdjustResponsiveLayout();
         }
 
         private void InitializeDropdowns()
@@ -68,7 +64,15 @@ namespace UI
             this.BackColor = SidebarCream;
             this.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
 
-            // Input Fields
+            // 1. Flush Left Panel Setup
+            if (this.Controls.Find("panel1", true).FirstOrDefault() is Panel leftPanel)
+            {
+                leftPanel.BorderStyle = BorderStyle.None;
+                leftPanel.Dock = DockStyle.Left;
+                leftPanel.BackColor = SidebarCream;
+            }
+
+            // 2. Input Fields
             TextBoxBase[] textboxes = { txtUserId, txtUsername, txtPassword, txtFullName };
             foreach (var tb in textboxes.Where(t => t != null))
             {
@@ -122,9 +126,10 @@ namespace UI
                 btnDeleteUser.MouseLeave += (s, e) => btnDeleteUser.BackColor = DangerRed;
             }
 
-            // DataGridView InnovaStay Navy/Tan Styling
+            // 3. DataGridView Flush Right Setup
             if (dgvUsers != null)
             {
+                dgvUsers.Dock = DockStyle.Fill;
                 dgvUsers.BackgroundColor = Color.White;
                 dgvUsers.BorderStyle = BorderStyle.None;
                 dgvUsers.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
@@ -133,7 +138,7 @@ namespace UI
                 dgvUsers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
                 dgvUsers.MultiSelect = false;
                 dgvUsers.AllowUserToResizeRows = false;
-                dgvUsers.RowTemplate.Height = 38;
+                dgvUsers.RowTemplate.Height = 36;
                 dgvUsers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
                 dgvUsers.EnableHeadersVisualStyles = false;
@@ -155,45 +160,35 @@ namespace UI
             }
         }
 
-        private void AdjustResponsiveLayout()
+        private void BuildTopHeaderAndSearchBar()
         {
             if (dgvUsers == null) return;
 
-            int rightMargin = 30;
-            int bottomMargin = 30;
-            int topMargin = 72; // Space for search bar
-
-            int targetLeft = dgvUsers.Left;
-            int targetWidth = Math.Max(400, this.ClientSize.Width - targetLeft - rightMargin);
-            int targetHeight = Math.Max(300, this.ClientSize.Height - topMargin - bottomMargin);
-
-            dgvUsers.Top = topMargin;
-            dgvUsers.Width = targetWidth;
-            dgvUsers.Height = targetHeight;
-            dgvUsers.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
-
-            // Reposition search bar relative to expanded grid
-            if (_txtSearch != null && _lblSearch != null && _btnClearSearch != null)
+            // Gray sub-header bar identical to Room Maintenance
+            _headerPanel = new Panel
             {
-                int searchY = topMargin - 36;
-                int searchRight = dgvUsers.Right;
+                Name = "pnlUserHeader",
+                Dock = DockStyle.Top,
+                Height = 44,
+                BackColor = HeaderGray
+            };
 
-                _btnClearSearch.Location = new Point(searchRight - _btnClearSearch.Width, searchY - 1);
-                _txtSearch.Location = new Point(_btnClearSearch.Left - _txtSearch.Width - 6, searchY);
-                _lblSearch.Location = new Point(_txtSearch.Left - _lblSearch.Width - 6, searchY + 4);
-            }
-        }
-
-        private void BuildSearchBar()
-        {
-            if (dgvUsers == null) return;
+            _lblHeaderTitle = new Label
+            {
+                Text = "User Accounts List",
+                Font = new Font("Segoe UI", 11.5F, FontStyle.Bold),
+                ForeColor = TableHeaderNavy,
+                AutoSize = true,
+                Location = new Point(14, 11)
+            };
 
             _lblSearch = new Label
             {
                 Text = "Search:",
                 Font = new Font("Segoe UI", 9F, FontStyle.Bold),
                 ForeColor = TableHeaderNavy,
-                AutoSize = true
+                AutoSize = true,
+                Anchor = AnchorStyles.Top | AnchorStyles.Right
             };
 
             _txtSearch = new TextBox
@@ -201,8 +196,9 @@ namespace UI
                 Name = "txtSearchUsersDynamic",
                 PlaceholderText = "Username, name, role...",
                 Font = new Font("Segoe UI", 9.5F, FontStyle.Regular),
-                Size = new Size(240, 26),
-                BorderStyle = BorderStyle.FixedSingle
+                Size = new Size(230, 26),
+                BorderStyle = BorderStyle.FixedSingle,
+                Anchor = AnchorStyles.Top | AnchorStyles.Right
             };
 
             _btnClearSearch = new Button
@@ -214,29 +210,35 @@ namespace UI
                 BackColor = OliveGold,
                 ForeColor = Color.White,
                 Font = new Font("Segoe UI", 9F, FontStyle.Bold),
-                Cursor = Cursors.Hand
+                Cursor = Cursors.Hand,
+                Anchor = AnchorStyles.Top | AnchorStyles.Right
             };
             _btnClearSearch.FlatAppearance.BorderSize = 0;
             _btnClearSearch.MouseEnter += (s, e) => _btnClearSearch.BackColor = OliveHover;
             _btnClearSearch.MouseLeave += (s, e) => _btnClearSearch.BackColor = OliveGold;
 
-            _txtSearch.TextChanged += (s, e) => ApplySearchFilter();
+            // Layout positioning inside the header
+            int headerW = _headerPanel.Width > 0 ? _headerPanel.Width : 800;
+            _btnClearSearch.Location = new Point(headerW - 80, 9);
+            _txtSearch.Location = new Point(_btnClearSearch.Left - 238, 9);
+            _lblSearch.Location = new Point(_txtSearch.Left - 58, 13);
 
+            _txtSearch.TextChanged += (s, e) => ApplySearchFilter();
             _btnClearSearch.Click += (s, e) =>
             {
-                if (_txtSearch != null)
-                {
-                    _txtSearch.Text = string.Empty;
-                }
+                if (_txtSearch != null) _txtSearch.Text = string.Empty;
                 ApplySearchFilter();
             };
 
-            this.Controls.Add(_lblSearch);
-            this.Controls.Add(_txtSearch);
-            this.Controls.Add(_btnClearSearch);
-            _lblSearch.BringToFront();
-            _txtSearch.BringToFront();
-            _btnClearSearch.BringToFront();
+            _headerPanel.Controls.Add(_lblHeaderTitle);
+            _headerPanel.Controls.Add(_lblSearch);
+            _headerPanel.Controls.Add(_txtSearch);
+            _headerPanel.Controls.Add(_btnClearSearch);
+
+            // Container ordering: LeftPanel docked Left, HeaderPanel docked Top, Grid docked Fill
+            this.Controls.Add(_headerPanel);
+            _headerPanel.BringToFront();
+            dgvUsers.BringToFront();
         }
 
         private void ApplySearchFilter()
@@ -298,8 +300,8 @@ namespace UI
             if (txtUsername != null) txtUsername.Clear();
             if (txtPassword != null) txtPassword.Clear();
             if (txtFullName != null) txtFullName.Clear();
-            if (cmbRole != null) cmbRole.SelectedIndex = 1;
-            if (cmbStatus != null) cmbStatus.SelectedIndex = 0;
+            if (cmbRole != null && cmbRole.Items.Count > 1) cmbRole.SelectedIndex = 1;
+            if (cmbStatus != null && cmbStatus.Items.Count > 0) cmbStatus.SelectedIndex = 0;
 
             if (btnAddUser != null) btnAddUser.Enabled = true;
             if (btnUpdateUser != null) btnUpdateUser.Enabled = false;
