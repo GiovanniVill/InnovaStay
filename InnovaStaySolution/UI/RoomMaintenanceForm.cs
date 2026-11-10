@@ -454,46 +454,33 @@ namespace UI
 
         private void btnEditRoom_Click_1(object sender, EventArgs e)
         {
-            if (_selectedRoomId <= 0)
             {
-                MessageBox.Show("Please select a room from the table to edit.", "Selection Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                var grid = _grid ?? (this.Controls.Find("dgvRooms", true).FirstOrDefault() as DataGridView);
 
-            string rateText = _txtPrice?.Text.Trim() ?? _cmbRate?.SelectedItem?.ToString() ?? "0";
-            if (!decimal.TryParse(rateText, out decimal rate) || rate <= 0)
-            {
-                MessageBox.Show("Please enter a valid price.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                if (grid == null || grid.SelectedRows.Count == 0 || _selectedRoomId <= 0)
+                {
+                    MessageBox.Show("Please select a room from the list to edit.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-            string roomNum = _txtRoomNum?.Text.Trim() ?? "";
-            int floor = 1;
-            if (roomNum.Length >= 2 && int.TryParse(roomNum.Substring(0, roomNum.Length - 2), out int f))
-            {
-                floor = f;
-            }
+                var row = grid.SelectedRows[0];
 
-            var room = new RoomModel
-            {
-                RoomId = _selectedRoomId,
-                RoomNumber = roomNum,
-                RoomType = _cmbType?.SelectedItem?.ToString() ?? "Single",
-                PricePerNight = rate,
-                Status = _cmbStatus?.SelectedItem?.ToString() ?? "Available",
-                Floor = floor
-            };
+                // Read values using either direct object binding or column lookups
+                var boundRoom = row.DataBoundItem as RoomModel;
 
-            var (success, message) = _roomController.UpdateRoom(room, _currentUserRole);
-            MessageBox.Show(message, success ? "Success" : "Error", MessageBoxButtons.OK,
-                success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
+                int roomId = boundRoom?.RoomId ?? _selectedRoomId;
+                string roomNumber = boundRoom?.RoomNumber ?? row.Cells["RoomNumber"]?.Value?.ToString() ?? _txtRoomNum?.Text ?? "";
+                string roomType = boundRoom?.RoomType ?? row.Cells["RoomType"]?.Value?.ToString() ?? _cmbType?.SelectedItem?.ToString() ?? "Standard";
+                decimal price = boundRoom?.PricePerNight ?? (decimal.TryParse(row.Cells["PricePerNight"]?.Value?.ToString(), out decimal p) ? p : 0m);
+                string status = boundRoom?.Status ?? row.Cells["Status"]?.Value?.ToString() ?? _cmbStatus?.SelectedItem?.ToString() ?? "Available";
 
-            if (success)
-            {
-                RefreshGridAndInputs();
+                using var editModal = new EditRoomForm(roomId, roomNumber, roomType, price, status);
+                if (editModal.ShowDialog(this) == DialogResult.OK)
+                {
+                    RefreshGridAndInputs();
+                }
             }
         }
-
         private void btnDeactivateRoom_Click_1(object sender, EventArgs e)
         {
             if (_selectedRoomId <= 0)
