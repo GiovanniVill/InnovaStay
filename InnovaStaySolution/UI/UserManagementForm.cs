@@ -52,11 +52,6 @@ namespace UI
             {
                 cmbRole.Items.AddRange(new object[] { "Admin", "FrontDesk" });
             }
-
-            if (cmbStatus != null && cmbStatus.Items.Count == 0)
-            {
-                cmbStatus.Items.AddRange(new object[] { "Active", "Inactive", "Locked" });
-            }
         }
 
         private void ApplyInnovaStayStyling()
@@ -64,16 +59,28 @@ namespace UI
             this.BackColor = SidebarCream;
             this.Font = new Font("Segoe UI", 9.5F, FontStyle.Regular);
 
-            // 1. Flush Left Panel Setup
+            // 1. Flush Left Panel Setup & Hide Full Name + Status Controls
             if (this.Controls.Find("panel1", true).FirstOrDefault() is Panel leftPanel)
             {
                 leftPanel.BorderStyle = BorderStyle.None;
                 leftPanel.Dock = DockStyle.Left;
                 leftPanel.BackColor = SidebarCream;
+
+                foreach (Control c in leftPanel.Controls)
+                {
+                    string nameLower = c.Name.ToLower();
+                    string textLower = c.Text.ToLower();
+
+                    if (nameLower.Contains("fullname") || textLower.Contains("full name") ||
+                        nameLower.Contains("status") || textLower == "status")
+                    {
+                        c.Visible = false;
+                    }
+                }
             }
 
             // 2. Input Fields
-            TextBoxBase[] textboxes = { txtUserId, txtUsername, txtPassword, txtFullName };
+            TextBoxBase[] textboxes = { txtUserId, txtUsername, txtPassword };
             foreach (var tb in textboxes.Where(t => t != null))
             {
                 tb.Font = new Font("Segoe UI", 10F);
@@ -83,6 +90,7 @@ namespace UI
             if (txtUserId != null)
             {
                 txtUserId.ReadOnly = true;
+                txtUserId.UseSystemPasswordChar = false;
                 txtUserId.BackColor = Color.FromArgb(245, 245, 240);
             }
 
@@ -91,12 +99,11 @@ namespace UI
                 txtPassword.UseSystemPasswordChar = true;
             }
 
-            // Dropdowns
-            ComboBox[] combos = { cmbRole, cmbStatus };
-            foreach (var cb in combos.Where(c => c != null))
+            // Role Dropdown
+            if (cmbRole != null)
             {
-                cb.Font = new Font("Segoe UI", 10F);
-                cb.FlatStyle = FlatStyle.Flat;
+                cmbRole.Font = new Font("Segoe UI", 10F);
+                cmbRole.FlatStyle = FlatStyle.Flat;
             }
 
             // Primary Olive Buttons
@@ -164,7 +171,6 @@ namespace UI
         {
             if (dgvUsers == null) return;
 
-            // Gray sub-header bar identical to Room Maintenance
             _headerPanel = new Panel
             {
                 Name = "pnlUserHeader",
@@ -194,7 +200,7 @@ namespace UI
             _txtSearch = new TextBox
             {
                 Name = "txtSearchUsersDynamic",
-                PlaceholderText = "Username, name, role...",
+                PlaceholderText = "Username or role...",
                 Font = new Font("Segoe UI", 9.5F, FontStyle.Regular),
                 Size = new Size(230, 26),
                 BorderStyle = BorderStyle.FixedSingle,
@@ -217,7 +223,6 @@ namespace UI
             _btnClearSearch.MouseEnter += (s, e) => _btnClearSearch.BackColor = OliveHover;
             _btnClearSearch.MouseLeave += (s, e) => _btnClearSearch.BackColor = OliveGold;
 
-            // Layout positioning inside the header
             int headerW = _headerPanel.Width > 0 ? _headerPanel.Width : 800;
             _btnClearSearch.Location = new Point(headerW - 80, 9);
             _txtSearch.Location = new Point(_btnClearSearch.Left - 238, 9);
@@ -235,7 +240,6 @@ namespace UI
             _headerPanel.Controls.Add(_txtSearch);
             _headerPanel.Controls.Add(_btnClearSearch);
 
-            // Container ordering: LeftPanel docked Left, HeaderPanel docked Top, Grid docked Fill
             this.Controls.Add(_headerPanel);
             _headerPanel.BringToFront();
             dgvUsers.BringToFront();
@@ -256,7 +260,6 @@ namespace UI
             {
                 var filtered = _allUsers.Where(u =>
                     (!string.IsNullOrEmpty(u.Username) && u.Username.ToLower().Contains(query)) ||
-                    (!string.IsNullOrEmpty(u.FullName) && u.FullName.ToLower().Contains(query)) ||
                     (!string.IsNullOrEmpty(u.Role) && u.Role.ToLower().Contains(query))
                 ).ToList();
 
@@ -271,11 +274,17 @@ namespace UI
         {
             if (dgvUsers == null || dgvUsers.Columns.Count == 0) return;
 
-            if (dgvUsers.Columns.Contains("CreatedAt"))
-                dgvUsers.Columns["CreatedAt"].DefaultCellStyle.Format = "MM/dd/yyyy hh:mm tt";
+            if (dgvUsers.Columns.Contains("FullName"))
+                dgvUsers.Columns["FullName"].Visible = false;
+
+            if (dgvUsers.Columns.Contains("IsLocked"))
+                dgvUsers.Columns["IsLocked"].Visible = false;
 
             if (dgvUsers.Columns.Contains("PasswordHash"))
                 dgvUsers.Columns["PasswordHash"].Visible = false;
+
+            if (dgvUsers.Columns.Contains("CreatedAt"))
+                dgvUsers.Columns["CreatedAt"].DefaultCellStyle.Format = "MM/dd/yyyy hh:mm tt";
         }
 
         private void HookGridEvents()
@@ -299,9 +308,7 @@ namespace UI
             if (txtUserId != null) txtUserId.Text = "(Auto)";
             if (txtUsername != null) txtUsername.Clear();
             if (txtPassword != null) txtPassword.Clear();
-            if (txtFullName != null) txtFullName.Clear();
             if (cmbRole != null && cmbRole.Items.Count > 1) cmbRole.SelectedIndex = 1;
-            if (cmbStatus != null && cmbStatus.Items.Count > 0) cmbStatus.SelectedIndex = 0;
 
             if (btnAddUser != null) btnAddUser.Enabled = true;
             if (btnUpdateUser != null) btnUpdateUser.Enabled = false;
@@ -328,19 +335,12 @@ namespace UI
 
             if (txtUserId != null) txtUserId.Text = _selectedUserId.ToString();
             if (txtUsername != null) txtUsername.Text = row.Cells["Username"]?.Value?.ToString() ?? "";
-            if (txtFullName != null) txtFullName.Text = row.Cells["FullName"]?.Value?.ToString() ?? "";
             if (txtPassword != null) txtPassword.Text = "";
 
             if (cmbRole != null)
             {
                 string r = row.Cells["Role"]?.Value?.ToString() ?? "";
                 cmbRole.SelectedItem = r.Replace(" ", "");
-            }
-
-            if (cmbStatus != null)
-            {
-                bool isLocked = Convert.ToBoolean(row.Cells["IsLocked"]?.Value ?? false);
-                cmbStatus.SelectedItem = isLocked ? "Locked" : "Active";
             }
 
             if (btnAddUser != null) btnAddUser.Enabled = false;
@@ -352,9 +352,7 @@ namespace UI
         {
             string username = txtUsername?.Text.Trim() ?? "";
             string password = txtPassword?.Text.Trim() ?? "";
-            string fullName = txtFullName?.Text.Trim() ?? "";
             string role = cmbRole?.SelectedItem?.ToString() ?? "FrontDesk";
-            string status = cmbStatus?.SelectedItem?.ToString() ?? "Active";
 
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
@@ -362,12 +360,8 @@ namespace UI
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(fullName))
-            {
-                fullName = username;
-            }
-
-            var (success, errorMsg) = _userController.AddUser(username, password, fullName, role, status);
+            // Defaults fullName to username and status to "Active"
+            var (success, errorMsg) = _userController.AddUser(username, password, username, role, "Active");
 
             if (success)
             {
@@ -382,38 +376,23 @@ namespace UI
 
         public void btnUpdateUser_Click(object sender, EventArgs e)
         {
-            if (_selectedUserId <= 0)
+            if (dgvUsers == null || dgvUsers.SelectedRows.Count == 0 || _selectedUserId <= 0)
             {
-                MessageBox.Show("Please select a user from the table to update.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a user from the table to edit.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string username = txtUsername?.Text.Trim() ?? "";
-            string fullName = txtFullName?.Text.Trim() ?? "";
-            string role = cmbRole?.SelectedItem?.ToString() ?? "FrontDesk";
-            string status = cmbStatus?.SelectedItem?.ToString() ?? "Active";
+            var row = dgvUsers.SelectedRows[0];
+            var selectedUser = row.DataBoundItem as UserModel;
 
-            if (string.IsNullOrWhiteSpace(username))
+            int userId = selectedUser?.UserID ?? _selectedUserId;
+            string username = selectedUser?.Username ?? row.Cells["Username"]?.Value?.ToString() ?? "";
+            string role = selectedUser?.Role ?? row.Cells["Role"]?.Value?.ToString() ?? "FrontDesk";
+
+            using var editModal = new EditUserForm(userId, username, role);
+            if (editModal.ShowDialog(this) == DialogResult.OK)
             {
-                MessageBox.Show("Username cannot be empty.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(fullName))
-            {
-                fullName = username;
-            }
-
-            var (success, errorMsg) = _userController.UpdateUser(_selectedUserId, username, fullName, role, status);
-
-            if (success)
-            {
-                MessageBox.Show("User details updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 RefreshGridAndInputs();
-            }
-            else
-            {
-                MessageBox.Show(errorMsg, "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
