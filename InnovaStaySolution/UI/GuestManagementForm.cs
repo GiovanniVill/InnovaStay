@@ -1,177 +1,259 @@
-using BusinessLogic.Controller;
-using Model;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml.Linq;
+using BusinessLogic.Controller;
+using Model;
 
 namespace UI
 {
     public partial class GuestManagementForm : Form
     {
         private readonly GuestController _guestController;
-        private int selectedGuestId = -1;
+        private int _selectedGuestId = 0;
+        private List<GuestModel> _allGuests = new List<GuestModel>();
+
+        private readonly Color OliveGold = Color.FromArgb(184, 172, 102);
+        private readonly Color OliveHover = Color.FromArgb(160, 150, 85);
+        private readonly Color DangerRed = Color.FromArgb(220, 53, 69);
+        private readonly Color DangerHover = Color.FromArgb(200, 35, 51);
 
         public GuestManagementForm()
         {
             InitializeComponent();
             _guestController = new GuestController();
-
-            this.Load += GuestManagementForm_Load;
-            btnAddGuest.Click += btnAddGuest_Click;
-            btnEditGuest.Click += btnEditGuest_Click;
-            btnSearchGuest.Click += btnSearchGuest_Click;
-            btnViewGuest.Click += btnViewGuest_Click;
-            dgvGuest.CellClick += dgvGuest_CellClick;
+            WireHoverEffects();
         }
 
         private void GuestManagementForm_Load(object sender, EventArgs e)
         {
-            LoadAllGuests();
+            RefreshGridAndInputs();
         }
 
-        private void btnViewGuest_Click(object sender, EventArgs e)
+        private void WireHoverEffects()
         {
-            LoadAllGuests();
-            ClearInputs();
+            Button[] oliveBtns = { btnAddGuest, btnEditGuest, btnViewGuest, btnClearSearch };
+            foreach (var btn in oliveBtns)
+            {
+                btn.MouseEnter += (s, e) => btn.BackColor = OliveHover;
+                btn.MouseLeave += (s, e) => btn.BackColor = OliveGold;
+            }
+
+            btnDeleteGuest.MouseEnter += (s, e) => btnDeleteGuest.BackColor = DangerHover;
+            btnDeleteGuest.MouseLeave += (s, e) => btnDeleteGuest.BackColor = DangerRed;
         }
 
-        private void LoadAllGuests()
+        private void RefreshGridAndInputs()
         {
-            try
+            _allGuests = _guestController.GetAllGuests() ?? new List<GuestModel>();
+            ApplySearchFilter();
+            ResetToAutomatedDefaults();
+        }
+
+        private void ApplySearchFilter()
+        {
+            string query = txtSearch.Text.Trim().ToLower();
+
+            if (string.IsNullOrEmpty(query))
             {
-                List<GuestModel> guests = _guestController.GetAllGuests();
-                dgvGuest.DataSource = null;
-                dgvGuest.DataSource = guests;
+                dgvGuests.DataSource = null;
+                dgvGuests.DataSource = _allGuests;
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"Failed to load guests: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var filtered = _allGuests.Where(g =>
+                    (g.FirstName != null && g.FirstName.ToLower().Contains(query)) ||
+                    (g.LastName != null && g.LastName.ToLower().Contains(query)) ||
+                    (g.FullName != null && g.FullName.ToLower().Contains(query)) ||
+                    (g.PhoneNumber != null && g.PhoneNumber.ToLower().Contains(query)) ||
+                    (g.Address != null && g.Address.ToLower().Contains(query)) ||
+                    (g.Email != null && g.Email.ToLower().Contains(query))
+                ).ToList();
+
+                dgvGuests.DataSource = null;
+                dgvGuests.DataSource = filtered;
+            }
+
+            if (dgvGuests.Columns.Contains("CreatedAt"))
+                dgvGuests.Columns["CreatedAt"].DefaultCellStyle.Format = "MM/dd/yyyy hh:mm tt";
+            if (dgvGuests.Columns.Contains("UpdatedAt"))
+                dgvGuests.Columns["UpdatedAt"].DefaultCellStyle.Format = "MM/dd/yyyy hh:mm tt";
+        }
+
+        private void ResetToAutomatedDefaults()
+        {
+            _selectedGuestId = 0;
+
+            int nextId = _allGuests.Any() ? _allGuests.Max(g => g.GuestId) + 1 : 1;
+            txtGuestId.Text = nextId.ToString();
+
+            txtLastName.Clear();
+            txtFirstName.Clear();
+            txtMiddleName.Clear();
+            txtContact.Clear();
+            txtEmail.Clear();
+            txtBarangay.Clear();
+            txtMunicipality.Clear();
+            txtProvince.Clear();
+
+            btnAddGuest.Enabled = true;
+            dgvGuests.ClearSelection();
+        }
+
+        private GuestModel BuildGuestModelFromInputs()
+        {
+            string first = txtFirstName.Text.Trim();
+            string middle = txtMiddleName.Text.Trim();
+            string last = txtLastName.Text.Trim();
+
+            string combinedFirstName = string.IsNullOrWhiteSpace(middle) ? first : $"{first} {middle}";
+
+            var addressParts = new[]
+            {
+                txtBarangay.Text.Trim(),
+                txtMunicipality.Text.Trim(),
+                txtProvince.Text.Trim()
+            }.Where(s => !string.IsNullOrWhiteSpace(s));
+
+            return new GuestModel
+            {
+                GuestId = _selectedGuestId,
+                FirstName = combinedFirstName,
+                LastName = last,
+                PhoneNumber = txtContact.Text.Trim(),
+                Email = txtEmail.Text.Trim(),
+                Address = string.Join(", ", addressParts)
+            };
+        }
+
+        // --- Designer-Wired Events ---
+
+        private void dgvGuests_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            var row = dgvGuests.Rows[e.RowIndex];
+            if (row.DataBoundItem is not GuestModel guest) return;
+
+            _selectedGuestId = guest.GuestId;
+            txtGuestId.Text = guest.GuestId.ToString();
+            txtLastName.Text = guest.LastName ?? "";
+            txtContact.Text = guest.PhoneNumber ?? "";
+            txtEmail.Text = guest.Email ?? "";
+
+            var nameParts = (guest.FirstName ?? "").Trim().Split(new[] { ' ' }, 2);
+            txtFirstName.Text = nameParts.Length > 0 ? nameParts[0] : "";
+            txtMiddleName.Text = nameParts.Length > 1 ? nameParts[1] : "";
+
+            var addrParts = (guest.Address ?? "").Split(',').Select(p => p.Trim()).ToArray();
+            txtBarangay.Text = addrParts.Length > 0 ? addrParts[0] : "";
+            txtMunicipality.Text = addrParts.Length > 1 ? addrParts[1] : "";
+            txtProvince.Text = addrParts.Length > 2 ? addrParts[2] : "";
+
+            btnAddGuest.Enabled = false;
+        }
+
+        private void dgvGuests_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (dgvGuests.HitTest(e.X, e.Y).Type == DataGridViewHitTestType.None)
+            {
+                ResetToAutomatedDefaults();
             }
         }
 
-        private (string FirstName, string LastName) ParseFullName(string fullName)
+        private void pnlLeftSidebar_Click(object sender, EventArgs e)
         {
-            fullName = (fullName ?? string.Empty).Trim();
-            if (string.IsNullOrEmpty(fullName))
-            {
-                return (string.Empty, string.Empty);
-            }
+            ResetToAutomatedDefaults();
+        }
 
-            int firstSpace = fullName.IndexOf(' ');
-            if (firstSpace == -1)
-            {
-                return (fullName, string.Empty);
-            }
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            ApplySearchFilter();
+        }
 
-            string firstName = fullName.Substring(0, firstSpace).Trim();
-            string lastName = fullName.Substring(firstSpace + 1).Trim();
-            return (firstName, lastName);
+        private void btnClearSearch_Click(object sender, EventArgs e)
+        {
+            txtSearch.Clear();
+            ApplySearchFilter();
+            ResetToAutomatedDefaults();
         }
 
         private void btnAddGuest_Click(object sender, EventArgs e)
         {
-            var (firstName, lastName) = ParseFullName(txtFullName.Text);
-
-            var guest = new GuestModel
+            if (string.IsNullOrWhiteSpace(txtLastName.Text) || string.IsNullOrWhiteSpace(txtFirstName.Text))
             {
-                FirstName = firstName,
-                LastName = lastName,
-                PhoneNumber = txtContact.Text.Trim(),
-                Email = txtEmail.Text.Trim(),
-                Address = txtAddress.Text.Trim()
-            };
+                MessageBox.Show("Last Name and First Name are required.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
+            var guest = BuildGuestModelFromInputs();
             var (success, message) = _guestController.AddGuest(guest);
-            if (success)
-            {
-                MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                ClearInputs();
-                LoadAllGuests();
-            }
-            else
-            {
-                MessageBox.Show(message, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            MessageBox.Show(message, success ? "Success" : "Error", MessageBoxButtons.OK,
+                success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
+
+            if (success) RefreshGridAndInputs();
         }
 
         private void btnEditGuest_Click(object sender, EventArgs e)
         {
-            if (selectedGuestId == -1)
+            if (_selectedGuestId <= 0)
             {
-                MessageBox.Show("Please select a guest from the table to edit.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a guest from the table first.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var (firstName, lastName) = ParseFullName(txtFullName.Text);
-
-            var guest = new GuestModel
-            {
-                GuestId = selectedGuestId,
-                FirstName = firstName,
-                LastName = lastName,
-                PhoneNumber = txtContact.Text.Trim(),
-                Email = txtEmail.Text.Trim(),
-                Address = txtAddress.Text.Trim()
-            };
-
+            var guest = BuildGuestModelFromInputs();
             var (success, message) = _guestController.UpdateGuest(guest);
-            if (success)
-            {
-                MessageBox.Show(message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                ClearInputs();
-                LoadAllGuests();
-            }
-            else
-            {
-                MessageBox.Show(message, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            MessageBox.Show(message, success ? "Success" : "Error", MessageBoxButtons.OK,
+                success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
+
+            if (success) RefreshGridAndInputs();
         }
 
-        private void btnSearchGuest_Click(object sender, EventArgs e)
+        private void btnViewGuest_Click(object sender, EventArgs e)
         {
-            string searchName = txtFullName.Text.Trim().ToLower();
-            string searchPhone = txtContact.Text.Trim();
-
-            try
+           
+        
+            if (_selectedGuestId <= 0)
             {
-                List<GuestModel> allGuests = _guestController.GetAllGuests();
-                var results = allGuests.Where(g =>
-                    (string.IsNullOrEmpty(searchName) || (g.FullName != null && g.FullName.ToLower().Contains(searchName))) &&
-                    (string.IsNullOrEmpty(searchPhone) || (g.PhoneNumber != null && g.PhoneNumber.Contains(searchPhone)))
-                ).ToList();
-
-                dgvGuest.DataSource = null;
-                dgvGuest.DataSource = results;
+                MessageBox.Show("Please select a guest from the table to view.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
-            catch (Exception ex)
+
+            // Retrieve fresh record directly from the database via GuestController
+            var freshGuest = _guestController.GetAllGuests()?
+                .FirstOrDefault(g => g.GuestId == _selectedGuestId) ?? BuildGuestModelFromInputs();
+
+            using (var infoModal = new GuestInfo(freshGuest))
             {
-                MessageBox.Show($"Search failed: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                infoModal.StartPosition = FormStartPosition.CenterParent;
+                infoModal.FormBorderStyle = FormBorderStyle.FixedDialog;
+                infoModal.MaximizeBox = false;
+                infoModal.MinimizeBox = false;
+                infoModal.ShowDialog(this);
             }
         }
+       
+       
 
-        private void dgvGuest_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void btnDeleteGuest_Click(object sender, EventArgs e)
         {
-            if (e.RowIndex >= 0 && dgvGuest.Rows[e.RowIndex].DataBoundItem is GuestModel selectedGuest)
+            if (_selectedGuestId <= 0)
             {
-                selectedGuestId = selectedGuest.GuestId;
-                txtFullName.Text = selectedGuest.FullName;
-                txtContact.Text = selectedGuest.PhoneNumber;
-                txtEmail.Text = selectedGuest.Email;
-                txtAddress.Text = selectedGuest.Address;
+                MessageBox.Show("Please select a guest from the table to delete.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var confirm = MessageBox.Show($"Are you sure you want to delete guest #{_selectedGuestId}?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirm == DialogResult.Yes)
+            {
+                var (success, message) = _guestController.DeleteGuest(_selectedGuestId);
+                MessageBox.Show(message, success ? "Success" : "Error", MessageBoxButtons.OK,
+                    success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
+
+                if (success) RefreshGridAndInputs();
             }
         }
-
-        private void ClearInputs()
-        {
-            selectedGuestId = -1;
-            txtFullName.Clear();
-            txtContact.Clear();
-            txtEmail.Clear();
-            txtAddress.Clear();
-        }
-
-
     }
 }
