@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 using Model;
 
@@ -29,30 +27,14 @@ namespace UI
                 ? _guest.FullName
                 : $"{_guest.FirstName} {_guest.LastName}".Trim();
 
-            string address = string.IsNullOrWhiteSpace(_guest.Address) ? "N/A" : _guest.Address;
-            string email = string.IsNullOrWhiteSpace(_guest.Email) ? "N/A" : _guest.Email;
-            string contact = string.IsNullOrWhiteSpace(_guest.PhoneNumber) ? "N/A" : _guest.PhoneNumber;
-
-            // Match the 4 value labels situated to the right of each bold title label
-            var allLabels = this.Controls.OfType<Label>().ToList();
-
-            SetValueNextToHeader(allLabels, "Full Name:", fullName);
-            SetValueNextToHeader(allLabels, "Address:", address);
-            SetValueNextToHeader(allLabels, "Email:", email);
-            SetValueNextToHeader(allLabels, "Contact:", contact);
-        }
-
-        private void SetValueNextToHeader(System.Collections.Generic.List<Label> labels, string headerText, string valueText)
-        {
-            var header = labels.FirstOrDefault(l => l.Text.Trim().Equals(headerText, StringComparison.OrdinalIgnoreCase) && l.Font.Bold);
-            if (header != null)
-            {
-                var valueLabel = labels.FirstOrDefault(l => l != header && Math.Abs(l.Top - header.Top) <= 10 && l.Left > header.Left);
-                if (valueLabel != null)
-                {
-                    valueLabel.Text = valueText;
-                }
-            }
+            lblFullName.Text = string.IsNullOrWhiteSpace(fullName) ? "N/A" : fullName;
+            lblAddress.Text = string.IsNullOrWhiteSpace(_guest.Address) ? "N/A" : _guest.Address;
+            lblEmail.Text = string.IsNullOrWhiteSpace(_guest.Email) ? "N/A" : _guest.Email;
+            lblContact.Text = string.IsNullOrWhiteSpace(_guest.PhoneNumber) ? "N/A" : _guest.PhoneNumber;
+            lblAge.Text = _guest.Age > 0 ? _guest.Age.ToString() : "N/A";
+            lblDOB.Text = _guest.DateOfBirth.HasValue
+                ? _guest.DateOfBirth.Value.ToString("MMMM dd, yyyy")
+                : "N/A";
         }
     }
 }

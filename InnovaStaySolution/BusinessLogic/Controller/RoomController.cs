@@ -36,8 +36,8 @@ namespace BusinessLogic.Controller
             if (room.PricePerNight <= 0)
                 return (false, "Price per night must be greater than zero.");
 
-            if (room.Floor <= 0)
-                return (false, "Floor must be a positive number.");
+            if (room.BedCount <= 0)
+                return (false, "Number of beds must be a positive number.");
 
             bool isSaved = _roomRepository.AddRoom(room, out string errorMessage);
             if (!isSaved)
@@ -77,6 +77,9 @@ namespace BusinessLogic.Controller
 
             if (room.PricePerNight <= 0)
                 return (false, "Price per night must be greater than zero.");
+
+            if (room.BedCount <= 0)
+                return (false, "Number of beds must be a positive number.");
 
             bool isUpdated = _roomRepository.UpdateRoom(room, out string errorMessage);
             if (!isUpdated)

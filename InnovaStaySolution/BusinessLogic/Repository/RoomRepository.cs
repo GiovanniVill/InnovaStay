@@ -24,7 +24,7 @@ namespace BusinessLogic.Repository
                     cmd.Parameters.AddWithValue("@RoomType", room.RoomType ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@PricePerNight", room.PricePerNight);
                     cmd.Parameters.AddWithValue("@Status", room.Status ?? "Available");
-                    cmd.Parameters.AddWithValue("@Floor", room.Floor);
+                    cmd.Parameters.AddWithValue("@BedCount", room.BedCount);
 
                     conn.Open();
                     int rows = cmd.ExecuteNonQuery();
@@ -60,7 +60,7 @@ namespace BusinessLogic.Repository
                             RoomType = reader["RoomType"].ToString(),
                             PricePerNight = Convert.ToDecimal(reader["PricePerNight"]),
                             Status = reader["Status"].ToString(),
-                            Floor = Convert.ToInt32(reader["Floor"]),
+                            BedCount = reader["BedCount"] != DBNull.Value ? Convert.ToInt32(reader["BedCount"]) : 1,
                             CreatedAt = Convert.ToDateTime(reader["CreatedAt"]),
                             UpdatedAt = Convert.ToDateTime(reader["UpdatedAt"])
                         });
@@ -86,7 +86,7 @@ namespace BusinessLogic.Repository
                     cmd.Parameters.AddWithValue("@RoomType", room.RoomType ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@PricePerNight", room.PricePerNight);
                     cmd.Parameters.AddWithValue("@Status", room.Status ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Floor", room.Floor);
+                    cmd.Parameters.AddWithValue("@BedCount", room.BedCount);
 
                     conn.Open();
                     int rows = cmd.ExecuteNonQuery();

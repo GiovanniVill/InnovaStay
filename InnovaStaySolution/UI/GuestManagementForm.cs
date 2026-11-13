@@ -14,6 +14,9 @@ namespace UI
         private int _selectedGuestId = 0;
         private List<GuestModel> _allGuests = new List<GuestModel>();
 
+        private TextBox? _txtAgeControl;
+        private DateTimePicker? _dtpDobControl;
+
         private readonly Color OliveGold = Color.FromArgb(184, 172, 102);
         private readonly Color OliveHover = Color.FromArgb(160, 150, 85);
         private readonly Color DangerRed = Color.FromArgb(220, 53, 69);
@@ -23,12 +26,62 @@ namespace UI
         {
             InitializeComponent();
             _guestController = new GuestController();
+            ResolveAgeAndDobControls();
             WireHoverEffects();
+
+            btnEditGuest.Click -= btnEditGuest_Click;
+            btnEditGuest.Click += btnEditGuest_Click;
         }
 
         private void GuestManagementForm_Load(object sender, EventArgs e)
         {
             RefreshGridAndInputs();
+        }
+
+        private void ResolveAgeAndDobControls()
+        {
+            var allControls = GetAllControls(this).ToList();
+
+            _txtAgeControl = allControls
+                .OfType<TextBox>()
+                .FirstOrDefault(t => t.Name.IndexOf("age", StringComparison.OrdinalIgnoreCase) >= 0);
+
+            _dtpDobControl = allControls
+                .OfType<DateTimePicker>()
+                .FirstOrDefault(d =>
+                    d.Name.IndexOf("dob", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    d.Name.IndexOf("birth", StringComparison.OrdinalIgnoreCase) >= 0)
+                ?? allControls.OfType<DateTimePicker>().FirstOrDefault();
+
+            if (_dtpDobControl != null)
+            {
+                _dtpDobControl.ValueChanged += (s, e) =>
+                {
+                    if (_txtAgeControl != null)
+                    {
+                        int calculatedAge = CalculateAge(_dtpDobControl.Value.Date);
+                        _txtAgeControl.Text = calculatedAge > 0 ? calculatedAge.ToString() : string.Empty;
+                    }
+                };
+            }
+        }
+
+        private IEnumerable<Control> GetAllControls(Control root)
+        {
+            foreach (Control c in root.Controls)
+            {
+                yield return c;
+                foreach (Control child in GetAllControls(c))
+                    yield return child;
+            }
+        }
+
+        private int CalculateAge(DateTime birthDate)
+        {
+            DateTime today = DateTime.Today;
+            int age = today.Year - birthDate.Year;
+            if (birthDate.Date > today.AddYears(-age)) age--;
+            return Math.Max(0, age);
         }
 
         private void WireHoverEffects()
@@ -64,6 +117,7 @@ namespace UI
             {
                 var filtered = _allGuests.Where(g =>
                     (g.FirstName != null && g.FirstName.ToLower().Contains(query)) ||
+                    (g.MiddleName != null && g.MiddleName.ToLower().Contains(query)) ||
                     (g.LastName != null && g.LastName.ToLower().Contains(query)) ||
                     (g.FullName != null && g.FullName.ToLower().Contains(query)) ||
                     (g.PhoneNumber != null && g.PhoneNumber.ToLower().Contains(query)) ||
@@ -75,6 +129,11 @@ namespace UI
                 dgvGuests.DataSource = filtered;
             }
 
+            if (dgvGuests.Columns.Contains("DateOfBirth"))
+            {
+                dgvGuests.Columns["DateOfBirth"].HeaderText = "Date of Birth";
+                dgvGuests.Columns["DateOfBirth"].DefaultCellStyle.Format = "MM/dd/yyyy";
+            }
             if (dgvGuests.Columns.Contains("CreatedAt"))
                 dgvGuests.Columns["CreatedAt"].DefaultCellStyle.Format = "MM/dd/yyyy hh:mm tt";
             if (dgvGuests.Columns.Contains("UpdatedAt"))
@@ -97,33 +156,70 @@ namespace UI
             txtMunicipality.Clear();
             txtProvince.Clear();
 
+            if (_txtAgeControl != null) _txtAgeControl.Clear();
+            if (_dtpDobControl != null) _dtpDobControl.Value = DateTime.Today;
+
             btnAddGuest.Enabled = true;
             dgvGuests.ClearSelection();
         }
 
-        private GuestModel BuildGuestModelFromInputs()
+        private int ResolveSelectedGuestId()
+        {
+            if (_selectedGuestId > 0)
+                return _selectedGuestId;
+
+            if (dgvGuests.CurrentRow?.DataBoundItem is GuestModel rowGuest && rowGuest.GuestId > 0)
+                return rowGuest.GuestId;
+
+            if (int.TryParse(txtGuestId.Text.Trim(), out int idFromBox) && _allGuests.Any(g => g.GuestId == idFromBox))
+                return idFromBox;
+
+            return 0;
+        }
+
+        private GuestModel BuildGuestModelFromInputs(int guestId)
         {
             string first = txtFirstName.Text.Trim();
             string middle = txtMiddleName.Text.Trim();
             string last = txtLastName.Text.Trim();
 
-            string combinedFirstName = string.IsNullOrWhiteSpace(middle) ? first : $"{first} {middle}";
+            if (first.Equals("First Name", StringComparison.OrdinalIgnoreCase)) first = "";
+            if (middle.Equals("Middle Name", StringComparison.OrdinalIgnoreCase)) middle = "";
+            if (last.Equals("Last Name", StringComparison.OrdinalIgnoreCase)) last = "";
 
             var addressParts = new[]
             {
                 txtBarangay.Text.Trim(),
                 txtMunicipality.Text.Trim(),
                 txtProvince.Text.Trim()
-            }.Where(s => !string.IsNullOrWhiteSpace(s));
+            }.Where(s => !string.IsNullOrWhiteSpace(s)
+                && !s.Equals("Barangay", StringComparison.OrdinalIgnoreCase)
+                && !s.Equals("Municipality", StringComparison.OrdinalIgnoreCase)
+                && !s.Equals("Province", StringComparison.OrdinalIgnoreCase));
+
+            int age = 0;
+            if (_txtAgeControl != null && int.TryParse(_txtAgeControl.Text.Trim(), out int parsedAge) && parsedAge > 0)
+            {
+                age = parsedAge;
+            }
+            else if (_dtpDobControl != null)
+            {
+                age = CalculateAge(_dtpDobControl.Value.Date);
+            }
+
+            DateTime? dob = _dtpDobControl != null ? _dtpDobControl.Value.Date : (DateTime?)null;
 
             return new GuestModel
             {
-                GuestId = _selectedGuestId,
-                FirstName = combinedFirstName,
+                GuestId = guestId,
+                FirstName = first,
+                MiddleName = middle,
                 LastName = last,
                 PhoneNumber = txtContact.Text.Trim(),
                 Email = txtEmail.Text.Trim(),
-                Address = string.Join(", ", addressParts)
+                Address = string.Join(", ", addressParts),
+                Age = age,
+                DateOfBirth = dob
             };
         }
 
@@ -139,17 +235,21 @@ namespace UI
             _selectedGuestId = guest.GuestId;
             txtGuestId.Text = guest.GuestId.ToString();
             txtLastName.Text = guest.LastName ?? "";
+            txtFirstName.Text = guest.FirstName ?? "";
+            txtMiddleName.Text = guest.MiddleName ?? "";
             txtContact.Text = guest.PhoneNumber ?? "";
             txtEmail.Text = guest.Email ?? "";
-
-            var nameParts = (guest.FirstName ?? "").Trim().Split(new[] { ' ' }, 2);
-            txtFirstName.Text = nameParts.Length > 0 ? nameParts[0] : "";
-            txtMiddleName.Text = nameParts.Length > 1 ? nameParts[1] : "";
 
             var addrParts = (guest.Address ?? "").Split(',').Select(p => p.Trim()).ToArray();
             txtBarangay.Text = addrParts.Length > 0 ? addrParts[0] : "";
             txtMunicipality.Text = addrParts.Length > 1 ? addrParts[1] : "";
             txtProvince.Text = addrParts.Length > 2 ? addrParts[2] : "";
+
+            if (_txtAgeControl != null)
+                _txtAgeControl.Text = guest.Age > 0 ? guest.Age.ToString() : string.Empty;
+
+            if (_dtpDobControl != null && guest.DateOfBirth.HasValue && guest.DateOfBirth.Value >= _dtpDobControl.MinDate && guest.DateOfBirth.Value <= _dtpDobControl.MaxDate)
+                _dtpDobControl.Value = guest.DateOfBirth.Value;
 
             btnAddGuest.Enabled = false;
         }
@@ -164,7 +264,7 @@ namespace UI
 
         private void pnlLeftSidebar_Click(object sender, EventArgs e)
         {
-            ResetToAutomatedDefaults();
+            // Keep selected guest intact while editing inputs
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
@@ -181,13 +281,13 @@ namespace UI
 
         private void btnAddGuest_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtLastName.Text) || string.IsNullOrWhiteSpace(txtFirstName.Text))
+            var guest = BuildGuestModelFromInputs(0);
+            if (string.IsNullOrWhiteSpace(guest.LastName) || string.IsNullOrWhiteSpace(guest.FirstName))
             {
                 MessageBox.Show("Last Name and First Name are required.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var guest = BuildGuestModelFromInputs();
             var (success, message) = _guestController.AddGuest(guest);
             MessageBox.Show(message, success ? "Success" : "Error", MessageBoxButtons.OK,
                 success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
@@ -197,13 +297,14 @@ namespace UI
 
         private void btnEditGuest_Click(object sender, EventArgs e)
         {
-            if (_selectedGuestId <= 0)
+            int targetId = ResolveSelectedGuestId();
+            if (targetId <= 0)
             {
                 MessageBox.Show("Please select a guest from the table first.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var guest = BuildGuestModelFromInputs();
+            var guest = BuildGuestModelFromInputs(targetId);
             var (success, message) = _guestController.UpdateGuest(guest);
             MessageBox.Show(message, success ? "Success" : "Error", MessageBoxButtons.OK,
                 success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
@@ -213,17 +314,21 @@ namespace UI
 
         private void btnViewGuest_Click(object sender, EventArgs e)
         {
-           
-        
-            if (_selectedGuestId <= 0)
+            int targetId = ResolveSelectedGuestId();
+            if (targetId <= 0)
             {
                 MessageBox.Show("Please select a guest from the table to view.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            // Retrieve fresh record directly from the database via GuestController
             var freshGuest = _guestController.GetAllGuests()?
-                .FirstOrDefault(g => g.GuestId == _selectedGuestId) ?? BuildGuestModelFromInputs();
+                .FirstOrDefault(g => g.GuestId == targetId);
+
+            if (freshGuest == null)
+            {
+                MessageBox.Show("Guest record could not be found in the database.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             using (var infoModal = new GuestInfo(freshGuest))
             {
@@ -234,21 +339,20 @@ namespace UI
                 infoModal.ShowDialog(this);
             }
         }
-       
-       
 
         private void btnDeleteGuest_Click(object sender, EventArgs e)
         {
-            if (_selectedGuestId <= 0)
+            int targetId = ResolveSelectedGuestId();
+            if (targetId <= 0)
             {
                 MessageBox.Show("Please select a guest from the table to delete.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var confirm = MessageBox.Show($"Are you sure you want to delete guest #{_selectedGuestId}?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var confirm = MessageBox.Show($"Are you sure you want to delete guest #{targetId}?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (confirm == DialogResult.Yes)
             {
-                var (success, message) = _guestController.DeleteGuest(_selectedGuestId);
+                var (success, message) = _guestController.DeleteGuest(targetId);
                 MessageBox.Show(message, success ? "Success" : "Error", MessageBoxButtons.OK,
                     success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
 

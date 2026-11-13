@@ -39,7 +39,6 @@
             btnAddRoom = new Button();
             btnEditRoom = new Button();
             btnViewRoom = new Button();
-            btnClear = new Button();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             pnlInputCard = new Panel();
             pnlGridCard = new Panel();
@@ -154,20 +153,6 @@
             btnViewRoom.UseVisualStyleBackColor = false;
             btnViewRoom.Click += btnViewRoom_Click_1;
             // 
-            // btnClear
-            // 
-            btnClear.BackColor = Color.FromArgb(239, 68, 68);
-            btnClear.FlatStyle = FlatStyle.Flat;
-            btnClear.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnClear.ForeColor = Color.White;
-            btnClear.Location = new Point(187, 382);
-            btnClear.Name = "btnClear";
-            btnClear.Size = new Size(128, 41);
-            btnClear.TabIndex = 11;
-            btnClear.Text = "Deactivate Room";
-            btnClear.UseVisualStyleBackColor = false;
-            btnClear.Click += btnDeactivateRoom_Click_1;
-            // 
             // pnlInputCard
             // 
             pnlInputCard.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
@@ -180,7 +165,6 @@
             pnlInputCard.Controls.Add(btnAddRoom);
             pnlInputCard.Controls.Add(btnEditRoom);
             pnlInputCard.Controls.Add(btnViewRoom);
-            pnlInputCard.Controls.Add(btnClear);
             pnlInputCard.Location = new Point(15, 15);
             pnlInputCard.Name = "pnlInputCard";
             pnlInputCard.Size = new Size(458, 818);
@@ -259,7 +243,6 @@
         private Button btnAddRoom;
         private Button btnEditRoom;
         private Button btnViewRoom;
-        private Button btnClear;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private Panel pnlInputCard;
         private Panel pnlGridCard;

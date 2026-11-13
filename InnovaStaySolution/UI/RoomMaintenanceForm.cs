@@ -23,9 +23,6 @@ namespace UI
         private readonly Color SidebarCream = Color.FromArgb(238, 236, 203);
         private readonly Color TableHeaderNavy = Color.FromArgb(20, 26, 40);
         private readonly Color SelectionTan = Color.FromArgb(226, 222, 190);
-        private readonly Color DangerRed = Color.FromArgb(220, 53, 69);
-        private readonly Color DangerHover = Color.FromArgb(200, 35, 51);
-        private readonly Color NeutralGray = Color.FromArgb(160, 165, 170);
 
         // Dynamic control references
         private TextBox? _txtRoomNum;
@@ -33,11 +30,12 @@ namespace UI
         private TextBox? _txtPrice;
         private ComboBox? _cmbRate;
         private ComboBox? _cmbStatus;
+        private NumericUpDown? _nudBedCount;
+        private Label? _lblBedCount;
         private DataGridView? _grid;
         private Button? _btnCreate;
         private Button? _btnEdit;
         private Button? _btnView;
-        private Button? _btnDeactivate;
         private Panel? _leftPanel;
 
         // Search Bar Controls
@@ -54,6 +52,7 @@ namespace UI
         private void DesignRoomMaintenanceForm_Load_1(object sender, EventArgs e)
         {
             FindFormControls();
+            BuildBedCountControl();
             ApplyInnovaStayStyling();
             BuildSearchBar();
             HookEvents();
@@ -86,6 +85,10 @@ namespace UI
                     else if (name.Contains("status"))
                         _cmbStatus = cb;
                 }
+                else if (c is NumericUpDown nud && name.Contains("bed"))
+                {
+                    _nudBedCount = nud;
+                }
                 else if (c is DataGridView dgv)
                 {
                     _grid = dgv;
@@ -98,8 +101,6 @@ namespace UI
                         _btnEdit = btn;
                     else if (name.Contains("view") || name.Contains("info"))
                         _btnView = btn;
-                    else if (name.Contains("deactivate") || name.Contains("delete"))
-                        _btnDeactivate = btn;
                 }
             }
 
@@ -112,6 +113,45 @@ namespace UI
             {
                 _cmbStatus.Items.AddRange(new object[] { "Available", "Occupied", "Reserved", "Maintenance" });
             }
+        }
+
+        private void BuildBedCountControl()
+        {
+            if (_nudBedCount != null) return;
+
+            Control? anchorControl = (Control?)_txtPrice ?? _cmbRate ?? _cmbType;
+            if (anchorControl == null) return;
+
+            Control parent = anchorControl.Parent ?? (Control?)_leftPanel ?? this;
+            int posX = anchorControl.Left;
+            int posY = anchorControl.Bottom + 14;
+            int width = anchorControl.Width;
+
+            _lblBedCount = new Label
+            {
+                Text = "Number of Beds:",
+                Font = new Font("Segoe UI", 9F, FontStyle.Regular),
+                ForeColor = Color.FromArgb(40, 40, 40),
+                AutoSize = true,
+                Location = new Point(posX, posY)
+            };
+
+            _nudBedCount = new NumericUpDown
+            {
+                Name = "nudBedCount",
+                Minimum = 1,
+                Maximum = 10,
+                Value = 1,
+                Font = new Font("Segoe UI", 10F),
+                BorderStyle = BorderStyle.FixedSingle,
+                Size = new Size(width, 26),
+                Location = new Point(posX, posY + 20)
+            };
+
+            parent.Controls.Add(_lblBedCount);
+            parent.Controls.Add(_nudBedCount);
+            _lblBedCount.BringToFront();
+            _nudBedCount.BringToFront();
         }
 
         private void ApplyInnovaStayStyling()
@@ -136,6 +176,12 @@ namespace UI
                 _txtPrice.BorderStyle = BorderStyle.FixedSingle;
             }
 
+            if (_nudBedCount != null)
+            {
+                _nudBedCount.Font = new Font("Segoe UI", 10F);
+                _nudBedCount.BorderStyle = BorderStyle.FixedSingle;
+            }
+
             Control[] combos = { _cmbType!, _cmbRate!, _cmbStatus! };
             foreach (var cb in combos.Where(c => c != null))
             {
@@ -157,18 +203,6 @@ namespace UI
                 btn.Cursor = Cursors.Hand;
                 btn.MouseEnter += (s, e) => btn.BackColor = OliveHover;
                 btn.MouseLeave += (s, e) => btn.BackColor = OliveGold;
-            }
-
-            if (_btnDeactivate != null)
-            {
-                _btnDeactivate.FlatStyle = FlatStyle.Flat;
-                _btnDeactivate.FlatAppearance.BorderSize = 0;
-                _btnDeactivate.BackColor = DangerRed;
-                _btnDeactivate.ForeColor = Color.White;
-                _btnDeactivate.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-                _btnDeactivate.Cursor = Cursors.Hand;
-                _btnDeactivate.MouseEnter += (s, e) => _btnDeactivate.BackColor = DangerHover;
-                _btnDeactivate.MouseLeave += (s, e) => _btnDeactivate.BackColor = DangerRed;
             }
 
             if (_grid != null)
@@ -285,7 +319,8 @@ namespace UI
                 var filtered = _allRooms.Where(r =>
                     (r.RoomNumber != null && r.RoomNumber.ToLower().Contains(query)) ||
                     (r.RoomType != null && r.RoomType.ToLower().Contains(query)) ||
-                    (r.Status != null && r.Status.ToLower().Contains(query))
+                    (r.Status != null && r.Status.ToLower().Contains(query)) ||
+                    r.BedCount.ToString().Contains(query)
                 ).ToList();
 
                 _grid.DataSource = null;
@@ -299,6 +334,9 @@ namespace UI
         {
             if (_grid == null || _grid.Columns.Count == 0) return;
 
+            if (_grid.Columns.Contains("BedCount"))
+                _grid.Columns["BedCount"].HeaderText = "Beds";
+
             if (_grid.Columns.Contains("PricePerNight"))
                 _grid.Columns["PricePerNight"].DefaultCellStyle.Format = "PHP #,##0.00";
 
@@ -309,7 +347,7 @@ namespace UI
                 _grid.Columns["UpdatedAt"].DefaultCellStyle.Format = "MM/dd/yyyy hh:mm tt";
         }
 
-        private System.Collections.Generic.IEnumerable<Control> GetAllControls(Control root)
+        private IEnumerable<Control> GetAllControls(Control root)
         {
             foreach (Control c in root.Controls)
             {
@@ -346,18 +384,26 @@ namespace UI
                 _leftPanel.Click += (s, e) => ResetToAutomatedDefaults();
             }
 
-            // Sync type changes to standard base rates
+            // Sync type changes to standard base rates and default bed counts
             if (_cmbType != null)
             {
                 _cmbType.SelectedIndexChanged += (s, e) =>
                 {
-                    if (_selectedRoomId == 0 && _txtPrice != null)
+                    if (_selectedRoomId == 0)
                     {
                         string selected = _cmbType.SelectedItem?.ToString() ?? "";
-                        if (selected == "Single") _txtPrice.Text = "1500.00";
-                        else if (selected == "Double") _txtPrice.Text = "2500.00";
-                        else if (selected == "Deluxe") _txtPrice.Text = "3500.00";
-                        else if (selected == "Suite") _txtPrice.Text = "5000.00";
+                        if (_txtPrice != null)
+                        {
+                            if (selected == "Single") _txtPrice.Text = "1500.00";
+                            else if (selected == "Double") _txtPrice.Text = "2500.00";
+                            else if (selected == "Deluxe") _txtPrice.Text = "3500.00";
+                            else if (selected == "Suite") _txtPrice.Text = "5000.00";
+                        }
+
+                        if (_nudBedCount != null)
+                        {
+                            _nudBedCount.Value = selected == "Single" ? 1 : 2;
+                        }
                     }
                 };
             }
@@ -384,9 +430,19 @@ namespace UI
                 _cmbType.SelectedIndex = 0;
             }
 
+            string currentType = _cmbType?.SelectedItem?.ToString() ?? "Single";
+
             if (_txtPrice != null)
             {
-                _txtPrice.Text = "1500.00";
+                _txtPrice.Text = currentType == "Double" ? "2500.00"
+                    : currentType == "Deluxe" ? "3500.00"
+                    : currentType == "Suite" ? "5000.00"
+                    : "1500.00";
+            }
+
+            if (_nudBedCount != null)
+            {
+                _nudBedCount.Value = currentType == "Single" ? 1 : 2;
             }
 
             if (_btnCreate != null) _btnCreate.Enabled = true;
@@ -427,19 +483,15 @@ namespace UI
                 ? _txtRoomNum.Text.Trim()
                 : _roomController.GetNextRoomNumber();
 
-            int floor = 1;
-            if (roomNum.Length >= 2 && int.TryParse(roomNum.Substring(0, roomNum.Length - 2), out int f))
-            {
-                floor = f;
-            }
+            int bedCount = _nudBedCount != null ? (int)_nudBedCount.Value : 1;
 
             var room = new RoomModel
             {
                 RoomNumber = roomNum,
-                RoomType = _cmbType.SelectedItem.ToString(),
+                RoomType = _cmbType.SelectedItem.ToString()!,
                 PricePerNight = rate,
                 Status = "Available",
-                Floor = floor
+                BedCount = bedCount
             };
 
             var (success, message) = _roomController.AddRoom(room, _currentUserRole);
@@ -454,52 +506,27 @@ namespace UI
 
         private void btnEditRoom_Click_1(object sender, EventArgs e)
         {
+            var grid = _grid ?? (this.Controls.Find("dgvRooms", true).FirstOrDefault() as DataGridView);
+
+            if (grid == null || grid.SelectedRows.Count == 0 || _selectedRoomId <= 0)
             {
-                var grid = _grid ?? (this.Controls.Find("dgvRooms", true).FirstOrDefault() as DataGridView);
-
-                if (grid == null || grid.SelectedRows.Count == 0 || _selectedRoomId <= 0)
-                {
-                    MessageBox.Show("Please select a room from the list to edit.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                var row = grid.SelectedRows[0];
-
-                // Read values using either direct object binding or column lookups
-                var boundRoom = row.DataBoundItem as RoomModel;
-
-                int roomId = boundRoom?.RoomId ?? _selectedRoomId;
-                string roomNumber = boundRoom?.RoomNumber ?? row.Cells["RoomNumber"]?.Value?.ToString() ?? _txtRoomNum?.Text ?? "";
-                string roomType = boundRoom?.RoomType ?? row.Cells["RoomType"]?.Value?.ToString() ?? _cmbType?.SelectedItem?.ToString() ?? "Standard";
-                decimal price = boundRoom?.PricePerNight ?? (decimal.TryParse(row.Cells["PricePerNight"]?.Value?.ToString(), out decimal p) ? p : 0m);
-                string status = boundRoom?.Status ?? row.Cells["Status"]?.Value?.ToString() ?? _cmbStatus?.SelectedItem?.ToString() ?? "Available";
-
-                using var editModal = new EditRoomForm(roomId, roomNumber, roomType, price, status);
-                if (editModal.ShowDialog(this) == DialogResult.OK)
-                {
-                    RefreshGridAndInputs();
-                }
-            }
-        }
-        private void btnDeactivateRoom_Click_1(object sender, EventArgs e)
-        {
-            if (_selectedRoomId <= 0)
-            {
-                MessageBox.Show("Please select a room to deactivate.", "Selection Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a room from the list to edit.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var confirm = MessageBox.Show($"Are you sure you want to deactivate room {_txtRoomNum?.Text}?", "Confirm Deactivation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (confirm == DialogResult.Yes)
-            {
-                var (success, message) = _roomController.DeleteRoom(_selectedRoomId, _currentUserRole);
-                MessageBox.Show(message, success ? "Success" : "Error", MessageBoxButtons.OK,
-                    success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
+            var row = grid.SelectedRows[0];
+            var boundRoom = row.DataBoundItem as RoomModel;
 
-                if (success)
-                {
-                    RefreshGridAndInputs();
-                }
+            int roomId = boundRoom?.RoomId ?? _selectedRoomId;
+            string roomNumber = boundRoom?.RoomNumber ?? row.Cells["RoomNumber"]?.Value?.ToString() ?? _txtRoomNum?.Text ?? "";
+            string roomType = boundRoom?.RoomType ?? row.Cells["RoomType"]?.Value?.ToString() ?? _cmbType?.SelectedItem?.ToString() ?? "Single";
+            decimal price = boundRoom?.PricePerNight ?? (decimal.TryParse(row.Cells["PricePerNight"]?.Value?.ToString(), out decimal p) ? p : 0m);
+            string status = boundRoom?.Status ?? row.Cells["Status"]?.Value?.ToString() ?? _cmbStatus?.SelectedItem?.ToString() ?? "Available";
+
+            using var editModal = new EditRoomForm(roomId, roomNumber, roomType, price, status);
+            if (editModal.ShowDialog(this) == DialogResult.OK)
+            {
+                RefreshGridAndInputs();
             }
         }
 
@@ -517,14 +544,16 @@ namespace UI
                 selectedRow = _grid.CurrentRow;
             }
 
-            var selectedRoom = new RoomModel
+            var boundRoom = selectedRow?.DataBoundItem as RoomModel;
+
+            var selectedRoom = boundRoom ?? new RoomModel
             {
                 RoomId = _selectedRoomId,
                 RoomNumber = selectedRow?.Cells["RoomNumber"]?.Value?.ToString() ?? _txtRoomNum?.Text ?? "",
                 RoomType = selectedRow?.Cells["RoomType"]?.Value?.ToString() ?? _cmbType?.SelectedItem?.ToString() ?? "",
                 PricePerNight = decimal.TryParse(selectedRow?.Cells["PricePerNight"]?.Value?.ToString(), out decimal p) ? p : 0m,
                 Status = selectedRow?.Cells["Status"]?.Value?.ToString() ?? _cmbStatus?.SelectedItem?.ToString() ?? "Available",
-                Floor = int.TryParse(selectedRow?.Cells["Floor"]?.Value?.ToString(), out int fl) ? fl : 1
+                BedCount = int.TryParse(selectedRow?.Cells["BedCount"]?.Value?.ToString(), out int b) ? b : 1
             };
 
             try
@@ -569,6 +598,11 @@ namespace UI
                 _txtPrice.Text = priceVal;
             if (_cmbRate != null)
                 _cmbRate.SelectedItem = priceVal;
+
+            if (_nudBedCount != null && int.TryParse(row.Cells["BedCount"]?.Value?.ToString(), out int beds))
+            {
+                _nudBedCount.Value = Math.Clamp(beds, (int)_nudBedCount.Minimum, (int)_nudBedCount.Maximum);
+            }
 
             if (_cmbStatus != null)
             {
