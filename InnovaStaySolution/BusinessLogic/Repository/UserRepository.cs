@@ -55,7 +55,6 @@ namespace BusinessLogic.Repository
                     conn.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        // Cache available columns from the result set to prevent IndexOutOfRangeException
                         var cols = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                         for (int i = 0; i < reader.FieldCount; i++)
                         {
@@ -140,7 +139,7 @@ namespace BusinessLogic.Repository
             }
         }
 
-        public (bool IsSuccess, string ErrorMessage) UpdateUser(UserModel user)
+        public (bool IsSuccess, string ErrorMessage) UpdateUser(UserModel user, string? plainPassword = null)
         {
             try
             {
@@ -154,6 +153,7 @@ namespace BusinessLogic.Repository
                         cmd.Parameters.AddWithValue("@FullName", user.FullName);
                         cmd.Parameters.AddWithValue("@Role", user.Role);
                         cmd.Parameters.AddWithValue("@IsLocked", user.IsLocked);
+                        cmd.Parameters.AddWithValue("@PasswordHash", string.IsNullOrWhiteSpace(plainPassword) ? DBNull.Value : plainPassword);
 
                         conn.Open();
                         int rows = cmd.ExecuteNonQuery();

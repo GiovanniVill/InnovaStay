@@ -21,18 +21,17 @@ namespace BusinessLogic.Controller
         public (bool IsSuccess, string Message) AddUser(string username, string password, string fullName, string role, string status)
         {
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
-                return (false, "Kailangan ilagay ang Username at Password.");
-
-            if (string.IsNullOrWhiteSpace(fullName))
-                return (false, "Kailangan ilagay ang Full Name.");
+                return (false, "Username and Password are required.");
 
             if (string.IsNullOrWhiteSpace(role))
-                return (false, "Pumili ng Role para sa account.");
+                return (false, "Please select a Role for the account.");
+
+            string resolvedFullName = string.IsNullOrWhiteSpace(fullName) ? username.Trim() : fullName.Trim();
 
             var user = new UserModel
             {
                 Username = username.Trim(),
-                FullName = fullName.Trim(),
+                FullName = resolvedFullName,
                 Role = role,
                 IsLocked = (status == "Locked")
             };
@@ -40,50 +39,54 @@ namespace BusinessLogic.Controller
             var (isSuccess, errorMessage) = _userRepo.AddUser(user, password.Trim());
             if (!isSuccess)
             {
-                return (false, !string.IsNullOrEmpty(errorMessage) ? errorMessage : "Hindi naidagdag ang user.");
+                return (false, !string.IsNullOrEmpty(errorMessage) ? errorMessage : "Failed to add user account.");
             }
 
-            return (true, "Matagumpay na naidagdag ang user!");
+            return (true, "User account added successfully!");
         }
 
-        public (bool IsSuccess, string Message) UpdateUser(int userId, string username, string fullName, string role, string status)
+        public (bool IsSuccess, string Message) UpdateUser(int userId, string username, string fullName, string role, string status, string? newPassword = null)
         {
             if (userId <= 0)
-                return (false, "Pumili muna ng user sa table.");
+                return (false, "Please select a user from the table first.");
 
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(fullName))
-                return (false, "Hindi maaaring blangko ang Username at Full Name.");
+            if (string.IsNullOrWhiteSpace(username))
+                return (false, "Username cannot be empty.");
+
+            string resolvedFullName = string.IsNullOrWhiteSpace(fullName) ? username.Trim() : fullName.Trim();
 
             var user = new UserModel
             {
                 UserID = userId,
                 Username = username.Trim(),
-                FullName = fullName.Trim(),
+                FullName = resolvedFullName,
                 Role = role,
                 IsLocked = (status == "Locked")
             };
 
-            var (isSuccess, errorMessage) = _userRepo.UpdateUser(user);
+            string? trimmedPassword = string.IsNullOrWhiteSpace(newPassword) ? null : newPassword.Trim();
+
+            var (isSuccess, errorMessage) = _userRepo.UpdateUser(user, trimmedPassword);
             if (!isSuccess)
             {
-                return (false, !string.IsNullOrEmpty(errorMessage) ? errorMessage : "Hindi na-update ang user.");
+                return (false, !string.IsNullOrEmpty(errorMessage) ? errorMessage : "Failed to update user account.");
             }
 
-            return (true, "Matagumpay na na-update ang user!");
+            return (true, "User account updated successfully!");
         }
 
         public (bool IsSuccess, string Message) DeleteUser(int userId)
         {
             if (userId <= 0)
-                return (false, "Pumili muna ng user na buburahin.");
+                return (false, "Please select a user to delete.");
 
             var (isSuccess, errorMessage) = _userRepo.DeleteUser(userId);
             if (!isSuccess)
             {
-                return (false, !string.IsNullOrEmpty(errorMessage) ? errorMessage : "Hindi nabura ang user.");
+                return (false, !string.IsNullOrEmpty(errorMessage) ? errorMessage : "Failed to delete user account.");
             }
 
-            return (true, "Matagumpay na nabura ang user!");
+            return (true, "User account deleted successfully!");
         }
     }
 }
