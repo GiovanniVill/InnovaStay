@@ -44,8 +44,24 @@ namespace UI
                     string.Equals(role, "FrontDesk", StringComparison.OrdinalIgnoreCase))
                 {
                     LoggedInRole = role;
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
+
+                    if (this.Modal)
+                    {
+                        // Initial launch from Program.cs using ShowDialog()
+                        this.DialogResult = DialogResult.OK;
+                        this.Close();
+                    }
+                    else
+                    {
+                        // Re-login after Logout (opened via .Show())
+                        Form nextDashboard = string.Equals(role, "Admin", StringComparison.OrdinalIgnoreCase)
+                            ? new AdminDashboardForm()
+                            : new FrontDeskDashboardForm();
+
+                        this.Hide();
+                        nextDashboard.FormClosed += (s, args) => this.Close();
+                        nextDashboard.Show();
+                    }
                 }
                 else
                 {

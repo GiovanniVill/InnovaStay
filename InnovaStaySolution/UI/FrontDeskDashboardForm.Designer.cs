@@ -17,9 +17,10 @@
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             pnlSidebar = new Panel();
+            btnBilling = new Button();
             lblBrandSubtitle = new Label();
             lblBrand = new Label();
             btnDashboard = new Button();
@@ -32,10 +33,6 @@
             pnlDashboardWorkspace = new Panel();
             lblTitle = new Label();
             lblSubtitle = new Label();
-            pnlTimelineCard = new Panel();
-            lblTimelineTitle = new Label();
-            lblTimelineSub = new Label();
-            pnlTimelineCanvas = new Panel();
             pnlOccupancyCard = new Panel();
             lblOccupancyTitle = new Label();
             pnlRingCanvas = new Panel();
@@ -62,11 +59,9 @@
             pnlQueueItem3 = new Panel();
             lblQ3Title = new Label();
             lblQ3Time = new Label();
-            btnBilling = new Button();
             pnlSidebar.SuspendLayout();
             panelMainContent.SuspendLayout();
             pnlDashboardWorkspace.SuspendLayout();
-            pnlTimelineCard.SuspendLayout();
             pnlOccupancyCard.SuspendLayout();
             pnlActivityCard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvActivity).BeginInit();
@@ -93,6 +88,21 @@
             pnlSidebar.Name = "pnlSidebar";
             pnlSidebar.Size = new Size(220, 780);
             pnlSidebar.TabIndex = 0;
+            // 
+            // btnBilling
+            // 
+            btnBilling.BackColor = Color.FromArgb(184, 172, 102);
+            btnBilling.FlatAppearance.BorderSize = 0;
+            btnBilling.FlatStyle = FlatStyle.Flat;
+            btnBilling.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            btnBilling.ForeColor = Color.White;
+            btnBilling.Location = new Point(18, 251);
+            btnBilling.Name = "btnBilling";
+            btnBilling.Size = new Size(184, 42);
+            btnBilling.TabIndex = 9;
+            btnBilling.Text = "Billing/Payment";
+            btnBilling.UseVisualStyleBackColor = false;
+            btnBilling.Click += btnBilling_Click;
             // 
             // lblBrandSubtitle
             // 
@@ -224,7 +234,6 @@
             pnlDashboardWorkspace.BackColor = Color.FromArgb(244, 245, 247);
             pnlDashboardWorkspace.Controls.Add(lblTitle);
             pnlDashboardWorkspace.Controls.Add(lblSubtitle);
-            pnlDashboardWorkspace.Controls.Add(pnlTimelineCard);
             pnlDashboardWorkspace.Controls.Add(pnlOccupancyCard);
             pnlDashboardWorkspace.Controls.Add(pnlActivityCard);
             pnlDashboardWorkspace.Controls.Add(pnlQueueCard);
@@ -256,50 +265,6 @@
             lblSubtitle.Size = new Size(261, 19);
             lblSubtitle.TabIndex = 1;
             lblSubtitle.Text = "Live Room Activity & Front Office Tasks";
-            // 
-            // pnlTimelineCard
-            // 
-            pnlTimelineCard.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            pnlTimelineCard.BackColor = Color.White;
-            pnlTimelineCard.BorderStyle = BorderStyle.FixedSingle;
-            pnlTimelineCard.Controls.Add(lblTimelineTitle);
-            pnlTimelineCard.Controls.Add(lblTimelineSub);
-            pnlTimelineCard.Controls.Add(pnlTimelineCanvas);
-            pnlTimelineCard.Location = new Point(24, 82);
-            pnlTimelineCard.Name = "pnlTimelineCard";
-            pnlTimelineCard.Size = new Size(730, 290);
-            pnlTimelineCard.TabIndex = 2;
-            // 
-            // lblTimelineTitle
-            // 
-            lblTimelineTitle.AutoSize = true;
-            lblTimelineTitle.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblTimelineTitle.ForeColor = Color.FromArgb(20, 26, 40);
-            lblTimelineTitle.Location = new Point(14, 10);
-            lblTimelineTitle.Name = "lblTimelineTitle";
-            lblTimelineTitle.Size = new Size(168, 21);
-            lblTimelineTitle.TabIndex = 0;
-            lblTimelineTitle.Text = "Rooms & Reservations";
-            // 
-            // lblTimelineSub
-            // 
-            lblTimelineSub.AutoSize = true;
-            lblTimelineSub.Font = new Font("Segoe UI", 8.5F);
-            lblTimelineSub.ForeColor = Color.FromArgb(115, 122, 134);
-            lblTimelineSub.Location = new Point(15, 34);
-            lblTimelineSub.Name = "lblTimelineSub";
-            lblTimelineSub.Size = new Size(211, 15);
-            lblTimelineSub.TabIndex = 1;
-            lblTimelineSub.Text = "Interactive Rooms Availability Timeline";
-            // 
-            // pnlTimelineCanvas
-            // 
-            pnlTimelineCanvas.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            pnlTimelineCanvas.BackColor = Color.FromArgb(250, 251, 253);
-            pnlTimelineCanvas.Location = new Point(14, 58);
-            pnlTimelineCanvas.Name = "pnlTimelineCanvas";
-            pnlTimelineCanvas.Size = new Size(700, 218);
-            pnlTimelineCanvas.TabIndex = 2;
             // 
             // pnlOccupancyCard
             // 
@@ -344,7 +309,7 @@
             lblBookingsWeek.Name = "lblBookingsWeek";
             lblBookingsWeek.Size = new Size(115, 15);
             lblBookingsWeek.TabIndex = 2;
-            lblBookingsWeek.Text = "Bookings this week";
+            
             // 
             // pnlBarCanvas
             // 
@@ -362,9 +327,9 @@
             pnlActivityCard.BorderStyle = BorderStyle.FixedSingle;
             pnlActivityCard.Controls.Add(lblActivityTitle);
             pnlActivityCard.Controls.Add(dgvActivity);
-            pnlActivityCard.Location = new Point(24, 386);
+            pnlActivityCard.Location = new Point(24, 82);
             pnlActivityCard.Name = "pnlActivityCard";
-            pnlActivityCard.Size = new Size(730, 368);
+            pnlActivityCard.Size = new Size(730, 672);
             pnlActivityCard.TabIndex = 4;
             // 
             // lblActivityTitle
@@ -389,23 +354,23 @@
             dgvActivity.BorderStyle = BorderStyle.None;
             dgvActivity.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dgvActivity.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = Color.FromArgb(20, 26, 40);
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            dataGridViewCellStyle3.ForeColor = Color.White;
-            dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(20, 26, 40);
-            dataGridViewCellStyle3.SelectionForeColor = Color.White;
-            dgvActivity.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(20, 26, 40);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(20, 26, 40);
+            dataGridViewCellStyle1.SelectionForeColor = Color.White;
+            dgvActivity.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvActivity.ColumnHeadersHeight = 36;
             dgvActivity.Columns.AddRange(new DataGridViewColumn[] { colGuestId, colGuestName, colRoom, colCheckIn, colCheckOut, colTotal, colStatus });
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = Color.White;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = Color.FromArgb(28, 34, 46);
-            dataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(226, 222, 190);
-            dataGridViewCellStyle4.SelectionForeColor = Color.FromArgb(20, 26, 40);
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
-            dgvActivity.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.White;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = Color.FromArgb(28, 34, 46);
+            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(226, 222, 190);
+            dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(20, 26, 40);
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dgvActivity.DefaultCellStyle = dataGridViewCellStyle2;
             dgvActivity.EnableHeadersVisualStyles = false;
             dgvActivity.GridColor = Color.FromArgb(240, 242, 245);
             dgvActivity.Location = new Point(14, 44);
@@ -415,7 +380,7 @@
             dgvActivity.RowHeadersVisible = false;
             dgvActivity.RowTemplate.Height = 38;
             dgvActivity.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvActivity.Size = new Size(700, 308);
+            dgvActivity.Size = new Size(700, 612);
             dgvActivity.TabIndex = 1;
             // 
             // colGuestId
@@ -594,21 +559,6 @@
             lblQ3Time.TabIndex = 1;
             lblQ3Time.Text = "Front Desk Request • 7 hours ago";
             // 
-            // btnBilling
-            // 
-            btnBilling.BackColor = Color.FromArgb(184, 172, 102);
-            btnBilling.FlatAppearance.BorderSize = 0;
-            btnBilling.FlatStyle = FlatStyle.Flat;
-            btnBilling.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            btnBilling.ForeColor = Color.White;
-            btnBilling.Location = new Point(18, 251);
-            btnBilling.Name = "btnBilling";
-            btnBilling.Size = new Size(184, 42);
-            btnBilling.TabIndex = 9;
-            btnBilling.Text = "Billing/Payment";
-            btnBilling.UseVisualStyleBackColor = false;
-            btnBilling.Click += btnBilling_Click;
-            // 
             // FrontDeskDashboardForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -626,8 +576,6 @@
             panelMainContent.ResumeLayout(false);
             pnlDashboardWorkspace.ResumeLayout(false);
             pnlDashboardWorkspace.PerformLayout();
-            pnlTimelineCard.ResumeLayout(false);
-            pnlTimelineCard.PerformLayout();
             pnlOccupancyCard.ResumeLayout(false);
             pnlOccupancyCard.PerformLayout();
             pnlActivityCard.ResumeLayout(false);
@@ -660,10 +608,6 @@
         private System.Windows.Forms.Panel pnlDashboardWorkspace;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblSubtitle;
-        private System.Windows.Forms.Panel pnlTimelineCard;
-        private System.Windows.Forms.Label lblTimelineTitle;
-        private System.Windows.Forms.Label lblTimelineSub;
-        private System.Windows.Forms.Panel pnlTimelineCanvas;
         private System.Windows.Forms.Panel pnlOccupancyCard;
         private System.Windows.Forms.Label lblOccupancyTitle;
         private System.Windows.Forms.Panel pnlRingCanvas;

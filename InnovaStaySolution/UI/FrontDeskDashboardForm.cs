@@ -19,12 +19,11 @@ namespace UI
         private List<RoomModel> _liveRooms = new List<RoomModel>();
         private List<ReservationModel> _liveReservations = new List<ReservationModel>();
 
-        // Occupancy & Weekly stats computed from DB
+        // Occupancy stats computed from DB
         private int _occupancyPercent = 0;
         private int _checkedInCount = 0;
         private int _checkedOutToday = 0;
         private int _availableCount = 0;
-        private int[] _weeklyBookingsCount = new int[6]; // Mo, Tu, We, Th, Fr, Sa
 
         // InnovaStay Theme Colors
         private readonly Color DeepNavy = Color.FromArgb(20, 26, 40);
@@ -43,10 +42,8 @@ namespace UI
             _roomController = new RoomController();
             _reservationController = new ReservationController();
 
-            // Connect Paint events for live charts
-            pnlTimelineCanvas.Paint += PnlTimelineCanvas_Paint;
+            // Connect Paint event for occupancy ring chart
             pnlRingCanvas.Paint += PnlRingCanvas_Paint;
-            pnlBarCanvas.Paint += PnlBarCanvas_Paint;
         }
 
         private void FrontDeskDashboardForm_Load(object sender, EventArgs e)
@@ -94,36 +91,15 @@ namespace UI
                 dgvActivity.CellFormatting -= DgvActivity_CellFormatting;
                 dgvActivity.CellFormatting += DgvActivity_CellFormatting;
 
-                // 4. Calculate Weekly Bookings
-                ComputeWeeklyDistribution();
-
-                // 5. Update Action Queue with real data
+                // 4. Update Action Queue with real data
                 UpdateLiveActionQueue();
 
-                // 6. Request repaint of dynamic graphics
-                pnlTimelineCanvas.Invalidate();
+                // 5. Request repaint of occupancy ring
                 pnlRingCanvas.Invalidate();
-                pnlBarCanvas.Invalidate();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Unable to refresh dashboard data: {ex.Message}", "Database Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
-        private void ComputeWeeklyDistribution()
-        {
-            Array.Clear(_weeklyBookingsCount, 0, _weeklyBookingsCount.Length);
-
-            DateTime startOfWeek = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + (int)DayOfWeek.Monday);
-
-            foreach (var res in _liveReservations)
-            {
-                int dayOffset = (res.CheckInDate.Date - startOfWeek.Date).Days;
-                if (dayOffset >= 0 && dayOffset < 6)
-                {
-                    _weeklyBookingsCount[dayOffset]++;
-                }
             }
         }
 
@@ -193,80 +169,6 @@ namespace UI
             }
         }
 
-        private void PnlTimelineCanvas_Paint(object? sender, PaintEventArgs e)
-        {
-            Graphics g = e.Graphics;
-            g.SmoothingMode = SmoothingMode.AntiAlias;
-
-            // Display top 6 live rooms from DB or default placeholders
-            var roomsToDisplay = _liveRooms.Take(6).ToList();
-            if (roomsToDisplay.Count == 0) return;
-
-            // Generate next 6 days starting from today
-            DateTime today = DateTime.Today;
-            string[] dates = new string[6];
-            for (int i = 0; i < 6; i++)
-            {
-                dates[i] = today.AddDays(i).ToString("MMM dd");
-            }
-
-            int rowH = Math.Max(26, (pnlTimelineCanvas.Height - 26) / roomsToDisplay.Count);
-            int labelW = 90;
-            int chartW = pnlTimelineCanvas.Width - labelW - 10;
-            int colW = Math.Max(30, chartW / dates.Length);
-
-            using var linePen = new Pen(BorderColor, 1);
-            using var textBrush = new SolidBrush(TextMuted);
-            using var roomBrush = new SolidBrush(TextDark);
-            using var font = new Font("Segoe UI", 8F);
-
-            // Draw Day Grid Lines & Headers
-            for (int i = 0; i < dates.Length; i++)
-            {
-                int x = labelW + (i * colW);
-                g.DrawLine(linePen, x, 0, x, pnlTimelineCanvas.Height);
-                g.DrawString(dates[i], font, textBrush, x + (colW / 2) - 18, 4);
-            }
-
-            // Draw Rooms & Dynamic Status Bars
-            for (int i = 0; i < roomsToDisplay.Count; i++)
-            {
-                var room = roomsToDisplay[i];
-                int y = 26 + (i * rowH);
-
-                g.DrawLine(linePen, 0, y, pnlTimelineCanvas.Width, y);
-                g.DrawString($"Room {room.RoomNumber}", font, roomBrush, 8, y + (rowH / 2) - 6);
-
-                string status = room.Status?.Trim() ?? "Available";
-
-                if (status.Equals("Occupied", StringComparison.OrdinalIgnoreCase))
-                {
-                    DrawBar(g, labelW + 8, y + 4, (int)(colW * 2.8), rowH - 8, DeepNavy, "Occupied");
-                }
-                else if (status.Equals("Reserved", StringComparison.OrdinalIgnoreCase))
-                {
-                    DrawBar(g, labelW + (int)(colW * 0.8), y + 4, (int)(colW * 2.5), rowH - 8, OliveGold, "Reserved");
-                }
-                else if (status.Equals("Maintenance", StringComparison.OrdinalIgnoreCase))
-                {
-                    DrawBar(g, labelW + 8, y + 4, (int)(colW * 3.2), rowH - 8, DangerRed, "Maintenance");
-                }
-                else
-                {
-                    DrawBar(g, labelW + 8, y + 4, (int)(colW * 3.5), rowH - 8, StatusGreen, "Available");
-                }
-            }
-        }
-
-        private void DrawBar(Graphics g, int x, int y, int w, int h, Color color, string text)
-        {
-            using var brush = new SolidBrush(color);
-            using var path = GetRoundedRect(new Rectangle(x, y, w, h), 4);
-            g.FillPath(brush, path);
-            using var font = new Font("Segoe UI", 7.5F, FontStyle.Bold);
-            g.DrawString(text, font, Brushes.White, x + (w / 2) - (text.Length * 3), y + (h / 2) - 6);
-        }
-
         private void PnlRingCanvas_Paint(object? sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -302,51 +204,6 @@ namespace UI
             using var textBrush = new SolidBrush(TextDark);
             using var font = new Font("Segoe UI", 8.5F);
             g.DrawString(text, font, textBrush, x + 14, y);
-        }
-
-        private void PnlBarCanvas_Paint(object? sender, PaintEventArgs e)
-        {
-            Graphics g = e.Graphics;
-            g.SmoothingMode = SmoothingMode.AntiAlias;
-
-            string[] days = { "Mo", "Tu", "We", "Th", "Fr", "Sa" };
-            int maxVal = Math.Max(1, _weeklyBookingsCount.Max());
-
-            int colW = Math.Max(20, pnlBarCanvas.Width / days.Length);
-            int maxH = Math.Max(40, pnlBarCanvas.Height - 24);
-
-            using var barBrush = new SolidBrush(OliveGold);
-            using var textBrush = new SolidBrush(TextMuted);
-            using var font = new Font("Segoe UI", 8F);
-
-            for (int i = 0; i < days.Length; i++)
-            {
-                int count = _weeklyBookingsCount[i];
-                int barH = count > 0 ? (int)(maxH * ((double)count / maxVal)) : 4; // minimum 4px height indicator
-                int x = (i * colW) + (colW / 2) - 8;
-                int y = maxH - barH;
-
-                using var path = GetRoundedRect(new Rectangle(x, y, 16, barH), 3);
-                g.FillPath(barBrush, path);
-                g.DrawString(days[i], font, textBrush, x - 2, maxH + 4);
-            }
-        }
-
-        private GraphicsPath GetRoundedRect(Rectangle bounds, int radius)
-        {
-            GraphicsPath path = new GraphicsPath();
-            int diameter = radius * 2;
-            Rectangle arc = new Rectangle(bounds.Location, new Size(diameter, diameter));
-
-            path.AddArc(arc, 180, 90);
-            arc.X = bounds.Right - diameter;
-            path.AddArc(arc, 270, 90);
-            arc.Y = bounds.Bottom - diameter;
-            path.AddArc(arc, 0, 90);
-            arc.X = bounds.Left;
-            path.AddArc(arc, 90, 90);
-            path.CloseFigure();
-            return path;
         }
 
         private void OpenChildForm(Form childForm)
@@ -424,6 +281,7 @@ namespace UI
                 loginForm.Show();
             }
         }
+
         public void ShowDashboardWorkspace()
         {
             if (activeForm != null)
