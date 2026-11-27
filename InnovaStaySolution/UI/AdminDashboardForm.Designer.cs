@@ -42,10 +42,6 @@
             lblCardRevSub = new Label();
             lblCardRevVal = new Label();
             lblCardRevTitle = new Label();
-            pnlCardDb = new Panel();
-            lblCardDbSub = new Label();
-            lblCardDbVal = new Label();
-            lblCardDbTitle = new Label();
             pnlGridCard = new Panel();
             lblGridTitle = new Label();
             dgvAdminUsers = new DataGridView();
@@ -54,16 +50,6 @@
             colRole = new DataGridViewTextBoxColumn();
             colStatus = new DataGridViewTextBoxColumn();
             colCreatedAt = new DataGridViewTextBoxColumn();
-            pnlRightCard1 = new Panel();
-            lblLog3 = new Label();
-            lblLog2 = new Label();
-            lblLog1 = new Label();
-            lblLogsHeader = new Label();
-            lblSessionFrontDeskStatus = new Label();
-            lblSessionFrontDesk = new Label();
-            lblSessionAdminStatus = new Label();
-            lblSessionAdmin = new Label();
-            lblActiveSessionTitle = new Label();
             pnlRightCard2 = new Panel();
             lblSuiteCount = new Label();
             lblSuiteName = new Label();
@@ -78,10 +64,8 @@
             pnlCardRooms.SuspendLayout();
             pnlCardUsers.SuspendLayout();
             pnlCardRev.SuspendLayout();
-            pnlCardDb.SuspendLayout();
             pnlGridCard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvAdminUsers).BeginInit();
-            pnlRightCard1.SuspendLayout();
             pnlRightCard2.SuspendLayout();
             SuspendLayout();
             // 
@@ -201,9 +185,7 @@
             pnlMainDashboard.Controls.Add(pnlCardRooms);
             pnlMainDashboard.Controls.Add(pnlCardUsers);
             pnlMainDashboard.Controls.Add(pnlCardRev);
-            pnlMainDashboard.Controls.Add(pnlCardDb);
             pnlMainDashboard.Controls.Add(pnlGridCard);
-            pnlMainDashboard.Controls.Add(pnlRightCard1);
             pnlMainDashboard.Controls.Add(pnlRightCard2);
             pnlMainDashboard.Dock = DockStyle.Fill;
             pnlMainDashboard.Location = new Point(0, 0);
@@ -369,52 +351,6 @@
             lblCardRevTitle.TabIndex = 0;
             lblCardRevTitle.Text = "System Revenue Potential";
             // 
-            // pnlCardDb
-            // 
-            pnlCardDb.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            pnlCardDb.BackColor = Color.White;
-            pnlCardDb.BorderStyle = BorderStyle.FixedSingle;
-            pnlCardDb.Controls.Add(lblCardDbSub);
-            pnlCardDb.Controls.Add(lblCardDbVal);
-            pnlCardDb.Controls.Add(lblCardDbTitle);
-            pnlCardDb.Location = new Point(780, 88);
-            pnlCardDb.Name = "pnlCardDb";
-            pnlCardDb.Size = new Size(260, 95);
-            pnlCardDb.TabIndex = 5;
-            // 
-            // lblCardDbSub
-            // 
-            lblCardDbSub.AutoSize = true;
-            lblCardDbSub.Font = new Font("Segoe UI", 8F);
-            lblCardDbSub.ForeColor = Color.FromArgb(115, 122, 134);
-            lblCardDbSub.Location = new Point(12, 64);
-            lblCardDbSub.Name = "lblCardDbSub";
-            lblCardDbSub.Size = new Size(155, 13);
-            lblCardDbSub.TabIndex = 2;
-            lblCardDbSub.Text = "MSSQLLocalDB InnovaStayDB";
-            // 
-            // lblCardDbVal
-            // 
-            lblCardDbVal.AutoSize = true;
-            lblCardDbVal.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblCardDbVal.ForeColor = Color.FromArgb(46, 125, 50);
-            lblCardDbVal.Location = new Point(10, 34);
-            lblCardDbVal.Name = "lblCardDbVal";
-            lblCardDbVal.Size = new Size(28, 21);
-            lblCardDbVal.TabIndex = 1;
-            lblCardDbVal.Text = "---";
-            // 
-            // lblCardDbTitle
-            // 
-            lblCardDbTitle.AutoSize = true;
-            lblCardDbTitle.Font = new Font("Segoe UI", 8.5F);
-            lblCardDbTitle.ForeColor = Color.FromArgb(115, 122, 134);
-            lblCardDbTitle.Location = new Point(12, 10);
-            lblCardDbTitle.Name = "lblCardDbTitle";
-            lblCardDbTitle.Size = new Size(90, 15);
-            lblCardDbTitle.TabIndex = 0;
-            lblCardDbTitle.Text = "Database Status";
-            // 
             // pnlGridCard
             // 
             pnlGridCard.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
@@ -514,126 +450,6 @@
             colCreatedAt.Name = "colCreatedAt";
             colCreatedAt.ReadOnly = true;
             // 
-            // pnlRightCard1
-            // 
-            pnlRightCard1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            pnlRightCard1.BackColor = Color.White;
-            pnlRightCard1.BorderStyle = BorderStyle.FixedSingle;
-            pnlRightCard1.Controls.Add(lblLog3);
-            pnlRightCard1.Controls.Add(lblLog2);
-            pnlRightCard1.Controls.Add(lblLog1);
-            pnlRightCard1.Controls.Add(lblLogsHeader);
-            pnlRightCard1.Controls.Add(lblSessionFrontDeskStatus);
-            pnlRightCard1.Controls.Add(lblSessionFrontDesk);
-            pnlRightCard1.Controls.Add(lblSessionAdminStatus);
-            pnlRightCard1.Controls.Add(lblSessionAdmin);
-            pnlRightCard1.Controls.Add(lblActiveSessionTitle);
-            pnlRightCard1.Location = new Point(780, 200);
-            pnlRightCard1.Name = "pnlRightCard1";
-            pnlRightCard1.Size = new Size(260, 280);
-            pnlRightCard1.TabIndex = 7;
-            // 
-            // lblLog3
-            // 
-            lblLog3.AutoSize = true;
-            lblLog3.Font = new Font("Segoe UI", 8F);
-            lblLog3.ForeColor = Color.FromArgb(115, 122, 134);
-            lblLog3.Location = new Point(14, 230);
-            lblLog3.Name = "lblLog3";
-            lblLog3.Size = new Size(220, 13);
-            lblLog3.TabIndex = 8;
-            lblLog3.Text = "• dbo.tbl_Rooms state synchronized - Live";
-            // 
-            // lblLog2
-            // 
-            lblLog2.AutoSize = true;
-            lblLog2.Font = new Font("Segoe UI", 8F);
-            lblLog2.ForeColor = Color.FromArgb(115, 122, 134);
-            lblLog2.Location = new Point(14, 206);
-            lblLog2.Name = "lblLog2";
-            lblLog2.Size = new Size(247, 13);
-            lblLog2.TabIndex = 7;
-            lblLog2.Text = "• spGetAllUsersWithProfiles queried - Just now";
-            // 
-            // lblLog1
-            // 
-            lblLog1.AutoSize = true;
-            lblLog1.Font = new Font("Segoe UI", 8F);
-            lblLog1.ForeColor = Color.FromArgb(115, 122, 134);
-            lblLog1.Location = new Point(14, 182);
-            lblLog1.Name = "lblLog1";
-            lblLog1.Size = new Size(174, 13);
-            lblLog1.TabIndex = 6;
-            lblLog1.Text = "• sp_Room_CRUD executed - Live";
-            // 
-            // lblLogsHeader
-            // 
-            lblLogsHeader.AutoSize = true;
-            lblLogsHeader.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            lblLogsHeader.ForeColor = Color.FromArgb(20, 26, 40);
-            lblLogsHeader.Location = new Point(14, 150);
-            lblLogsHeader.Name = "lblLogsHeader";
-            lblLogsHeader.Size = new Size(161, 19);
-            lblLogsHeader.TabIndex = 5;
-            lblLogsHeader.Text = "Database Activity Logs";
-            // 
-            // lblSessionFrontDeskStatus
-            // 
-            lblSessionFrontDeskStatus.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            lblSessionFrontDeskStatus.AutoSize = true;
-            lblSessionFrontDeskStatus.Font = new Font("Segoe UI", 8.5F);
-            lblSessionFrontDeskStatus.ForeColor = Color.FromArgb(115, 122, 134);
-            lblSessionFrontDeskStatus.Location = new Point(145, 82);
-            lblSessionFrontDeskStatus.Name = "lblSessionFrontDeskStatus";
-            lblSessionFrontDeskStatus.Size = new Size(22, 15);
-            lblSessionFrontDeskStatus.TabIndex = 4;
-            lblSessionFrontDeskStatus.Text = "---";
-            // 
-            // lblSessionFrontDesk
-            // 
-            lblSessionFrontDesk.AutoSize = true;
-            lblSessionFrontDesk.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            lblSessionFrontDesk.ForeColor = Color.FromArgb(20, 26, 40);
-            lblSessionFrontDesk.Location = new Point(14, 80);
-            lblSessionFrontDesk.Name = "lblSessionFrontDesk";
-            lblSessionFrontDesk.Size = new Size(67, 17);
-            lblSessionFrontDesk.TabIndex = 3;
-            lblSessionFrontDesk.Text = "frontdesk";
-            // 
-            // lblSessionAdminStatus
-            // 
-            lblSessionAdminStatus.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            lblSessionAdminStatus.AutoSize = true;
-            lblSessionAdminStatus.Font = new Font("Segoe UI", 8.5F);
-            lblSessionAdminStatus.ForeColor = Color.FromArgb(46, 125, 50);
-            lblSessionAdminStatus.Location = new Point(135, 48);
-            lblSessionAdminStatus.Name = "lblSessionAdminStatus";
-            lblSessionAdminStatus.Size = new Size(22, 15);
-            lblSessionAdminStatus.TabIndex = 2;
-            lblSessionAdminStatus.Text = "---";
-            // 
-            // lblSessionAdmin
-            // 
-            lblSessionAdmin.AutoSize = true;
-            lblSessionAdmin.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            lblSessionAdmin.ForeColor = Color.FromArgb(20, 26, 40);
-            lblSessionAdmin.Location = new Point(14, 46);
-            lblSessionAdmin.Name = "lblSessionAdmin";
-            lblSessionAdmin.Size = new Size(47, 17);
-            lblSessionAdmin.TabIndex = 1;
-            lblSessionAdmin.Text = "admin";
-            // 
-            // lblActiveSessionTitle
-            // 
-            lblActiveSessionTitle.AutoSize = true;
-            lblActiveSessionTitle.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            lblActiveSessionTitle.ForeColor = Color.FromArgb(20, 26, 40);
-            lblActiveSessionTitle.Location = new Point(14, 12);
-            lblActiveSessionTitle.Name = "lblActiveSessionTitle";
-            lblActiveSessionTitle.Size = new Size(182, 20);
-            lblActiveSessionTitle.TabIndex = 0;
-            lblActiveSessionTitle.Text = "Active Session & Accounts";
-            // 
             // pnlRightCard2
             // 
             pnlRightCard2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
@@ -646,9 +462,9 @@
             pnlRightCard2.Controls.Add(lblSingleCount);
             pnlRightCard2.Controls.Add(lblSingleName);
             pnlRightCard2.Controls.Add(lblBreakdownTitle);
-            pnlRightCard2.Location = new Point(780, 496);
+            pnlRightCard2.Location = new Point(792, 302);
             pnlRightCard2.Name = "pnlRightCard2";
-            pnlRightCard2.Size = new Size(260, 200);
+            pnlRightCard2.Size = new Size(245, 148);
             pnlRightCard2.TabIndex = 8;
             // 
             // lblSuiteCount
@@ -657,7 +473,7 @@
             lblSuiteCount.AutoSize = true;
             lblSuiteCount.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblSuiteCount.ForeColor = Color.FromArgb(145, 134, 75);
-            lblSuiteCount.Location = new Point(185, 102);
+            lblSuiteCount.Location = new Point(170, 102);
             lblSuiteCount.Name = "lblSuiteCount";
             lblSuiteCount.Size = new Size(22, 15);
             lblSuiteCount.TabIndex = 6;
@@ -680,7 +496,7 @@
             lblDoubleCount.AutoSize = true;
             lblDoubleCount.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblDoubleCount.ForeColor = Color.FromArgb(145, 134, 75);
-            lblDoubleCount.Location = new Point(185, 74);
+            lblDoubleCount.Location = new Point(170, 74);
             lblDoubleCount.Name = "lblDoubleCount";
             lblDoubleCount.Size = new Size(22, 15);
             lblDoubleCount.TabIndex = 4;
@@ -703,7 +519,7 @@
             lblSingleCount.AutoSize = true;
             lblSingleCount.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             lblSingleCount.ForeColor = Color.FromArgb(145, 134, 75);
-            lblSingleCount.Location = new Point(185, 46);
+            lblSingleCount.Location = new Point(170, 46);
             lblSingleCount.Name = "lblSingleCount";
             lblSingleCount.Size = new Size(22, 15);
             lblSingleCount.TabIndex = 2;
@@ -754,13 +570,9 @@
             pnlCardUsers.PerformLayout();
             pnlCardRev.ResumeLayout(false);
             pnlCardRev.PerformLayout();
-            pnlCardDb.ResumeLayout(false);
-            pnlCardDb.PerformLayout();
             pnlGridCard.ResumeLayout(false);
             pnlGridCard.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvAdminUsers).EndInit();
-            pnlRightCard1.ResumeLayout(false);
-            pnlRightCard1.PerformLayout();
             pnlRightCard2.ResumeLayout(false);
             pnlRightCard2.PerformLayout();
             ResumeLayout(false);
@@ -792,10 +604,6 @@
         private System.Windows.Forms.Label lblCardRevTitle;
         private System.Windows.Forms.Label lblCardRevVal;
         private System.Windows.Forms.Label lblCardRevSub;
-        private System.Windows.Forms.Panel pnlCardDb;
-        private System.Windows.Forms.Label lblCardDbTitle;
-        private System.Windows.Forms.Label lblCardDbVal;
-        private System.Windows.Forms.Label lblCardDbSub;
         private System.Windows.Forms.Panel pnlGridCard;
         private System.Windows.Forms.Label lblGridTitle;
         private System.Windows.Forms.DataGridView dgvAdminUsers;
@@ -804,16 +612,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colRole;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCreatedAt;
-        private System.Windows.Forms.Panel pnlRightCard1;
-        private System.Windows.Forms.Label lblActiveSessionTitle;
-        private System.Windows.Forms.Label lblSessionAdmin;
-        private System.Windows.Forms.Label lblSessionAdminStatus;
-        private System.Windows.Forms.Label lblSessionFrontDesk;
-        private System.Windows.Forms.Label lblSessionFrontDeskStatus;
-        private System.Windows.Forms.Label lblLogsHeader;
-        private System.Windows.Forms.Label lblLog1;
-        private System.Windows.Forms.Label lblLog2;
-        private System.Windows.Forms.Label lblLog3;
         private System.Windows.Forms.Panel pnlRightCard2;
         private System.Windows.Forms.Label lblBreakdownTitle;
         private System.Windows.Forms.Label lblSingleName;

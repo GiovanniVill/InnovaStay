@@ -91,63 +91,12 @@ namespace UI
                 dgvActivity.CellFormatting -= DgvActivity_CellFormatting;
                 dgvActivity.CellFormatting += DgvActivity_CellFormatting;
 
-                // 4. Update Action Queue with real data
-                UpdateLiveActionQueue();
-
-                // 5. Request repaint of occupancy ring
+                // 4. Request repaint of occupancy ring
                 pnlRingCanvas.Invalidate();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Unable to refresh dashboard data: {ex.Message}", "Database Notification", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
-        private void UpdateLiveActionQueue()
-        {
-            // Card 1: Check rooms under maintenance
-            var maintenanceRoom = _liveRooms.FirstOrDefault(r => string.Equals(r.Status, "Maintenance", StringComparison.OrdinalIgnoreCase));
-            if (maintenanceRoom != null)
-            {
-                lblQ1Title.Text = $"Turnover Room {maintenanceRoom.RoomNumber}";
-                lblQ1Time.Text = $"Maintenance active • Room #{maintenanceRoom.RoomNumber}";
-            }
-            else
-            {
-                lblQ1Title.Text = "All Rooms Inspected";
-                lblQ1Time.Text = "No maintenance alerts";
-            }
-
-            // Card 2: Upcoming or overdue check-outs
-            var pendingCheckout = _liveReservations.FirstOrDefault(r =>
-                string.Equals(r.Status, "Checked-In", StringComparison.OrdinalIgnoreCase) &&
-                r.CheckOutDate.Date <= DateTime.Today);
-
-            if (pendingCheckout != null)
-            {
-                lblQ2Title.Text = $"Processing: {pendingCheckout.GuestName}";
-                lblQ2Time.Text = $"Rm {pendingCheckout.RoomNumber} • Check-out scheduled today";
-            }
-            else
-            {
-                lblQ2Title.Text = "Check-Out Queue Clear";
-                lblQ2Time.Text = "No pending departures";
-            }
-
-            // Card 3: Today's pending check-ins
-            var pendingCheckIn = _liveReservations.FirstOrDefault(r =>
-                string.Equals(r.Status, "Confirmed", StringComparison.OrdinalIgnoreCase) &&
-                r.CheckInDate.Date == DateTime.Today);
-
-            if (pendingCheckIn != null)
-            {
-                lblQ3Title.Text = $"Arrival: {pendingCheckIn.GuestName}";
-                lblQ3Time.Text = $"Rm {pendingCheckIn.RoomNumber} • Reserved for today";
-            }
-            else
-            {
-                lblQ3Title.Text = "No Pending Arrivals";
-                lblQ3Time.Text = "Front Desk schedule clear";
             }
         }
 

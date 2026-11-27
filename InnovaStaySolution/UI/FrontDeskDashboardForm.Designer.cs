@@ -17,8 +17,8 @@
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             pnlSidebar = new Panel();
             btnBilling = new Button();
             lblBrandSubtitle = new Label();
@@ -37,7 +37,6 @@
             lblOccupancyTitle = new Label();
             pnlRingCanvas = new Panel();
             lblBookingsWeek = new Label();
-            pnlBarCanvas = new Panel();
             pnlActivityCard = new Panel();
             lblActivityTitle = new Label();
             dgvActivity = new DataGridView();
@@ -48,27 +47,12 @@
             colCheckOut = new DataGridViewTextBoxColumn();
             colTotal = new DataGridViewTextBoxColumn();
             colStatus = new DataGridViewTextBoxColumn();
-            pnlQueueCard = new Panel();
-            lblQueueTitle = new Label();
-            pnlQueueItem1 = new Panel();
-            lblQ1Title = new Label();
-            lblQ1Time = new Label();
-            pnlQueueItem2 = new Panel();
-            lblQ2Title = new Label();
-            lblQ2Time = new Label();
-            pnlQueueItem3 = new Panel();
-            lblQ3Title = new Label();
-            lblQ3Time = new Label();
             pnlSidebar.SuspendLayout();
             panelMainContent.SuspendLayout();
             pnlDashboardWorkspace.SuspendLayout();
             pnlOccupancyCard.SuspendLayout();
             pnlActivityCard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvActivity).BeginInit();
-            pnlQueueCard.SuspendLayout();
-            pnlQueueItem1.SuspendLayout();
-            pnlQueueItem2.SuspendLayout();
-            pnlQueueItem3.SuspendLayout();
             SuspendLayout();
             // 
             // pnlSidebar
@@ -236,7 +220,6 @@
             pnlDashboardWorkspace.Controls.Add(lblSubtitle);
             pnlDashboardWorkspace.Controls.Add(pnlOccupancyCard);
             pnlDashboardWorkspace.Controls.Add(pnlActivityCard);
-            pnlDashboardWorkspace.Controls.Add(pnlQueueCard);
             pnlDashboardWorkspace.Dock = DockStyle.Fill;
             pnlDashboardWorkspace.Location = new Point(0, 0);
             pnlDashboardWorkspace.Name = "pnlDashboardWorkspace";
@@ -270,14 +253,13 @@
             // 
             pnlOccupancyCard.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             pnlOccupancyCard.BackColor = Color.White;
-            pnlOccupancyCard.BorderStyle = BorderStyle.FixedSingle;
+            pnlOccupancyCard.BorderStyle = BorderStyle.Fixed3D;
             pnlOccupancyCard.Controls.Add(lblOccupancyTitle);
             pnlOccupancyCard.Controls.Add(pnlRingCanvas);
             pnlOccupancyCard.Controls.Add(lblBookingsWeek);
-            pnlOccupancyCard.Controls.Add(pnlBarCanvas);
             pnlOccupancyCard.Location = new Point(768, 82);
             pnlOccupancyCard.Name = "pnlOccupancyCard";
-            pnlOccupancyCard.Size = new Size(292, 290);
+            pnlOccupancyCard.Size = new Size(292, 362);
             pnlOccupancyCard.TabIndex = 3;
             // 
             // lblOccupancyTitle
@@ -297,7 +279,7 @@
             pnlRingCanvas.BackColor = Color.White;
             pnlRingCanvas.Location = new Point(14, 38);
             pnlRingCanvas.Name = "pnlRingCanvas";
-            pnlRingCanvas.Size = new Size(262, 95);
+            pnlRingCanvas.Size = new Size(260, 308);
             pnlRingCanvas.TabIndex = 1;
             // 
             // lblBookingsWeek
@@ -307,18 +289,8 @@
             lblBookingsWeek.ForeColor = Color.FromArgb(115, 122, 134);
             lblBookingsWeek.Location = new Point(14, 142);
             lblBookingsWeek.Name = "lblBookingsWeek";
-            lblBookingsWeek.Size = new Size(115, 15);
+            lblBookingsWeek.Size = new Size(0, 15);
             lblBookingsWeek.TabIndex = 2;
-            
-            // 
-            // pnlBarCanvas
-            // 
-            pnlBarCanvas.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            pnlBarCanvas.BackColor = Color.White;
-            pnlBarCanvas.Location = new Point(14, 165);
-            pnlBarCanvas.Name = "pnlBarCanvas";
-            pnlBarCanvas.Size = new Size(262, 110);
-            pnlBarCanvas.TabIndex = 3;
             // 
             // pnlActivityCard
             // 
@@ -354,23 +326,23 @@
             dgvActivity.BorderStyle = BorderStyle.None;
             dgvActivity.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dgvActivity.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(20, 26, 40);
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(20, 26, 40);
-            dataGridViewCellStyle1.SelectionForeColor = Color.White;
-            dgvActivity.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.FromArgb(20, 26, 40);
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle3.ForeColor = Color.White;
+            dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(20, 26, 40);
+            dataGridViewCellStyle3.SelectionForeColor = Color.White;
+            dgvActivity.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvActivity.ColumnHeadersHeight = 36;
             dgvActivity.Columns.AddRange(new DataGridViewColumn[] { colGuestId, colGuestName, colRoom, colCheckIn, colCheckOut, colTotal, colStatus });
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.White;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = Color.FromArgb(28, 34, 46);
-            dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(226, 222, 190);
-            dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(20, 26, 40);
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dgvActivity.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = Color.White;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle4.ForeColor = Color.FromArgb(28, 34, 46);
+            dataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(226, 222, 190);
+            dataGridViewCellStyle4.SelectionForeColor = Color.FromArgb(20, 26, 40);
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
+            dgvActivity.DefaultCellStyle = dataGridViewCellStyle4;
             dgvActivity.EnableHeadersVisualStyles = false;
             dgvActivity.GridColor = Color.FromArgb(240, 242, 245);
             dgvActivity.Location = new Point(14, 44);
@@ -432,133 +404,6 @@
             colStatus.Name = "colStatus";
             colStatus.ReadOnly = true;
             // 
-            // pnlQueueCard
-            // 
-            pnlQueueCard.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            pnlQueueCard.BackColor = Color.White;
-            pnlQueueCard.BorderStyle = BorderStyle.FixedSingle;
-            pnlQueueCard.Controls.Add(lblQueueTitle);
-            pnlQueueCard.Controls.Add(pnlQueueItem1);
-            pnlQueueCard.Controls.Add(pnlQueueItem2);
-            pnlQueueCard.Controls.Add(pnlQueueItem3);
-            pnlQueueCard.Location = new Point(768, 386);
-            pnlQueueCard.Name = "pnlQueueCard";
-            pnlQueueCard.Size = new Size(292, 368);
-            pnlQueueCard.TabIndex = 5;
-            // 
-            // lblQueueTitle
-            // 
-            lblQueueTitle.AutoSize = true;
-            lblQueueTitle.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblQueueTitle.ForeColor = Color.FromArgb(20, 26, 40);
-            lblQueueTitle.Location = new Point(14, 12);
-            lblQueueTitle.Name = "lblQueueTitle";
-            lblQueueTitle.Size = new Size(114, 21);
-            lblQueueTitle.TabIndex = 0;
-            lblQueueTitle.Text = "Action Queue";
-            // 
-            // pnlQueueItem1
-            // 
-            pnlQueueItem1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            pnlQueueItem1.BackColor = Color.FromArgb(248, 249, 251);
-            pnlQueueItem1.BorderStyle = BorderStyle.FixedSingle;
-            pnlQueueItem1.Controls.Add(lblQ1Title);
-            pnlQueueItem1.Controls.Add(lblQ1Time);
-            pnlQueueItem1.Location = new Point(14, 46);
-            pnlQueueItem1.Name = "pnlQueueItem1";
-            pnlQueueItem1.Size = new Size(262, 60);
-            pnlQueueItem1.TabIndex = 1;
-            // 
-            // lblQ1Title
-            // 
-            lblQ1Title.AutoSize = true;
-            lblQ1Title.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            lblQ1Title.ForeColor = Color.FromArgb(20, 26, 40);
-            lblQ1Title.Location = new Point(10, 10);
-            lblQ1Title.Name = "lblQ1Title";
-            lblQ1Title.Size = new Size(125, 17);
-            lblQ1Title.TabIndex = 0;
-            lblQ1Title.Text = "Turnover room 103";
-            // 
-            // lblQ1Time
-            // 
-            lblQ1Time.AutoSize = true;
-            lblQ1Time.Font = new Font("Segoe UI", 8F);
-            lblQ1Time.ForeColor = Color.FromArgb(115, 122, 134);
-            lblQ1Time.Location = new Point(10, 32);
-            lblQ1Time.Name = "lblQ1Time";
-            lblQ1Time.Size = new Size(172, 13);
-            lblQ1Time.TabIndex = 1;
-            lblQ1Time.Text = "Cleaning required • 2 hours ago";
-            // 
-            // pnlQueueItem2
-            // 
-            pnlQueueItem2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            pnlQueueItem2.BackColor = Color.FromArgb(248, 249, 251);
-            pnlQueueItem2.BorderStyle = BorderStyle.FixedSingle;
-            pnlQueueItem2.Controls.Add(lblQ2Title);
-            pnlQueueItem2.Controls.Add(lblQ2Time);
-            pnlQueueItem2.Location = new Point(14, 116);
-            pnlQueueItem2.Name = "pnlQueueItem2";
-            pnlQueueItem2.Size = new Size(262, 60);
-            pnlQueueItem2.TabIndex = 2;
-            // 
-            // lblQ2Title
-            // 
-            lblQ2Title.AutoSize = true;
-            lblQ2Title.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            lblQ2Title.ForeColor = Color.FromArgb(20, 26, 40);
-            lblQ2Title.Location = new Point(10, 10);
-            lblQ2Title.Name = "lblQ2Title";
-            lblQ2Title.Size = new Size(141, 17);
-            lblQ2Title.TabIndex = 0;
-            lblQ2Title.Text = "Processing Check-Out";
-            // 
-            // lblQ2Time
-            // 
-            lblQ2Time.AutoSize = true;
-            lblQ2Time.Font = new Font("Segoe UI", 8F);
-            lblQ2Time.ForeColor = Color.FromArgb(115, 122, 134);
-            lblQ2Time.Location = new Point(10, 32);
-            lblQ2Time.Name = "lblQ2Time";
-            lblQ2Time.Size = new Size(181, 13);
-            lblQ2Time.TabIndex = 1;
-            lblQ2Time.Text = "Check-Out pending • 5 hours ago";
-            // 
-            // pnlQueueItem3
-            // 
-            pnlQueueItem3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            pnlQueueItem3.BackColor = Color.FromArgb(248, 249, 251);
-            pnlQueueItem3.BorderStyle = BorderStyle.FixedSingle;
-            pnlQueueItem3.Controls.Add(lblQ3Title);
-            pnlQueueItem3.Controls.Add(lblQ3Time);
-            pnlQueueItem3.Location = new Point(14, 186);
-            pnlQueueItem3.Name = "pnlQueueItem3";
-            pnlQueueItem3.Size = new Size(262, 60);
-            pnlQueueItem3.TabIndex = 3;
-            // 
-            // lblQ3Title
-            // 
-            lblQ3Title.AutoSize = true;
-            lblQ3Title.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            lblQ3Title.ForeColor = Color.FromArgb(20, 26, 40);
-            lblQ3Title.Location = new Point(10, 10);
-            lblQ3Title.Name = "lblQ3Title";
-            lblQ3Title.Size = new Size(162, 17);
-            lblQ3Title.TabIndex = 0;
-            lblQ3Title.Text = "Keycard Reset: Room 105";
-            // 
-            // lblQ3Time
-            // 
-            lblQ3Time.AutoSize = true;
-            lblQ3Time.Font = new Font("Segoe UI", 8F);
-            lblQ3Time.ForeColor = Color.FromArgb(115, 122, 134);
-            lblQ3Time.Location = new Point(10, 32);
-            lblQ3Time.Name = "lblQ3Time";
-            lblQ3Time.Size = new Size(180, 13);
-            lblQ3Time.TabIndex = 1;
-            lblQ3Time.Text = "Front Desk Request • 7 hours ago";
-            // 
             // FrontDeskDashboardForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -581,14 +426,6 @@
             pnlActivityCard.ResumeLayout(false);
             pnlActivityCard.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvActivity).EndInit();
-            pnlQueueCard.ResumeLayout(false);
-            pnlQueueCard.PerformLayout();
-            pnlQueueItem1.ResumeLayout(false);
-            pnlQueueItem1.PerformLayout();
-            pnlQueueItem2.ResumeLayout(false);
-            pnlQueueItem2.PerformLayout();
-            pnlQueueItem3.ResumeLayout(false);
-            pnlQueueItem3.PerformLayout();
             ResumeLayout(false);
 
         }
@@ -612,7 +449,6 @@
         private System.Windows.Forms.Label lblOccupancyTitle;
         private System.Windows.Forms.Panel pnlRingCanvas;
         private System.Windows.Forms.Label lblBookingsWeek;
-        private System.Windows.Forms.Panel pnlBarCanvas;
         private System.Windows.Forms.Panel pnlActivityCard;
         private System.Windows.Forms.Label lblActivityTitle;
         private System.Windows.Forms.DataGridView dgvActivity;
@@ -623,17 +459,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colCheckOut;
         private System.Windows.Forms.DataGridViewTextBoxColumn colTotal;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
-        private System.Windows.Forms.Panel pnlQueueCard;
-        private System.Windows.Forms.Label lblQueueTitle;
-        private System.Windows.Forms.Panel pnlQueueItem1;
-        private System.Windows.Forms.Label lblQ1Title;
-        private System.Windows.Forms.Label lblQ1Time;
-        private System.Windows.Forms.Panel pnlQueueItem2;
-        private System.Windows.Forms.Label lblQ2Title;
-        private System.Windows.Forms.Label lblQ2Time;
-        private System.Windows.Forms.Panel pnlQueueItem3;
-        private System.Windows.Forms.Label lblQ3Title;
-        private System.Windows.Forms.Label lblQ3Time;
         private Button btnBilling;
     }
 }

@@ -81,32 +81,15 @@ namespace UI
                 var allControls = GetAllControls(this).ToList();
                 var allLabels = allControls.OfType<Label>().ToList();
 
-                // 3. Update the 4 Top Metric Cards by Card Headers
+                // 3. Update the 3 Top Metric Cards by Card Headers
                 UpdateCardMetrics(allLabels, "Total Rooms", $"{totalRooms} Rooms", $"{availableRooms} Available");
                 UpdateCardMetrics(allLabels, "Total Users", $"{totalUsers} Registered", $"{activeUsers} Active Accounts");
                 UpdateCardMetrics(allLabels, "Revenue", $"PHP {totalRevenue:N2}", $"{reservedRooms} Booked / Reserved");
-                UpdateDatabaseStatusCard(allLabels);
 
                 // 4. Update "Room Quick Breakdown" Card
                 UpdateRoomBreakdown(allLabels, singleCount, deluxeCount, suiteCount);
 
-                // 5. Update Active Session status badges
-                string currentLoggedIn = string.IsNullOrEmpty(UserSession.CurrentUsername) ? "admin" : UserSession.CurrentUsername;
-                foreach (var lbl in allLabels.Where(l => l.Text.Trim() == "---" || l.Text.Contains("Active Session")))
-                {
-                    if (lbl.Parent != null)
-                    {
-                        var siblingUser = lbl.Parent.Controls.OfType<Label>().FirstOrDefault(s => s != lbl);
-                        if (siblingUser != null)
-                        {
-                            bool isCurrent = string.Equals(siblingUser.Text.Trim(), currentLoggedIn, StringComparison.OrdinalIgnoreCase);
-                            lbl.Text = "Active Session";
-                            lbl.ForeColor = Color.FromArgb(46, 125, 50);
-                        }
-                    }
-                }
-
-                // 6. Bind User / Staff Accounts Table
+                // 5. Bind User / Staff Accounts Table
                 var userGrid = allControls.OfType<DataGridView>().FirstOrDefault();
                 if (userGrid != null)
                 {
@@ -151,30 +134,12 @@ namespace UI
 
                 if (cardLabels.Count >= 2)
                 {
-                    // Middle label = large metric value
                     cardLabels[0].Text = mainValue;
-                    // Bottom label = sub-caption
                     cardLabels[1].Text = subValue;
                 }
                 else if (cardLabels.Count == 1)
                 {
                     cardLabels[0].Text = mainValue;
-                }
-            }
-        }
-
-        private void UpdateDatabaseStatusCard(List<Label> allLabels)
-        {
-            var dbHeader = allLabels.FirstOrDefault(l => l.Text.IndexOf("Database Status", StringComparison.OrdinalIgnoreCase) >= 0);
-            if (dbHeader?.Parent != null)
-            {
-                var valLbl = dbHeader.Parent.Controls.OfType<Label>()
-                    .FirstOrDefault(l => l != dbHeader && !l.Text.Contains("MSSQL") && !l.Text.Contains("InnovaStayDB"));
-
-                if (valLbl != null)
-                {
-                    valLbl.Text = "Active Connected";
-                    valLbl.ForeColor = Color.FromArgb(46, 125, 50);
                 }
             }
         }
@@ -210,7 +175,6 @@ namespace UI
 
         private void FindAndSetCountLabel(List<Label> labels, Label titleLbl, string countText)
         {
-            // Matches the count label situated horizontally on the same row (within 12px vertical alignment)
             var countLbl = labels.FirstOrDefault(l => l != titleLbl
                 && Math.Abs(l.Top - titleLbl.Top) <= 12
                 && l.Left > titleLbl.Left);
