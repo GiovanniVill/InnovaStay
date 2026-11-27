@@ -286,7 +286,6 @@
             btnAddCharge.TabIndex = 4;
             btnAddCharge.Text = "Post Charge";
             btnAddCharge.UseVisualStyleBackColor = false;
-            btnAddCharge.Click += btnAddCharge_Click;
             // 
             // grpPayment
             // 
@@ -357,7 +356,7 @@
             btnPay.TabIndex = 4;
             btnPay.Text = "Accept Payment";
             btnPay.UseVisualStyleBackColor = false;
-            btnPay.Click += btnPay_Click;
+
             // 
             // btnClose
             // 
@@ -373,7 +372,7 @@
             btnClose.TabIndex = 7;
             btnClose.Text = "Close";
             btnClose.UseVisualStyleBackColor = false;
-            btnClose.Click += btnClose_Click;
+
             // 
             // BillingForm
             // 
@@ -391,7 +390,6 @@
             Controls.Add(lblTitle);
             Name = "BillingForm";
             Text = "Billing & Payment";
-            Load += BillingForm_Load;
             grpSummary.ResumeLayout(false);
             grpSummary.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvCharges).EndInit();

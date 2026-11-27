@@ -33,27 +33,27 @@
             label3 = new Label();
             label4 = new Label();
             panel1 = new Panel();
+            lblIssuedDate = new Label();
+            lblBillingAddress = new Label();
+            lblIssuedTo = new Label();
             label5 = new Label();
             panel2 = new Panel();
+            label23 = new Label();
             tableLayoutPanel1 = new TableLayoutPanel();
+            lblHotelName = new Label();
             label6 = new Label();
             label7 = new Label();
             label8 = new Label();
             label9 = new Label();
+            label13 = new Label();
             label10 = new Label();
             label11 = new Label();
             label12 = new Label();
-            label13 = new Label();
             label14 = new Label();
-            lblIssuedTo = new Label();
-            lblBillingAddress = new Label();
-            lblIssuedDate = new Label();
-            lblHotelName = new Label();
             lblPeriod = new Label();
             lblRoomType = new Label();
             lblNumberOfRooms = new Label();
             lblNumberOfExtraBeds = new Label();
-            label23 = new Label();
             lblTotalRoomCharges = new Label();
             lblTotalExtraBedCharges = new Label();
             lblGrandTotal = new Label();
@@ -119,6 +119,39 @@
             panel1.TabIndex = 4;
             panel1.Paint += panel1_Paint;
             // 
+            // lblIssuedDate
+            // 
+            lblIssuedDate.AutoSize = true;
+            lblIssuedDate.BackColor = Color.Transparent;
+            lblIssuedDate.Font = new Font("Sitka Heading", 11.249999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblIssuedDate.Location = new Point(124, 53);
+            lblIssuedDate.Name = "lblIssuedDate";
+            lblIssuedDate.Size = new Size(25, 21);
+            lblIssuedDate.TabIndex = 11;
+            lblIssuedDate.Text = "ㅤ";
+            // 
+            // lblBillingAddress
+            // 
+            lblBillingAddress.AutoSize = true;
+            lblBillingAddress.BackColor = Color.Transparent;
+            lblBillingAddress.Font = new Font("Sitka Heading", 11.249999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblBillingAddress.Location = new Point(160, 29);
+            lblBillingAddress.Name = "lblBillingAddress";
+            lblBillingAddress.Size = new Size(25, 21);
+            lblBillingAddress.TabIndex = 10;
+            lblBillingAddress.Text = "ㅤ";
+            // 
+            // lblIssuedTo
+            // 
+            lblIssuedTo.AutoSize = true;
+            lblIssuedTo.BackColor = Color.Transparent;
+            lblIssuedTo.Font = new Font("Sitka Heading", 11.249999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblIssuedTo.Location = new Point(105, 9);
+            lblIssuedTo.Name = "lblIssuedTo";
+            lblIssuedTo.Size = new Size(25, 21);
+            lblIssuedTo.TabIndex = 9;
+            lblIssuedTo.Text = "ㅤ";
+            // 
             // label5
             // 
             label5.AutoSize = true;
@@ -139,6 +172,16 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(469, 31);
             panel2.TabIndex = 5;
+            // 
+            // label23
+            // 
+            label23.AutoSize = true;
+            label23.Font = new Font("Sitka Heading", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label23.Location = new Point(380, 3);
+            label23.Name = "label23";
+            label23.Size = new Size(66, 23);
+            label23.TabIndex = 5;
+            label23.Text = "Amount";
             // 
             // tableLayoutPanel1
             // 
@@ -180,6 +223,17 @@
             tableLayoutPanel1.Size = new Size(469, 301);
             tableLayoutPanel1.TabIndex = 13;
             tableLayoutPanel1.Paint += tableLayoutPanel1_Paint;
+            // 
+            // lblHotelName
+            // 
+            lblHotelName.AutoSize = true;
+            lblHotelName.BackColor = Color.Transparent;
+            lblHotelName.Font = new Font("Sitka Heading", 11.249999F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblHotelName.Location = new Point(179, 2);
+            lblHotelName.Name = "lblHotelName";
+            lblHotelName.Size = new Size(25, 21);
+            lblHotelName.TabIndex = 9;
+            lblHotelName.Text = "ㅤ";
             // 
             // label6
             // 
@@ -225,6 +279,17 @@
             label9.TabIndex = 3;
             label9.Text = "No. of Rooms";
             // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.BackColor = Color.Transparent;
+            label13.Font = new Font("Sitka Heading", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label13.Location = new Point(179, 258);
+            label13.Name = "label13";
+            label13.Size = new Size(172, 41);
+            label13.TabIndex = 7;
+            label13.Text = "Total Charge To Credit Card";
+            // 
             // label10
             // 
             label10.AutoSize = true;
@@ -258,17 +323,6 @@
             label12.TabIndex = 6;
             label12.Text = "Total Extra Bed Charges";
             // 
-            // label13
-            // 
-            label13.AutoSize = true;
-            label13.BackColor = Color.Transparent;
-            label13.Font = new Font("Sitka Heading", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label13.Location = new Point(179, 258);
-            label13.Name = "label13";
-            label13.Size = new Size(172, 41);
-            label13.TabIndex = 7;
-            label13.Text = "Total Charge To Credit Card";
-            // 
             // label14
             // 
             label14.AutoSize = true;
@@ -279,50 +333,6 @@
             label14.Size = new Size(116, 23);
             label14.TabIndex = 8;
             label14.Text = "GRAND TOTAL";
-            // 
-            // lblIssuedTo
-            // 
-            lblIssuedTo.AutoSize = true;
-            lblIssuedTo.BackColor = Color.Transparent;
-            lblIssuedTo.Font = new Font("Sitka Heading", 11.249999F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblIssuedTo.Location = new Point(105, 9);
-            lblIssuedTo.Name = "lblIssuedTo";
-            lblIssuedTo.Size = new Size(25, 21);
-            lblIssuedTo.TabIndex = 9;
-            lblIssuedTo.Text = "ㅤ";
-            // 
-            // lblBillingAddress
-            // 
-            lblBillingAddress.AutoSize = true;
-            lblBillingAddress.BackColor = Color.Transparent;
-            lblBillingAddress.Font = new Font("Sitka Heading", 11.249999F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblBillingAddress.Location = new Point(160, 29);
-            lblBillingAddress.Name = "lblBillingAddress";
-            lblBillingAddress.Size = new Size(25, 21);
-            lblBillingAddress.TabIndex = 10;
-            lblBillingAddress.Text = "ㅤ";
-            // 
-            // lblIssuedDate
-            // 
-            lblIssuedDate.AutoSize = true;
-            lblIssuedDate.BackColor = Color.Transparent;
-            lblIssuedDate.Font = new Font("Sitka Heading", 11.249999F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblIssuedDate.Location = new Point(124, 53);
-            lblIssuedDate.Name = "lblIssuedDate";
-            lblIssuedDate.Size = new Size(25, 21);
-            lblIssuedDate.TabIndex = 11;
-            lblIssuedDate.Text = "ㅤ";
-            // 
-            // lblHotelName
-            // 
-            lblHotelName.AutoSize = true;
-            lblHotelName.BackColor = Color.Transparent;
-            lblHotelName.Font = new Font("Sitka Heading", 11.249999F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblHotelName.Location = new Point(179, 2);
-            lblHotelName.Name = "lblHotelName";
-            lblHotelName.Size = new Size(25, 21);
-            lblHotelName.TabIndex = 9;
-            lblHotelName.Text = "ㅤ";
             // 
             // lblPeriod
             // 
@@ -367,16 +377,6 @@
             lblNumberOfExtraBeds.Size = new Size(25, 21);
             lblNumberOfExtraBeds.TabIndex = 13;
             lblNumberOfExtraBeds.Text = "ㅤ";
-            // 
-            // label23
-            // 
-            label23.AutoSize = true;
-            label23.Font = new Font("Sitka Heading", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label23.Location = new Point(380, 3);
-            label23.Name = "label23";
-            label23.Size = new Size(66, 23);
-            label23.TabIndex = 5;
-            label23.Text = "Amount";
             // 
             // lblTotalRoomCharges
             // 
