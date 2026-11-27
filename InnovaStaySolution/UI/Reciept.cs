@@ -57,7 +57,6 @@ namespace UI
 
             _lblReceiptNumber.Text = $"Receipt #: {_receiptData.ReceiptNumber}";
             lblIssuedTo.Text = string.IsNullOrWhiteSpace(_receiptData.GuestName) ? "-" : _receiptData.GuestName;
-            lblBillingAddress.Text = string.IsNullOrWhiteSpace(_receiptData.BillingAddress) ? "-" : _receiptData.BillingAddress;
             lblIssuedDate.Text = _receiptData.IssuedDate.ToString("yyyy-MM-dd HH:mm");
 
             lblHotelName.Text = string.IsNullOrWhiteSpace(_receiptData.HotelName) ? "-" : _receiptData.HotelName;
@@ -129,8 +128,6 @@ namespace UI
             y += 14;
 
             g.DrawString($"Issued To: {_receiptData.GuestName}", bodyFont, Brushes.Black, left, y);
-            y += 20;
-            g.DrawString($"Billing Address: {_receiptData.BillingAddress}", bodyFont, Brushes.Black, left, y);
             y += 20;
             g.DrawString($"Hotel: {_receiptData.HotelName}", bodyFont, Brushes.Black, left, y);
             y += 20;

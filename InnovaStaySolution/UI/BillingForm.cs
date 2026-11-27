@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using BusinessLogic.Controller;
 using Model;
 
 namespace UI
@@ -12,13 +13,15 @@ namespace UI
         private readonly CultureInfo _phpCulture = new CultureInfo("en-PH");
         private readonly Random _random = new Random();
         private readonly List<ReceiptData> _activeStays = new List<ReceiptData>();
+        private readonly ReservationController _reservationController = new ReservationController();
+        private readonly RoomController _roomController = new RoomController();
         private ReceiptData? _currentStay;
 
         public BillingForm()
         {
             InitializeComponent();
             InitializeFormEvents();
-            LoadSampleStays();
+            LoadLiveActiveStays();
             PopulatePaymentMethods();
             RefreshBillingUI();
         }
@@ -94,60 +97,78 @@ namespace UI
             stay.BalanceRemaining = Math.Round(Math.Max(0m, stay.GrandTotal - stay.TotalPaid), 2);
         }
 
-        private void LoadSampleStays()
+        private void LoadLiveActiveStays()
         {
             _activeStays.Clear();
 
-            var stay1 = new ReceiptData
+            try
             {
-                GuestName = "Juan Dela Cruz",
-                BillingAddress = "123 Mabini St., Calaca, Batangas",
-                HotelName = "Grand Horizon Hotel",
-                RoomType = "Deluxe King",
-                CheckInDate = DateTime.Today.AddDays(-2),
-                CheckOutDate = DateTime.Today,
-                Nights = 2,
-                NumberOfRooms = 1,
-                RoomRatePerNight = 3500.00m,
-                NumberOfExtraBeds = 1,
-                ExtraBedRatePerNight = 800.00m,
-                ExtraCharges = new List<ChargeItem>
+                var rooms = _roomController.GetAllRooms() ?? new List<RoomModel>();
+                var reservations = _reservationController.GetActiveStays() ?? new List<ReservationModel>();
+
+                var validStays = reservations
+                    .Where(r => string.Equals(r.Status, "Checked-In", StringComparison.OrdinalIgnoreCase)
+                             || string.Equals(r.Status, "CheckedIn", StringComparison.OrdinalIgnoreCase)
+                             || string.Equals(r.Status, "Confirmed", StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                foreach (var res in validStays)
                 {
-                    new ChargeItem { Description = "Room Service Dinner", Amount = 950.00m, Date = DateTime.Today.AddDays(-1) }
-                },
-                PaymentMethod = "Cash"
-            };
-            CalculateTotals(stay1);
+                    int nights = Math.Max(1, (res.CheckOutDate.Date - res.CheckInDate.Date).Days);
+                    var matchedRoom = rooms.FirstOrDefault(rm =>
+                        string.Equals(rm.RoomNumber, res.RoomNumber, StringComparison.OrdinalIgnoreCase));
 
-            var stay2 = new ReceiptData
+                    decimal ratePerNight = matchedRoom != null && matchedRoom.PricePerNight > 0m
+                        ? matchedRoom.PricePerNight
+                        : Math.Round(res.TotalAmount / nights, 2);
+
+                    string roomLabel = matchedRoom != null && !string.IsNullOrWhiteSpace(matchedRoom.RoomType)
+                        ? $"{matchedRoom.RoomType} - Room {res.RoomNumber}"
+                        : $"Room {res.RoomNumber}";
+
+                    var stay = new ReceiptData
+                    {
+                        GuestName = string.IsNullOrWhiteSpace(res.GuestName) ? $"Guest #{res.GuestId}" : res.GuestName,
+                        BillingAddress = "Nasugbu, Batangas",
+                        HotelName = "InnovaStay Hotel",
+                        RoomType = roomLabel,
+                        CheckInDate = res.CheckInDate,
+                        CheckOutDate = res.CheckOutDate,
+                        Nights = nights,
+                        NumberOfRooms = 1,
+                        RoomRatePerNight = ratePerNight,
+                        NumberOfExtraBeds = 0,
+                        ExtraBedRatePerNight = 0m,
+                        ExtraCharges = new List<ChargeItem>(),
+                        PaymentMethod = "Cash"
+                    };
+
+                    CalculateTotals(stay);
+                    _activeStays.Add(stay);
+                }
+            }
+            catch (Exception ex)
             {
-                GuestName = "Maria Santos",
-                BillingAddress = "45 Rizal Ave., Lipa City, Batangas",
-                HotelName = "Grand Horizon Hotel",
-                RoomType = "Family Suite",
-                CheckInDate = DateTime.Today.AddDays(-3),
-                CheckOutDate = DateTime.Today,
-                Nights = 3,
-                NumberOfRooms = 1,
-                RoomRatePerNight = 5200.00m,
-                NumberOfExtraBeds = 0,
-                ExtraBedRatePerNight = 800.00m,
-                PaymentMethod = "Credit Card"
-            };
-            CalculateTotals(stay2);
+                MessageBox.Show($"Unable to load active stays from database: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
 
-            _activeStays.Add(stay1);
-            _activeStays.Add(stay2);
-
-            cmbActiveStays.DisplayMember = nameof(ReceiptData.GuestName);
+            cmbActiveStays.SelectedIndexChanged -= cmbActiveStays_SelectedIndexChanged;
             cmbActiveStays.DataSource = null;
-            cmbActiveStays.DataSource = _activeStays;
+            cmbActiveStays.Items.Clear();
 
             if (_activeStays.Count > 0)
             {
+                cmbActiveStays.DisplayMember = nameof(ReceiptData.GuestName);
+                cmbActiveStays.DataSource = _activeStays;
                 cmbActiveStays.SelectedIndex = 0;
                 _currentStay = _activeStays[0];
             }
+            else
+            {
+                _currentStay = null;
+            }
+
+            cmbActiveStays.SelectedIndexChanged += cmbActiveStays_SelectedIndexChanged;
         }
 
         private void cmbActiveStays_SelectedIndexChanged(object? sender, EventArgs e)
@@ -232,11 +253,12 @@ namespace UI
 
             if (_currentStay == null)
             {
-                lblGuestInfo.Text = "Guest: -";
+                lblGuestInfo.Text = "Guest: No active stays";
                 lblRoomRate.Text = $"Room Charges: {0m.ToString("C2", _phpCulture)}";
                 lblTotalCharges.Text = $"Extra Charges: {0m.ToString("C2", _phpCulture)}";
                 lblTotalPaid.Text = $"Paid: {0m.ToString("C2", _phpCulture)}";
                 lblBalanceDue.Text = $"Balance Due: {0m.ToString("C2", _phpCulture)}";
+                txtPaymentAmount.Clear();
                 return;
             }
 
@@ -246,6 +268,7 @@ namespace UI
             lblRoomRate.Text = $"Room Charges: {_currentStay.RoomSubtotal.ToString("C2", _phpCulture)}";
             lblTotalCharges.Text = $"Extra Charges: {_currentStay.ExtraChargesTotal.ToString("C2", _phpCulture)}";
             lblTotalPaid.Text = $"Paid: {_currentStay.TotalPaid.ToString("C2", _phpCulture)}";
+            txtPaymentAmount.Text = _currentStay.BalanceRemaining.ToString("N2");
 
             string changeText = _currentStay.ChangeDue > 0m
                 ? $" | Change: {_currentStay.ChangeDue.ToString("C2", _phpCulture)}"

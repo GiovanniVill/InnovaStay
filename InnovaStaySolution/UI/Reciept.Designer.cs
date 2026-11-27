@@ -30,11 +30,9 @@
         {
             label1 = new Label();
             label2 = new Label();
-            label3 = new Label();
             label4 = new Label();
             panel1 = new Panel();
             lblIssuedDate = new Label();
-            lblBillingAddress = new Label();
             lblIssuedTo = new Label();
             label5 = new Label();
             panel2 = new Panel();
@@ -83,21 +81,11 @@
             label2.TabIndex = 1;
             label2.Text = "ISSUED TO:";
             // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Sitka Heading", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(3, 30);
-            label3.Name = "label3";
-            label3.Size = new Size(151, 23);
-            label3.TabIndex = 2;
-            label3.Text = "BILLING ADDRESS:";
-            // 
             // label4
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Sitka Heading", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.Location = new Point(3, 53);
+            label4.Location = new Point(3, 51);
             label4.Name = "label4";
             label4.Size = new Size(115, 23);
             label4.TabIndex = 3;
@@ -108,10 +96,8 @@
             panel1.BackColor = Color.Transparent;
             panel1.BorderStyle = BorderStyle.FixedSingle;
             panel1.Controls.Add(lblIssuedDate);
-            panel1.Controls.Add(lblBillingAddress);
             panel1.Controls.Add(lblIssuedTo);
             panel1.Controls.Add(label4);
-            panel1.Controls.Add(label3);
             panel1.Controls.Add(label2);
             panel1.Location = new Point(26, 87);
             panel1.Name = "panel1";
@@ -129,17 +115,6 @@
             lblIssuedDate.Size = new Size(25, 21);
             lblIssuedDate.TabIndex = 11;
             lblIssuedDate.Text = "ㅤ";
-            // 
-            // lblBillingAddress
-            // 
-            lblBillingAddress.AutoSize = true;
-            lblBillingAddress.BackColor = Color.Transparent;
-            lblBillingAddress.Font = new Font("Sitka Heading", 11.249999F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblBillingAddress.Location = new Point(160, 29);
-            lblBillingAddress.Name = "lblBillingAddress";
-            lblBillingAddress.Size = new Size(25, 21);
-            lblBillingAddress.TabIndex = 10;
-            lblBillingAddress.Text = "ㅤ";
             // 
             // lblIssuedTo
             // 
@@ -447,7 +422,6 @@
 
         private Label label1;
         private Label label2;
-        private Label label3;
         private Label label4;
         private Panel panel1;
         private Label label5;
@@ -463,7 +437,6 @@
         private Label label12;
         private Label label14;
         private Label lblIssuedDate;
-        private Label lblBillingAddress;
         private Label lblIssuedTo;
         private Label label23;
         private Label lblHotelName;
